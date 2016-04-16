@@ -1,0 +1,9 @@
+Package: recmap
+Type: Package
+Title: RecMap
+Version: 0.1.0
+Author: Christian Panse
+Maintainer: Christian Panse <Christian.Panse@gmail.com>
+Description: More about what it does (maybe more than one line)
+License: GPL
+LazyData: TRUE
