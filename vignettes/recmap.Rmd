@@ -16,7 +16,7 @@ vignette: >
 
 This package contains a C++ implementation of the recmap algorithm 
 [[@recmap]](http://dx.doi.org/10.1109/INFVIS.2004.57).
-The input contains for each map region 
+The input contains for each map region:
 
 - a tuple of (x, y) values corresponding to the (longitude, latitude) position 
 - a map ratio, 
@@ -27,7 +27,7 @@ the ratio the longitude / latitude
 ratios, and the  statistical values define the desired 
 area of each map region. 
 
-The output is a rectangular cartogram where the map regions are 
+The output is a rectangular cartogram where the map regions are:
 
 - non overlapping, 
 - connected, 
@@ -44,11 +44,31 @@ spatial constraints, in particular
 are tried to be preserved
 
 
-```{r fig.width=7, fig.retina=2, fig.cap="Rectangular Cartogram of the U.S. election 2004; The area corresponds to the number of electors. The graphic was composed using the original implementation of the construction heuristic RecMap MP2 introduced in [@recmap]."}
+```{r fig.width=7, fig.retina=2, fig.align='center', fig.cap="Rectangular Cartogram of the U.S. election 2004; The area corresponds to the number of electors. The graphic was computed by using the original implementation of the construction heuristic RecMap MP2 introduced in [@recmap]."}
 
 library(recmap)
 op<-par(mar=c(0,0,0,0), bg='black')
-recmap:::.draw_recmap_us_state_ev(asp = 1, xlab='', ylab='', axes=FALSE)
+recmap:::.draw_recmap_us_state_ev()
+par(op)
+```
+
+
+# Example Data
+```{r}
+recmap:::.checker_board(2)
+```
+
+```{r fig.width=5, fig.height=5, fig.align='center'}
+
+
+op<-par(mar=c(0,0,0,0), 
+        mfrow=c(2,2), 
+        bg='white')
+
+res <- lapply(c(2, 4, 8, 64), function(n){plot(recmap:::.checker_board(n))})
+
+par(op)
 ```
 
 #References
+

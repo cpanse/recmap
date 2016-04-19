@@ -1,5 +1,5 @@
 
-.draw_recmap_us_state_ev <- function(...){
+.draw_recmap_us_state_ev <- function(plot=TRUE){
   
   cm <- c("#FF0000", "#FF0505", "#FF0A0A", "#FF1010", "#FF1515", "#FF1A1A", "#FF1F1F",
           "#FF2424", "#FF2A2A", "#FF2F2F", "#FF3434", "#FF3939", "#FF3E3E", "#FF4444",
@@ -30,15 +30,67 @@
   
   us_state_election_2004 <- read.table(us_state_election_2004.file, 
                                        sep = ',')
+  if(plot){
+    plot(recmap_us_state_ev$x, recmap_us_state_ev$y, type='n', asp = 1, xlab='', ylab='', axes=FALSE)
+    
+    polygon(recmap_us_state_ev$x, recmap_us_state_ev$y,
+            col=cm[round(length(cm)*(us_state_election_2004$V8/(us_state_election_2004$V8 + us_state_election_2004$V9)))+1])
+    
+    text(us_state_election_2004$V1,us_state_election_2004$V2-7,
+         as.character(us_state_election_2004$V3),cex=round(us_state_election_2004$V5*20)/100,
+         lwd=2.5,
+         pos=3,
+         col="black");
+  }
   
-  plot(recmap_us_state_ev$x, recmap_us_state_ev$y, type='n')
-  
-  polygon(recmap_us_state_ev$x, recmap_us_state_ev$y,
-          col=cm[round(length(cm)*(us_state_election_2004$V8/(us_state_election_2004$V8 + us_state_election_2004$V9)))+1])
-  
-  text(us_state_election_2004$V1,us_state_election_2004$V2-7,
-       as.character(us_state_election_2004$V3),cex=round(us_state_election_2004$V5*20)/100,
-       lwd=2.5,
-       pos=3,
-       col="black");
+  # res <- data.frame()
 }
+
+
+.checker_board <- function(n = 8){
+  xy <- (t(combn(1:n, 2)))
+  xy <- rbind(cbind(xy[,1], xy[,2]), cbind(xy[,2], xy[,1]), cbind(1:n, 1:n))
+  
+  
+  z.bool <- (xor(xy[,1] %% 2 == 1 , xy[,2] %% 2 == 0))
+  z <- rep(1,length(xy[,1]))
+  
+  z[which(z.bool)] <- z[which(z.bool)] + 0.5
+  z[which(!z.bool)] <- z[which(!z.bool)] - 0.5
+  
+  res <- data.frame(x = xy[, 1], 
+                    y = xy[,2], 
+                    dx=0.5, 
+                    dy=0.5, 
+                    z=z, 
+                    name=paste(letters[1:n][xy[,1]], xy[,2], sep=''))
+  
+  class(res) = 'recmapFrame'
+  res
+}
+
+plot.recmapFrame <- function(S, colormap=c('#FFFFFF', '#000000'), ...){
+  plot(S$x, S$y, 
+       xlim = c(min(S$x - S$dx), max(S$x + S$dx)), 
+       ylim = c(min(S$y - S$dy), max(S$y + S$dy)), 
+       type = 'n', 
+       axes = FALSE)
+  
+  col.idx <- (length(colormap) -1  ) * (S$z - min(S$z) / (max(S$z) - min(S$z))) + 1
+  
+  rect(xleft = S$x - S$dx, 
+       ybottom = S$y - S$dy,  
+       xright = S$x + S$dx, 
+       ytop = S$y + S$dy, 
+       col = colormap[col.idx])
+  
+  
+  colormap.rev <- rev(colormap)
+  
+  if (sqrt(length(S$x)) < 10){
+    text(S$x, S$y, 
+         S$name,
+         col = colormap.rev[col.idx])
+    }
+}
+

@@ -1,1 +1,9 @@
+useDynLib(recmap)
 exportPattern("^[[:alpha:]]+")
+
+exportClasses("recmapFrame")
+export("plot.recmapFrame")
+
+
+importFrom("graphics", "plot", "polygon", "rect", "text")
+importFrom("utils", "combn", "read.table")
