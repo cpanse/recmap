@@ -18,9 +18,9 @@ Description: This package contains an implementation of the recmap algorithm.
   the relative position, and the ratios of each input map regions.
 License: GPL-3
 LazyData: TRUE
-Depends: R (>= 3.2)
+Depends: R (>= 3.2), Rcpp (>= 0.12.4)
 Suggests: knitr, testthat
-LinkingTo: Rcpp (>= 0.9.9)
+LinkingTo: Rcpp (>= 0.12.4)
 VignetteBuilder: knitr
 NeedsCompilation: yes
 URL: https://github.com/cpanse/recmap

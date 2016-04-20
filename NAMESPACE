@@ -3,6 +3,7 @@ exportPattern("^[[:alpha:]]+")
 
 exportClasses("recmapFrame")
 export("plot.recmapFrame")
+export("recmap")
 
 
 importFrom("graphics", "plot", "polygon", "rect", "text")

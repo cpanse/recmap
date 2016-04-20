@@ -65,7 +65,7 @@
                     z=z, 
                     name=paste(letters[1:n][xy[,1]], xy[,2], sep=''))
   
-  class(res) = 'recmapFrame'
+  class(res) = c('data.frame', 'recmapFrame')
   res
 }
 
