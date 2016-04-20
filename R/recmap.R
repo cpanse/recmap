@@ -74,6 +74,8 @@ plot.recmapFrame <- function(S, colormap=c('#FFFFFF', '#000000'), ...){
        xlim = c(min(S$x - S$dx), max(S$x + S$dx)), 
        ylim = c(min(S$y - S$dy), max(S$y + S$dy)), 
        type = 'n', 
+       xlab = '',
+       ylab = '',
        axes = FALSE)
   
   col.idx <- (length(colormap) -1  ) * (S$z - min(S$z) / (max(S$z) - min(S$z))) + 1
@@ -83,7 +85,6 @@ plot.recmapFrame <- function(S, colormap=c('#FFFFFF', '#000000'), ...){
        xright = S$x + S$dx, 
        ytop = S$y + S$dy, 
        col = colormap[col.idx])
-  
   
   colormap.rev <- rev(colormap)
   
