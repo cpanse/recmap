@@ -12,7 +12,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-# Intro
+# Introduction
 
 This package contains a C++ implementation of the recmap algorithm 
 [[@recmap]](http://dx.doi.org/10.1109/INFVIS.2004.57).
@@ -65,10 +65,28 @@ op<-par(mar=c(0,0,0,0),
         mfrow=c(2,2), 
         bg='white')
 
-res <- lapply(c(2, 4, 8, 64), function(n){plot(recmap:::.checker_board(n))})
+res <- lapply(c(2, 4, 8, 64), function(n){plot.recmapFrame(recmap:::.checker_board(n))})
 
 par(op)
 ```
 
+# The Algorithm
+
+## Desired Areas
+
+The desired area $\tilde{A_j}$ of a map region  $r_j$ is defined as
+$\tilde{A_j}= z_j \cdot \frac {\sum_{i=1}^{k}A(r_j)} {\sum_{j=1}^{k} z_{j}}$ (see also [@cartodraw]). 
+
+## Compute Pseudo Dual Graph
+
+## Determine the Core Region
+
+## Place rectanglues along DFS Skeleton
+
+## Objective Functions
+
+### Topology 
+
+### Relative Position
 #References
 
