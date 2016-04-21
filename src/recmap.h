@@ -26,20 +26,18 @@ namespace crecmap{
 
   typedef struct {
     double x, y, dx, dy, z;
+    int id;
     std::string name;
   } map_region;
 
-typedef std::vector<int> vi;
-typedef std::vector<vi> graph;
 
+typedef std::vector<std::vector<int>> graph;
 
   class crecmap{
   
+    typedef std::vector<map_region> recmapvector; 
     
-    
-    typedef std::vector< map_region > recmapvector; 
-    
-    graph G;
+    graph PD0;
     recmapvector RecMap;
     int n;
     
@@ -54,9 +52,11 @@ typedef std::vector<vi> graph;
       map_region R; 
       
       R.x=x; R.y=y; R.dx=dx; R.dy = dy; R.z =z;
+      R.id = n;
+     
       // R.name = name;
       // not needed for the algorithm
-      
+      PD0.push_back({});
       RecMap.push_back(R);
       n++;
       
@@ -74,10 +74,14 @@ typedef std::vector<vi> graph;
                     [](map_region &r){std::swap(r.x, r.y);});
     }
     
-    map_region & get_map_region(int i){
-      
+    
+    /*  TODO: this can not work 
+     *  map_region& operator[](const int i){
+     * return (i * sizeof(map_region))}
+     */
+    
+    map_region& get_map_region(int i){
         return(RecMap[i]);
-
     }
     
     // http://stackoverflow.com/questions/17787410/nested-range-based-for-loops
@@ -88,37 +92,47 @@ typedef std::vector<vi> graph;
           fun1(*it, *it2, container1);
     }
     
-   
-    // TODO: void compute_pseudo_dual(graph &G, recmapvector &RM)
-    void compute_pseudo_dual(){
-      std::vector<double> v;
-      
-      each_unique_pair(RecMap, v,
-                       [](map_region &a, map_region &b, std::vector<double> &v){
-                         
+    void compute_pseudo_dual(graph &G, recmapvector &M){
+      each_unique_pair(M, G,
+                       [](map_region &a, map_region &b, graph &G){
          /*
           *  http://gamemath.com/2011/09/detecting-whether-two-boxes-overlap/
           */
-                          
                          if (a.x + a.dx < b.x - b.dx) return false; // a is left of b
                          else if (a.x - a.dx > b.x + b.dx) return false; // a is right of b
                          else if (a.y + a.dy < b.y - b.dy) return false; // a is above b
                          else if (a.y - a.dy > b.y + b.dy) return false; // a is below b
-                         // add edge tp pseudo dual graph
-                           v.push_back(1);
-                           std::cout << "pseudo-dual graph\t" << a.x << ", " << a.y << "\t" << a.dx << ", " << a.dy;
-                           std::cout << "\t-\t" << b.x << ", " << b.y << "\t" << b.dx << ", " << b.dy << std::endl;
+                         // add edges tp pseudo dual graph iff boxes are connected 
+                          G[a.id].push_back(b.id);
+                          G[b.id].push_back(a.id);
+                          // std::cout << "pseudo-dual graph\t" << a.x << ", " << a.y << "\t" << a.dx << ", " << a.dy;
+                          // std::cout << "\t-\t" << b.x << ", " << b.y << "\t" << b.dx << ", " << b.dy << std::endl;
                          return true;
                        });
-      
-      
-      std::cout << "size: "  << v.size() << std::endl;
     }
     
-    void construct_cartogram();
-    
+    void construct_cartogram(){
+      
+    }
+  
+    void run(){
+      compute_pseudo_dual(PD0, RecMap);
+   
+      for (map_region r: RecMap){
+        std::cout << std::endl << r.id << "\t(" << r.x << ", " << r.y << ")" << std::endl;
+        for (int i: PD0[r.id]){
+          std::cout << " " <<  i ;
+        }
+      }
+      
+      
+      for (int i = 0; i <= RecMap.size(); i++){
+        map_region r = RecMap[i];
+        std::cout << r.id << " ";
+      }
+      std::cout << std::endl;
+    }//run  
   };
-
-}
+}// namespace
   
 #endif  
