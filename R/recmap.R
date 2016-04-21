@@ -47,16 +47,16 @@
 }
 
 
-.checker_board <- function(n = 8){
+.checker_board <- function(n = 8, ratio = 2){
   xy <- (t(combn(1:n, 2)))
   xy <- rbind(cbind(xy[,1], xy[,2]), cbind(xy[,2], xy[,1]), cbind(1:n, 1:n))
   
   
   z.bool <- (xor(xy[,1] %% 2 == 1 , xy[,2] %% 2 == 0))
-  z <- rep(1,length(xy[,1]))
+  z <- rep(1, length(xy[,1]))
   
-  z[which(z.bool)] <- z[which(z.bool)] + 0.5
-  z[which(!z.bool)] <- z[which(!z.bool)] - 0.5
+  z[which(z.bool)] <- z[which(z.bool)] * ratio
+  z[which(!z.bool)] <- z[which(!z.bool)] 
   
   res <- data.frame(x = xy[, 1], 
                     y = xy[,2], 

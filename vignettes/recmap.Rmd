@@ -77,11 +77,11 @@ par(op)
 The desired area $\tilde{A_j}$ of a map region  $r_j$ is defined as
 $\tilde{A_j}= z_j \cdot \frac {\sum_{i=1}^{k}A(r_j)} {\sum_{j=1}^{k} z_{j}}$ (see also [@cartodraw]). 
 
-## Compute Pseudo Dual Graph
+## Compute Pseudo Dual Graph (PD)
 
 ## Determine the Core Region
 
-## Place rectanglues along DFS Skeleton
+## Place rectangles along DFS Skeleton of PD
 
 ## Objective Functions
 
@@ -89,6 +89,22 @@ $\tilde{A_j}= z_j \cdot \frac {\sum_{i=1}^{k}A(r_j)} {\sum_{j=1}^{k} z_{j}}$ (se
 
 ### Relative Position
 
+## Evaluation 
+
+### Proof of Concept
+
+```{r}
+chess_board <- recmap:::.checker_board(8)
+(chess_board.area <- sum(chess_board$dx * chess_board$dy * 4))
+
+chess_board_cartogram <- recmap:::recmap(chess_board)
+
+table(chess_board_cartogram$dx * chess_board_cartogram$dy * 4)
+
+(chess_board_cartogram.area <- sum(chess_board_cartogram$dx * chess_board_cartogram$dy * 4))
+
+chess_board_cartogram.area == chess_board.area
+```
 
 # Benchmark
 
