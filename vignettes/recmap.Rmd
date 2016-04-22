@@ -81,7 +81,54 @@ $\tilde{A_j}= z_j \cdot \frac {\sum_{i=1}^{k}A(r_j)} {\sum_{j=1}^{k} z_{j}}$ (se
 
 ## Determine the Core Region
 
-## Place rectangles along DFS Skeleton of PD
+## Place rectangle by rectangle
+
+### Global along DFS Skeleton of PD
+
+### Local 
+
+local placement function taking $\alpha$  with  $0 \leq \alpha  \le 2\pi$ as input
+
+```{r echo=FALSE, message=FALSE, fig.width=5, fig.height=5, fig.align='center'}
+
+place <- function(alpha=0.0, c.dx = 5, c.dy = 5, x=2, y=-2,dx=2.5, dy=5){
+ 
+  
+  c.x <- 0
+  c.y <- 0
+  
+  plot(x, y , xlim=c(-25,25), ylim=c(-25,25), asp=1)
+  rect(x - dx - c.dx, y - dy - c.dy, x+dx+c.dx, y+dy+c.dy, lwd=3,border='grey')
+  rect(x - dx, y - dy, x + dx, y + dy)
+  # case 1
+  if (sin(alpha) >= 0 & cos(alpha) >= 0){
+  
+    c.x.1 <- ((c.dy + dy) * tan(alpha) ) + x
+    c.y.1 <- (c.dy + dy)  + y
+    
+    c.x.2 <- c.dx + dx + x
+    c.y.2 <- ((c.dy + dy) * tan(pi/2 - alpha))  + y
+    points(c.x.1, c.y.1, col='green')
+    points(c.x.2, c.y.2, col='red')
+    
+    if (c.y.2 >= y + c.dy + dy){
+      c.x <- c.x.1
+      c.y <- c.y.1
+    }else{
+      c.x <- c.x.2
+      c.y <- c.y.2
+    }
+  }
+  
+  rect(c.x - c.dx, c.y - c.dy, c.x + c.dx, c.y + c.dy)
+  #data.frame(c.x, c.y)
+}
+
+#par(ask=TRUE)
+place(pi/2/3)
+#lapply(alpha <- seq(0, pi/2, length=40), function(a){place(a)})
+
+```
 
 ## Objective Functions
 
@@ -94,8 +141,9 @@ $\tilde{A_j}= z_j \cdot \frac {\sum_{i=1}^{k}A(r_j)} {\sum_{j=1}^{k} z_{j}}$ (se
 ### Proof of Concept
 
 ```{r}
-chess_board <- recmap:::.checker_board(8)
-(chess_board.area <- sum(chess_board$dx * chess_board$dy * 4))
+chess_board_fun <- function(n=8){
+chess_board <- recmap:::.checker_board(n)
+head(chess_board.area <- sum(chess_board$dx * chess_board$dy * 4))
 
 chess_board_cartogram <- recmap:::recmap(chess_board)
 
@@ -103,7 +151,7 @@ table(chess_board_cartogram$dx * chess_board_cartogram$dy * 4)
 
 (chess_board_cartogram.area <- sum(chess_board_cartogram$dx * chess_board_cartogram$dy * 4))
 
-chess_board_cartogram.area == chess_board.area
+chess_board_cartogram.area == chess_board.area}
 ```
 
 # Benchmark

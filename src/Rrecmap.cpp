@@ -17,9 +17,9 @@ DataFrame recmap(DataFrame df) {
   
 
   //crecmap::crecmap X(Rcpp::as<double>(x));
-  crecmap::crecmap X;
+  crecmap::Crecmap X;
   
-  // TODO: setting and gettings are pain of the art; fix that asap;
+  // TODO(cp@fgcz.ethz.ch): setting and gettings are pain of the art; fix that asap;
   for (int i=0; i<x.size(); i++){
     X.push(x[i], y[i], dx[i], dy[i], z[i]);
   }

@@ -5,7 +5,7 @@
 #include <iterator>
 #include <algorithm>
 #include <vector>
-
+#include <stack>
 #include <iostream>
 #include <string>
 #include <iterator>
@@ -29,12 +29,13 @@ namespace crecmap{
     int id;
     double area_desired;
     std::string name;
+    std::vector<int> connected;
   } map_region;
 
-
+// TODO(cp): unify graph and map_region
 typedef std::vector<std::vector<int>> graph;
 
-  class crecmap{
+  class Crecmap{
   
     typedef std::vector<map_region> recmapvector; 
     
@@ -42,24 +43,24 @@ typedef std::vector<std::vector<int>> graph;
     graph PD1;
     recmapvector RecMap;
     recmapvector Cartogram;
-    int n;
+    int num_regions;
     
   public:
   
     //template < class Tdouble > 
     
-    crecmap() { n = 0;}
+    Crecmap() { num_regions = 0;}
     
     void push(double x, double y, double dx, double dy, double z){
       
       map_region R, R1; 
       
       R.x=x; R.y=y; R.dx=dx; R.dy = dy; R.z =z;
-      R.id = n;
+      R.id = num_regions;
       R.area_desired = -1;
       
       R1.x=-1; R1.y=-1; R1.dx = dx; R1.dy = dy; R1.z =z;
-      R1.id = n;
+      R1.id = num_regions;
       R1.area_desired = -1;
       // R.name = name;
       // not needed for the algorithm
@@ -68,15 +69,15 @@ typedef std::vector<std::vector<int>> graph;
       
       RecMap.push_back(R);
       Cartogram.push_back(R1);
-      n++;
+      num_regions++;
       
-      if (n != RecMap.size()){
+      if (num_regions != RecMap.size()){
         
       }
     }
     
     int get_size(){
-      return n;
+      return num_regions;
     }
     
     /*
@@ -126,7 +127,7 @@ typedef std::vector<std::vector<int>> graph;
     }
     
     
-    void compute_pseudo_dual(graph &G, recmapvector &M){
+    void ComputePseudoDual(recmapvector &M, graph &G){
       each_unique_pair(M, G,
                        [](map_region &a, map_region &b, graph &G){
          /*
@@ -142,16 +143,32 @@ typedef std::vector<std::vector<int>> graph;
                          return true;
                        });
     }
+    // http://stackoverflow.com/questions/17787410/nested-range-based-for-loops
+    template<typename C, typename Op1>
+    void each_unique_pair__(C& container, Op1 fun1){
+      for(auto it = container.begin(); it != container.end() - 1; ++it)
+        for(auto it2 = std::next(it); it2 != container.end(); ++it2)
+          fun1(*it, *it2, container);
+    }
     
+    void ComputePseudoDual__(recmapvector &M){
+      each_unique_pair__(M, [](map_region &a, map_region &b, recmapvector &M){
+                         /*
+                         *  http://gamemath.com/2011/09/detecting-whether-two-boxes-overlap/
+                         */
+                         if (a.x + a.dx < b.x - b.dx) return false; // a is left of b
+                         else if (a.x - a.dx > b.x + b.dx) return false; // a is right of b
+                         else if (a.y + a.dy < b.y - b.dy) return false; // a is above b
+                         else if (a.y - a.dy > b.y + b.dy) return false; // a is below b
+                         // add edges tp pseudo dual graph iff boxes are connected 
+                         M[a.id].connected.push_back(b.id);
+                         M[b.id].connected.push_back(a.id);
+                         return true;
+                       });
+    }
     
-    /*
-     * A = 2 * dx * dy
-     * ratio = dy / dx
-     * 
-     * dx = A 
-     * dy = A / (dx * 2)
-     */
-    void compute_desired_area(recmapvector &M, recmapvector &C){
+
+    void ComputeDesiredArea(recmapvector &M, recmapvector &C){
       double sum_z = 0.0;
       double sum_area = 0.0;
       
@@ -160,27 +177,74 @@ typedef std::vector<std::vector<int>> graph;
       
       std::for_each(C.begin(), C.end(), [&] (map_region &r) {
         double area_desired = r.z * sum_area / sum_z;
-        std::cout << area_desired << std::endl;
         double ratio = r.dy / r.dx;
         r.dx = std::sqrt(area_desired / (4 * ratio));
         r.dy = r.dx * ratio;
         });
-      
-      std::cout << "sum_z = " << sum_z << "\t" << "sum_area = " << sum_area << std::endl;
-      //std::for_each(M.begin(), M.end(), [](map_region &r){ r.z = 0; });
-      
     }
     
-    void construct_cartogram(){
-      
+    // TODO(cp): has to be implemented
+    int ComputeCoreRegion(recmapvector &M, recmapvector &C){
+      int core_region_id = num_regions / 2;
+      C[core_region_id].x = M[core_region_id].x;
+      C[core_region_id].y = M[core_region_id].y;
+        
+      return core_region_id;
+    }
+    
+    
+    // place rectangle around predecessor_region_id if this violates the 
+    // constrain do a bfs until the box can be placed. 
+    // TODO(cp): 'spatial bfs' or later try several alternatives and evaluate
+    void PlaceRectangle(int predecessor_region_id, int current_region_id, recmapvector &C, graph &PD1){
+      std::cout << predecessor_region_id << '\t' << current_region_id << std::endl;
+    }
+    
+    // expore existing map and places the rectangles acc. specification using dfs 
+    void DrawCartogram(recmapvector &M, recmapvector &C, int start_region_id){
+      std::stack<int> stack;
+      std::vector<int> visited(num_regions, 0);
+      std::vector<int> dfs_num(num_regions, 0);
+
+      int dfs_num_counter = 0;
+      int current_region_id = start_region_id;
+      stack.push(current_region_id);
+      visited[current_region_id]++;
+      dfs_num[current_region_id] = dfs_num_counter++;
+
+      int predecessor_region_id;
+        
+      while (stack.size()  > 0){
+        predecessor_region_id = current_region_id;
+        current_region_id = stack.top() ; stack.pop();
+
+        if (predecessor_region_id != current_region_id)
+          PlaceRectangle(predecessor_region_id, current_region_id, C, PD1);
+
+        for(int adj_region_id: M[current_region_id].connected){
+          if (visited[adj_region_id] == 0) {
+            visited[adj_region_id]++;
+            stack.push(adj_region_id);
+            dfs_num[adj_region_id] = dfs_num_counter++;
+          }
+        }
+      } // while
     }
   
-
     
     void run(){
-      compute_pseudo_dual(PD0, RecMap);
-      compute_desired_area(RecMap, Cartogram);
-     
+      //ComputePseudoDual(RecMap, PD0);
+      ComputePseudoDual__(RecMap);
+      
+      ComputeDesiredArea(RecMap, Cartogram);
+      
+      int core_region_id = ComputeCoreRegion(RecMap, Cartogram);
+      
+      DrawCartogram(RecMap, Cartogram, core_region_id);
+  
+      // determine core region to start
+      // dfs 
+      
     }//run  
   };
 }// namespace
