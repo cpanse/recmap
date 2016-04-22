@@ -66,8 +66,9 @@
                     name=paste(letters[1:n][xy[,1]], xy[,2], sep=''))
   
 
-  row.names(res) <- paste(letters[1:n][xy[,1]], xy[,2], sep='')
+  
   res <- res[with(res, order(x, y)), ]
+  row.names(res) <- 1:nrow(res); # paste(letters[1:n][xy[,1]], xy[,2], sep='')
   class(res) = c('data.frame', 'recmapFrame')
   res
 }
