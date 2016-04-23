@@ -1,7 +1,7 @@
 Package: recmap
 Type: Package
 Title: RecMap
-Version: 0.1.1
+Version: 0.1.2
 Author: Christian Panse
 Maintainer: Christian Panse <Christian.Panse@gmail.com>
 Description: This package contains an implementation of the recmap algorithm.

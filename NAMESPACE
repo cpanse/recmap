@@ -1,4 +1,5 @@
 useDynLib(recmap)
+
 exportPattern("^[[:alpha:]]+")
 
 exportClasses("recmapFrame")

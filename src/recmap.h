@@ -10,6 +10,7 @@
 #include <string>
 #include <iterator>
 #include <sstream>
+#include <cmath>
   
   /*
   
@@ -34,12 +35,32 @@ namespace crecmap{
   } map_region;
 
 
+  double get_angle(map_region &r0, map_region &r1){
+    double dx = r1.x - r0.x;
+    
+    double dy = r1.y - r0.y;
+    
+    // http://en.cppreference.com/w/cpp/numeric/math/atan2
+    double alpha = std::atan2(dx, dy);
+    
+    return (alpha);
+  }
+
+  // http://gamemath.com/2011/09/detecting-whether-two-boxes-overlap/
+  bool mbb_check(map_region &a, map_region &b){
+    if (a.x + a.dx < b.x - b.dx) return false; // a is left of b
+    else if (a.x - a.dx > b.x + b.dx) return false; // a is right of b
+    else if (a.y + a.dy < b.y - b.dy) return false; // a is above b
+    else if (a.y - a.dy > b.y + b.dy) return false; // a is below b
+    
+    // rectangles can touch but do not overlap
+    return true;
+  }
 
   class Crecmap{
   
     typedef std::vector<map_region> recmapvector; 
     
-
     recmapvector RecMap;
     recmapvector Cartogram;
     int num_regions;
@@ -73,7 +94,7 @@ namespace crecmap{
       num_regions++;
       
       if (num_regions != RecMap.size()){
-        
+        // TODO(cp): call an exception
       }
     }
     
@@ -81,14 +102,9 @@ namespace crecmap{
       return num_regions;
     }
     
-    double get_angle(map_region &r0, map_region &r1){
-      double dx = r1.x - r0.x;
-      double dy = r1.y - r0.y;
-      
-      double alpha = std::atan(dx / dy);
-      
-      return (alpha);
-    }
+  
+    
+
     
     /*
      * BEGIN DEBUG FUNCTIONS
@@ -140,18 +156,12 @@ namespace crecmap{
     }
     
     void ComputePseudoDual(recmapvector &M){
-      each_unique_pair(M, [](map_region &a, map_region &b, recmapvector &M){
-                         /*
-                         *  http://gamemath.com/2011/09/detecting-whether-two-boxes-overlap/
-                         */
-                         if (a.x + a.dx < b.x - b.dx) return false; // a is left of b
-                         else if (a.x - a.dx > b.x + b.dx) return false; // a is right of b
-                         else if (a.y + a.dy < b.y - b.dy) return false; // a is above b
-                         else if (a.y - a.dy > b.y + b.dy) return false; // a is below b
+      each_unique_pair(M, [this](map_region &a, map_region &b, recmapvector &M){
                          // add edges tp pseudo dual graph iff boxes are connected 
-                         M[a.id].connected.push_back(b.id);
-                         M[b.id].connected.push_back(a.id);
-                         return true;
+                         if (mbb_check(a,b)){
+                           M[a.id].connected.push_back(b.id);
+                           M[b.id].connected.push_back(a.id);
+                         }
                        });
     }
     
@@ -166,7 +176,7 @@ namespace crecmap{
       std::for_each(C.begin(), C.end(), [&] (map_region &r) {
         double area_desired = r.z * sum_area / sum_z;
         double ratio = r.dy / r.dx;
-        r.dx = std::sqrt(area_desired / (4 * ratio));
+        r.dx = sqrt(area_desired / (4 * ratio));
         r.dy = r.dx * ratio;
         });
     }

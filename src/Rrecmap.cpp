@@ -3,6 +3,15 @@
 
 using namespace Rcpp;
 
+// [[Rcpp::export]]
+double get_angle(double x0, double y0, double x1, double y1){
+  crecmap::map_region a, b;
+  a.x = x0; a.y = y0;
+  b.x = x1; b.y = y1;
+  
+  
+  return (crecmap::get_angle(a,b));
+}
 
 // [[Rcpp::export]]
 DataFrame recmap(DataFrame df) {

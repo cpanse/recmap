@@ -5,6 +5,20 @@
 
 using namespace Rcpp;
 
+// get_angle
+double get_angle(double x0, double y0, double x1, double y1);
+RcppExport SEXP recmap_get_angle(SEXP x0SEXP, SEXP y0SEXP, SEXP x1SEXP, SEXP y1SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< double >::type x0(x0SEXP);
+    Rcpp::traits::input_parameter< double >::type y0(y0SEXP);
+    Rcpp::traits::input_parameter< double >::type x1(x1SEXP);
+    Rcpp::traits::input_parameter< double >::type y1(y1SEXP);
+    __result = Rcpp::wrap(get_angle(x0, y0, x1, y1));
+    return __result;
+END_RCPP
+}
 // recmap
 DataFrame recmap(DataFrame df);
 RcppExport SEXP recmap_recmap(SEXP dfSEXP) {
