@@ -1,5 +1,5 @@
 ---
-title: "On Rectangular Map Approximations"
+title: "Using R to Compute The Rectangular Statistical Cartogram"
 author: "Christian Panse"
 date: "`r Sys.Date()`"
 bibliography:
@@ -16,7 +16,8 @@ vignette: >
 
 This package contains a C++ implementation of the recmap algorithm 
 [[@recmap]](http://dx.doi.org/10.1109/INFVIS.2004.57).
-The input contains for each map region:
+The input consist of a map represented by overlapping rectangles.
+Furthermore the algorithm reqires as input for each map region:
 
 - a tuple of (x, y) values corresponding to the (longitude, latitude) position 
 - a map ratio, 
@@ -32,16 +33,18 @@ The output is a rectangular cartogram where the map regions are:
 - non overlapping, 
 - connected, 
 - ratio and area of each rectangle corresponds to the desired areas.
-- rectangles are parallel to the axes
+- rectangles are placed parallel to the axes
 
-The construction heuristic places the rectangles in a way that important 
+The construction heuristic  places the rectangles in a way that important 
 spatial constraints, in particular
 
 - the topology of the pseudo dual graph,
-- the relative position of MBB centers, 
-- and the ratios of each input map regions.
+- the relative position of MBB centers.
 
-are tried to be preserved
+are tried to be preserved.
+
+The ratios are preserved and the area of each region corresponds to 
+the as input given statistical value z.
 
 
 ```{r fig.width=7, fig.retina=2, fig.align='center', fig.cap="Rectangular Cartogram of the U.S. election 2004; The area corresponds to the number of electors. The graphic was computed by using the original implementation of the construction heuristic RecMap MP2 introduced in [@recmap]."}
@@ -156,6 +159,19 @@ chess_board_cartogram.area == chess_board.area}
 
 # Benchmark
 
+# Addendum 
+
+The work on recmap was initiated by understanding the limits of contiguous 
+cartograms generation [@cartodraw] and after studying the visualizations
+drawn by Erwin Raisz [@ErwinRaisz].
+While the purpose of the first implementation [@recmap] was more a feasibility 
+check on how computer generated rectangular cartograms could look like and 
+if this could be done  at all, 
+this R package tries to make one rectangular cartogram algorithm available for 
+a broader range of users. This means it is easy to generate input, e.g, no 
+complex polygon mesh, and the algorithm is made robust 
+to the price of not having all featues implemented.
+There is ongoing research  by Bettina Speckmann et al [@Speckmann2004].
 
 #References
 

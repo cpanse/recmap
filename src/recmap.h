@@ -21,10 +21,9 @@
   
   */
   
-  
 namespace crecmap{
 
-
+  // keeps map and pseudo dual
   typedef struct {
     double x, y, dx, dy, z;
     int id;
@@ -33,16 +32,14 @@ namespace crecmap{
     std::string name;
     std::vector<int> connected;
   } map_region;
+ typedef std::vector<map_region> recmapvector; 
 
-
+  // http://en.cppreference.com/w/cpp/numeric/math/atan2
   double get_angle(map_region &r0, map_region &r1){
     double dx = r1.x - r0.x;
-    
     double dy = r1.y - r0.y;
     
-    // http://en.cppreference.com/w/cpp/numeric/math/atan2
     double alpha = std::atan2(dx, dy);
-    
     return (alpha);
   }
 
@@ -53,14 +50,12 @@ namespace crecmap{
     else if (a.y + a.dy < b.y - b.dy) return false; // a is above b
     else if (a.y - a.dy > b.y + b.dy) return false; // a is below b
     
-    // rectangles can touch but do not overlap
+    // rectangles can touch each other but do not overlap
     return true;
   }
 
-  class Crecmap{
   
-    typedef std::vector<map_region> recmapvector; 
-    
+  class Crecmap{
     recmapvector RecMap;
     recmapvector Cartogram;
     int num_regions;
@@ -102,9 +97,6 @@ namespace crecmap{
       return num_regions;
     }
     
-  
-    
-
     
     /*
      * BEGIN DEBUG FUNCTIONS
@@ -192,6 +184,7 @@ namespace crecmap{
       return core_region_id;
     }
     
+    
     // place rectangle around predecessor_region_id if this violates the 
     // constrain do a bfs until the box can be placed. 
     // TODO(cp): 'spatial bfs' or later try several alternatives and evaluate
@@ -220,7 +213,8 @@ namespace crecmap{
     }
     
     
-    // expore existing map and places the rectangles acc. specification using dfs 
+    // expore existing map and places the rectangles acc. 
+    // specification using dfs 
     void DrawCartogram(recmapvector &M, recmapvector &C, int start_region_id){
       std::stack<int> stack;
       std::vector<int> visited(num_regions, 0);

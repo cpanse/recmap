@@ -3,7 +3,7 @@ Type: Package
 Title: RecMap
 Version: 0.1.2
 Author: Christian Panse
-Maintainer: Christian Panse <Christian.Panse@gmail.com>
+Maintainer: Christian Panse <cp@cartodraw.science>
 Description: This package contains an implementation of the recmap algorithm.
   The input contains for each map region a x-y coordinate, a map ratio, and 
   a statistical value.
@@ -23,4 +23,4 @@ Suggests: knitr, testthat
 LinkingTo: Rcpp (>= 0.12.4)
 VignetteBuilder: knitr
 NeedsCompilation: yes
-URL: https://github.com/cpanse/recmap
+URL: http://cartodraw.science/recmap/
