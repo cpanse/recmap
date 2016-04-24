@@ -2,8 +2,8 @@ useDynLib(recmap)
 
 exportPattern("^[[:alpha:]]+")
 
-exportClasses("recmapFrame")
-export("plot.recmapFrame")
+#exportClasses("recmapFrame")
+#export("plot.recmapFrame")
 export("recmap")
 
 

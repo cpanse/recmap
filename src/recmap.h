@@ -1,3 +1,22 @@
+//
+// This file is part of recmap.
+// 
+// recmap is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// recmap is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//  
+// You should have received a copy of the GNU General Public License
+// along with recmap.  If not, see <http://www.gnu.org/licenses/>.
+
+//  Authors   :  Christian Panse <Christian.Panse@gmail.com> 
+//  2016-04-19/20/21/22 Bristol, UK
+
 #ifndef RECMAP_H
 #define RECMAP_H
   
@@ -12,14 +31,9 @@
 #include <sstream>
 #include <cmath>
   
-  /*
+
   
-  Authors   :  <Christian.Panse@gmail.com>
-  
-  $HeadURL: $
-  $Id: $
-  
-  */
+
   
 namespace crecmap{
 
@@ -35,9 +49,9 @@ namespace crecmap{
  typedef std::vector<map_region> recmapvector; 
 
   // http://en.cppreference.com/w/cpp/numeric/math/atan2
-  double get_angle(map_region &r0, map_region &r1){
-    double dx = r1.x - r0.x;
-    double dy = r1.y - r0.y;
+  double get_angle(map_region &a, map_region &b){
+    double dx = b.x - a.x;
+    double dy = b.y - a.y;
     
     double alpha = std::atan2(dx, dy);
     return (alpha);
@@ -54,9 +68,64 @@ namespace crecmap{
     return true;
   }
 
+  void place_rectanle(map_region &a, map_region &b, double alpha, map_region &c){
+    double tanx, tany;
+    
+    if (std::sin(alpha) >= 0 & std::cos(alpha) >= 0){
+      // Quad I
+      tanx = a.x + ((a.dy + b.dy) * std::tan(alpha));
+      tany = a.y + ((a.dx + b.dx) * std::tan(PI/2 - alpha));  
+      
+      c.x = a.x + a.dx + b.dx;
+      c.y = a.y + a.dy + b.dy;
+      
+      // there are always two intersection; choose the right one
+      if (tany >= c.y) c.x = tanx;
+      else c.y = tany;
+
+    } else if (std::sin(alpha) >= 0 && std::cos(alpha) < 0) {
+      // Quad II
+      tanx = a.x + ((a.dy + b.dy) * std::tan(PI - alpha));
+      tany = a.y - ((a.dx + b.dx) * std::tan(alpha - PI/2));
+      
+      c.x = a.x + a.dx + b.dx;
+      c.y = a.y - a.dy - b.dy;
+      
+      if (tanx <= c.x) c.x = tanx;
+      else c.y = tany;
+      
+    } else if (std::sin(alpha) < 0 && std::cos(alpha) < 0) {
+      // Quad III
+      tanx = a.x - ((a.dy + b.dy) * std::tan(alpha - PI));
+      tany = a.y - ((a.dx + b.dx) * std::tan(3 * PI / 2 - alpha));  
+      
+      c.x = a.x - a.dx - b.dx;
+      c.y = a.y - a.dy - b.dy;
+      
+      
+      if (tany > c.y) c.y = tany;
+      else c.x = tanx;
+      
+    } else if (std::sin(alpha) < 0 && std::cos(alpha) >  0) {
+      // Quad IV
+      tanx = a.x - ((a.dy + b.dy) * std::tan(2 * PI - alpha));
+      tany = a.y + ((a.dx + b.dx) * std::tan(alpha - 3 * PI /2));  
+      
+      c.x = a.x - a.dx - b.dx;
+      c.y = a.y + a.dy + b.dy;
+      
+      if (tanx < c.x) c.y = tany;
+      else c.x = tanx;
+      
+    } else {
+      // error
+      }
+      
+  }
+  
   
   class Crecmap{
-    recmapvector RecMap;
+    recmapvector Map;
     recmapvector Cartogram;
     int num_regions;
     
@@ -84,11 +153,11 @@ namespace crecmap{
       // R.name = name;
       // not needed for the algorithm
      
-      RecMap.push_back(R);
+      Map.push_back(R);
       Cartogram.push_back(R1);
       num_regions++;
       
-      if (num_regions != RecMap.size()){
+      if (num_regions != Map.size()){
         // TODO(cp): call an exception
       }
     }
@@ -102,7 +171,7 @@ namespace crecmap{
      * BEGIN DEBUG FUNCTIONS
      */
     void fun(){
-      std::for_each(RecMap.begin(), RecMap.end(), 
+      std::for_each(Map.begin(), Map.end(), 
                     [](map_region &r){std::swap(r.x, r.y);});
     }
     
@@ -118,7 +187,7 @@ namespace crecmap{
       
       std::cout << std::endl;
       for (int i = 0; i < M.size(); i++){
-        map_region r = RecMap[i];
+        map_region r = Map[i];
         std::cout << r.id << " ";
       }
       std::cout << std::endl;
@@ -213,8 +282,7 @@ namespace crecmap{
     }
     
     
-    // expore existing map and places the rectangles acc. 
-    // specification using dfs 
+    // dfs exporer of existing map M / placement of rectangles in cartogram C
     void DrawCartogram(recmapvector &M, recmapvector &C, int start_region_id){
       std::stack<int> stack;
       std::vector<int> visited(num_regions, 0);
@@ -248,14 +316,14 @@ namespace crecmap{
     
     void run(){
       
-      ComputePseudoDual(RecMap);
+      ComputePseudoDual(Map);
       //print_pseudo_dual(RecMap);
       
-      ComputeDesiredArea(RecMap, Cartogram);
+      ComputeDesiredArea(Map, Cartogram);
       
-      int core_region_id = ComputeCoreRegion(RecMap, Cartogram);
+      int core_region_id = ComputeCoreRegion(Map, Cartogram);
       
-      DrawCartogram(RecMap, Cartogram, core_region_id);
+      DrawCartogram(Map, Cartogram, core_region_id);
   
       // determine core region to start
       // dfs 

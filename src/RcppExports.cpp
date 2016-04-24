@@ -19,6 +19,23 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// place_rectanle
+DataFrame place_rectanle(double x0, double y0, double dx0, double dy0, double dx1, double dy1, double alpha);
+RcppExport SEXP recmap_place_rectanle(SEXP x0SEXP, SEXP y0SEXP, SEXP dx0SEXP, SEXP dy0SEXP, SEXP dx1SEXP, SEXP dy1SEXP, SEXP alphaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< double >::type x0(x0SEXP);
+    Rcpp::traits::input_parameter< double >::type y0(y0SEXP);
+    Rcpp::traits::input_parameter< double >::type dx0(dx0SEXP);
+    Rcpp::traits::input_parameter< double >::type dy0(dy0SEXP);
+    Rcpp::traits::input_parameter< double >::type dx1(dx1SEXP);
+    Rcpp::traits::input_parameter< double >::type dy1(dy1SEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    __result = Rcpp::wrap(place_rectanle(x0, y0, dx0, dy0, dx1, dy1, alpha));
+    return __result;
+END_RCPP
+}
 // recmap
 DataFrame recmap(DataFrame df);
 RcppExport SEXP recmap_recmap(SEXP dfSEXP) {

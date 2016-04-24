@@ -90,46 +90,37 @@ $\tilde{A_j}= z_j \cdot \frac {\sum_{i=1}^{k}A(r_j)} {\sum_{j=1}^{k} z_{j}}$ (se
 
 ### Local 
 
-local placement function taking $\alpha$  with  $0 \leq \alpha  \le 2\pi$ as input
+local placement function $f: (x0,y0,dx0,dy0,dx1,dy1,[-\pi,\pi]) \rightarrow (\mathbb{R}, \mathbb{R})$.
+There are special cases for quad I, II, III, and IV indicated by different colors.
 
-```{r echo=FALSE, message=FALSE, fig.width=5, fig.height=5, fig.align='center'}
+```{r echo=FALSE, fig.width=3, fig.height=3, fig.align='center'}
 
-place <- function(alpha=0.0, c.dx = 5, c.dy = 5, x=2, y=-2,dx=2.5, dy=5){
- 
+draw_and_place_rectangle <- function(alpha=0.0, a.x=2, a.y=-5, a.dx = 20, a.dy = 5, b.dx=1.5, b.dy=5, ...){
+   
+   rect(a.x - a.dx - b.dx, a.y - a.dy - b.dy, 
+        a.x + a.dx + b.dx, a.y + a.dy + b.dy, 
+        lwd=3, border='grey')
   
-  c.x <- 0
-  c.y <- 0
+   rect(a.x - a.dx, a.y - a.dy, 
+        a.x + a.dx, a.y + a.dy)
+   
+   c <- recmap:::place_rectanle(a.x, a.y, a.dx, a.dy, b.dx, b.dy, alpha)
   
-  plot(x, y , xlim=c(-25,25), ylim=c(-25,25), asp=1)
-  rect(x - dx - c.dx, y - dy - c.dy, x+dx+c.dx, y+dy+c.dy, lwd=3,border='grey')
-  rect(x - dx, y - dy, x + dx, y + dy)
-  # case 1
-  if (sin(alpha) >= 0 & cos(alpha) >= 0){
-  
-    c.x.1 <- ((c.dy + dy) * tan(alpha) ) + x
-    c.y.1 <- (c.dy + dy)  + y
-    
-    c.x.2 <- c.dx + dx + x
-    c.y.2 <- ((c.dy + dy) * tan(pi/2 - alpha))  + y
-    points(c.x.1, c.y.1, col='green')
-    points(c.x.2, c.y.2, col='red')
-    
-    if (c.y.2 >= y + c.dy + dy){
-      c.x <- c.x.1
-      c.y <- c.y.1
-    }else{
-      c.x <- c.x.2
-      c.y <- c.y.2
-    }
-  }
-  
-  rect(c.x - c.dx, c.y - c.dy, c.x + c.dx, c.y + c.dy)
-  #data.frame(c.x, c.y)
+   rect(c$x - c$dx, c$y - c$dy, c$x + c$dx, c$y + c$dy, ...)
 }
 
-#par(ask=TRUE)
-place(pi/2/3)
-#lapply(alpha <- seq(0, pi/2, length=40), function(a){place(a)})
+op <- par(mar=c(0,0,0,0))
+plot(0,0 , xlim=c(-25,25), ylim=c(-25,25), asp=1, xlab='', ylab='', axes=FALSE); abline(v=0,h=0)
+r<-lapply(seq(0, pi/2, length=90), function(alpha){draw_and_place_rectangle(alpha, col='#DD001199', border='#88888877')})
+
+r<-lapply(seq(pi/2, pi, length=90), function(alpha){draw_and_place_rectangle(alpha, col='#00DD1199', border='#88888877')})
+
+r<-lapply(seq(-pi, -pi/2, length=90), function(alpha){draw_and_place_rectangle(alpha, col='#11DDDD99', border='#88888877')})
+
+#r<-lapply(seq(3 * pi/2, 2 * pi, length=90), function(alpha){draw_and_place_rectangle(alpha, col='#0011DD99', border='#88888877')})
+r<-lapply(seq(-pi/2, 0, length=90), function(alpha){draw_and_place_rectangle(alpha, col='#0011DD99', border='#88888877')})
+
+par(op)
 
 ```
 
@@ -169,9 +160,9 @@ check on how computer generated rectangular cartograms could look like and
 if this could be done  at all, 
 this R package tries to make one rectangular cartogram algorithm available for 
 a broader range of users. This means it is easy to generate input, e.g, no 
-complex polygon mesh, and the algorithm is made robust 
+complex polygon mesh, maintainable code, and the algorithm is made robust 
 to the price of not having all featues implemented.
-There is ongoing research  by Bettina Speckmann et al [@Speckmann2004].
+Recent research publication on rectangular cartograms drawing include [@Speckmann2004], [@Speckmann2007], [@Speckmann2012].
 
 #References
 
