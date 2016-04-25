@@ -1,21 +1,10 @@
 Package: recmap
 Type: Package
-Title: RecMap
+Title: RecMap - Compute The Rectangular Statistical Cartogram
 Version: 0.1.2
 Author: Christian Panse
-Maintainer: Christian Panse <cp@cartodraw.science>
-Description: This package contains an implementation of the recmap algorithm.
-  The input contains for each map region a x-y coordinate, a map ratio, and 
-  a statistical value.
-  The x-y coordinates representing the centers of gravity, the ratio the lat/long 
-  ratio, and the  statistical values define the desired 
-  area of each map region. 
-  The output is a rectangular cartogram where the map regions are non
-  overlapping, connected, ratio and area of each rectangle corresponde to the 
-  desired areas.
-  The construction heuristing places the map region by preserving important 
-  geospatial constraints, in particular the topology of the pseudo dual,
-  the relative position, and the ratios of each input map regions.
+Maintainer: Christian Panse <Christian.Panse@gmail.com>
+Description: xxx xxx xxxx xxx xxx xxx xxx
 License: GPL-3
 LazyData: TRUE
 Depends: R (>= 3.2), Rcpp (>= 0.12.4)

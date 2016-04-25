@@ -78,6 +78,7 @@ plot.recmapFrame <- function(S, colormap=c('#FFFFFF', '#000000'), ...){
        xlim = c(min(S$x - S$dx), max(S$x + S$dx)), 
        ylim = c(min(S$y - S$dy), max(S$y + S$dy)), 
        type = 'n', 
+       asp=1,
        xlab = '',
        ylab = '',
        axes = FALSE)
@@ -88,7 +89,8 @@ plot.recmapFrame <- function(S, colormap=c('#FFFFFF', '#000000'), ...){
        ybottom = S$y - S$dy,  
        xright = S$x + S$dx, 
        ytop = S$y + S$dy, 
-       col = colormap[col.idx])
+       col = colormap[col.idx], 
+       border = 'green')
   
   colormap.rev <- rev(colormap)
   
@@ -96,6 +98,10 @@ plot.recmapFrame <- function(S, colormap=c('#FFFFFF', '#000000'), ...){
     text(S$x, S$y, 
          S$name,
          col = colormap.rev[col.idx])
+    text(S$x, S$y, 
+         S$dfs_num,
+         col = colormap.rev[col.idx], 
+         pos=4, cex=0.75)
     }
 }
 

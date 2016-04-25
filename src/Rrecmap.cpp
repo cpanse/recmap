@@ -19,9 +19,9 @@ DataFrame place_rectanle(double x0, double y0, double dx0, double dy0, double dx
   crecmap::map_region a, b, c;
   
   a.x = x0; a.y = y0; a.dx = dx0; a.dy = dy0;
-  b.dx = dx1; b.dy = dy1;
+  c.dx = dx1; c.dy = dy1;
   
-  crecmap::place_rectanle(a, b, alpha, c);
+  crecmap::place_rectanle(a, alpha, c);
   return DataFrame::create(_["x"]= c.x, _["y"]= c.y, _["dx"]= dx1, _["dy"]= dy1);
 }
 
@@ -36,13 +36,14 @@ DataFrame recmap(DataFrame df) {
   NumericVector z = df["z"];
   CharacterVector name = df["name"];
   
-
+  NumericVector dfs_num(x.size()); 
   //crecmap::crecmap X(Rcpp::as<double>(x));
-  crecmap::Crecmap X;
+  crecmap::RecMap X;
   
   // TODO(cp@fgcz.ethz.ch): setting and gettings are pain of the art; fix that asap;
   for (int i=0; i<x.size(); i++){
-    X.push(x[i], y[i], dx[i], dy[i], z[i]);
+    std::string sname = Rcpp::as<std::string>(name[i]);
+    X.push(x[i], y[i], dx[i], dy[i], z[i], sname);
   }
   
   //X.fun();
@@ -55,13 +56,13 @@ DataFrame recmap(DataFrame df) {
     y[i] = r.y;
     dx[i] = r.dx;
     dy[i] = r.dy;
-    z[i] = r.z;
-    //name[i] = r.name;
+    //z[i] = r.z;
+    dfs_num[i] = r.dfs_num;
   }
 
   
   // return a new data frame
-  return DataFrame::create(_["x"]= x, _["y"]= y, _["dx"]= dx, _["dy"]= dy,_["z"]= z, _["name"]= name);
+  return DataFrame::create(_["x"]= x, _["y"]= y, _["dx"]= dx, _["dy"]= dy,_["z"]= z, _["name"]= name, _["dfs_num"] = dfs_num);
 }
 
 

@@ -12,6 +12,19 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r fig.width=8, fig.retina=3, echo=FALSE}
+
+library(recmap)
+par(mfcol=c(2,4), mar=c(0,0,0,0))
+
+lapply(c(3,5,7,9), function(n){
+  r <- recmap:::.checker_board(n);
+  plot.recmapFrame(r)
+  r2 <- recmap(r); 
+  plot.recmapFrame(r2)
+})
+```
+
 # Introduction
 
 This package contains a C++ implementation of the recmap algorithm 
@@ -90,7 +103,8 @@ $\tilde{A_j}= z_j \cdot \frac {\sum_{i=1}^{k}A(r_j)} {\sum_{j=1}^{k} z_{j}}$ (se
 
 ### Local 
 
-local placement function $f: (x0,y0,dx0,dy0,dx1,dy1,[-\pi,\pi]) \rightarrow (\mathbb{R}, \mathbb{R})$.
+
+The local placement function $f: [-\pi,\pi] \rightarrow (\mathbb{R}, \mathbb{R})$ maps an angle into a coordinate.
 There are special cases for quad I, II, III, and IV indicated by different colors.
 
 ```{r echo=FALSE, fig.width=3, fig.height=3, fig.align='center'}
@@ -112,12 +126,8 @@ draw_and_place_rectangle <- function(alpha=0.0, a.x=2, a.y=-5, a.dx = 20, a.dy =
 op <- par(mar=c(0,0,0,0))
 plot(0,0 , xlim=c(-25,25), ylim=c(-25,25), asp=1, xlab='', ylab='', axes=FALSE); abline(v=0,h=0)
 r<-lapply(seq(0, pi/2, length=90), function(alpha){draw_and_place_rectangle(alpha, col='#DD001199', border='#88888877')})
-
 r<-lapply(seq(pi/2, pi, length=90), function(alpha){draw_and_place_rectangle(alpha, col='#00DD1199', border='#88888877')})
-
 r<-lapply(seq(-pi, -pi/2, length=90), function(alpha){draw_and_place_rectangle(alpha, col='#11DDDD99', border='#88888877')})
-
-#r<-lapply(seq(3 * pi/2, 2 * pi, length=90), function(alpha){draw_and_place_rectangle(alpha, col='#0011DD99', border='#88888877')})
 r<-lapply(seq(-pi/2, 0, length=90), function(alpha){draw_and_place_rectangle(alpha, col='#0011DD99', border='#88888877')})
 
 par(op)
