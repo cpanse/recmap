@@ -32,9 +32,6 @@
 #include <cmath>
   
 
-  
-
-  
 namespace crecmap{
 
   // keeps map and pseudo dual
@@ -75,6 +72,7 @@ namespace crecmap{
   }
 
   // http://gamemath.com/2011/09/detecting-whether-two-boxes-overlap/
+  // TODO(cp): think of an eps value
   bool mbb_check(map_region &a, map_region &b){
     if (a.x + a.dx < b.x - b.dx) return false; // a is left of b
     else if (a.x - a.dx > b.x + b.dx) return false; // a is right of b
@@ -84,20 +82,25 @@ namespace crecmap{
     // rectangles can touch each other but do not overlap
     return true;
   }
-
+ 
   // computes the new x-y value on the cartogram map region c
-  // a is fix
-  // uses c.dx and c.dy
+  // map_region a has a fix position
+  // uses c.dx and c.dy for computation
+  // TODO(cp): consider giving eps als argument
   void place_rectanle(map_region &a, double alpha, map_region &c){
     double tanx, tany;
+    double eps = 0.01;
+    
+    double dy = a.dy + c.dy + eps;
+    double dx = a.dx + c.dx + eps;
     
     if (std::sin(alpha) >= 0 & std::cos(alpha) >= 0){
       // Quad I
-      tanx = a.x + ((a.dy + c.dy) * std::tan(alpha));
-      tany = a.y + ((a.dx + c.dx) * std::tan(PI/2 - alpha));  
+      tanx = a.x + (dx * std::tan(alpha));
+      tany = a.y + (dy * std::tan(PI/2 - alpha));  
       
-      c.x = a.x + a.dx + c.dx;
-      c.y = a.y + a.dy + c.dy;
+      c.x = a.x + dx;
+      c.y = a.y + dy;
       
       // there are always two intersection; choose the right one
       if (tany >= c.y) c.x = tanx;
@@ -105,34 +108,33 @@ namespace crecmap{
 
     } else if (std::sin(alpha) >= 0 && std::cos(alpha) < 0) {
       // Quad II
-      tanx = a.x + ((a.dy + c.dy) * std::tan(PI - alpha));
-      tany = a.y - ((a.dx + c.dx) * std::tan(alpha - PI/2));
+      tanx = a.x + (dx * std::tan(PI - alpha));
+      tany = a.y - (dy * std::tan(alpha - PI/2));
       
-      c.x = a.x + a.dx + c.dx;
-      c.y = a.y - a.dy - c.dy;
+      c.x = a.x + dx;
+      c.y = a.y - dy;
       
       if (tanx <= c.x) c.x = tanx;
       else c.y = tany;
       
     } else if (std::sin(alpha) < 0 && std::cos(alpha) < 0) {
       // Quad III
-      tanx = a.x - ((a.dy + c.dy) * std::tan(alpha - PI));
-      tany = a.y - ((a.dx + c.dx) * std::tan(3 * PI / 2 - alpha));  
+      tanx = a.x - (dx * std::tan(alpha - PI));
+      tany = a.y - (dy * std::tan(3 * PI / 2 - alpha));  
       
-      c.x = a.x - a.dx - c.dx;
-      c.y = a.y - a.dy - c.dy;
-      
-      
+      c.x = a.x - dx;
+      c.y = a.y - dy;
+
       if (tany > c.y) c.y = tany;
       else c.x = tanx;
       
     } else if (std::sin(alpha) < 0 && std::cos(alpha) >  0) {
       // Quad IV
-      tanx = a.x - ((a.dy + c.dy) * std::tan(2 * PI - alpha));
-      tany = a.y + ((a.dx + c.dx) * std::tan(alpha - 3 * PI /2));  
+      tanx = a.x - (dy * std::tan(2 * PI - alpha));
+      tany = a.y + (dx * std::tan(alpha - 3 * PI /2));  
       
-      c.x = a.x - a.dx - c.dx;
-      c.y = a.y + a.dy + c.dy;
+      c.x = a.x - dx;
+      c.y = a.y + dy;
       
       if (tanx < c.x) c.y = tany;
       else c.x = tanx;
@@ -190,7 +192,7 @@ namespace crecmap{
       return num_regions;
     }
     
-    /*  TODO: this can not work 
+    /*  TODO: Can that really work?
      *  map_region& operator[](const int i){
      * return (i * sizeof(map_region))}
      */
@@ -205,6 +207,7 @@ namespace crecmap{
         for(auto it2 = std::next(it); it2 != container.end(); ++it2)
           fun1(*it, *it2, container);
     }
+    
     
     void ComputePseudoDual(recmapvector &M){
       each_unique_pair(M, [this](map_region &a, map_region &b, recmapvector &M){
@@ -245,15 +248,16 @@ namespace crecmap{
       return core_region_id;
     }
     
-    bool check_mbb_intersection(recmapvector &C, map_region &b){
-      for (map_region a : C){
-        if (a.id != b.id){
-        if(!mbb_check(a, b)){
-          return false;
+    bool map_region_intersect(recmapvector &C, map_region &a){
+      for (map_region b : C){
+        if (a.id != b.id && b.placed > 0){
+        if(mbb_check(a, b)){
+          std::cout << a.name << " intersect with " << b.name << std::endl;
+          return true;
         }}
       }
-     // std::for_each(C.begin(), C.end(), [&](map_region &a){ if(!mbb_check(a, b)){return false;}});
-    return true;
+     
+    return false;
     }
     
     
@@ -261,14 +265,14 @@ namespace crecmap{
     // constrain do a bfs until the box can be placed. 
     void PlaceRectangle(recmapvector &M, recmapvector &C, int region_id){
       double alpha0, alpha;
-      int count = 0;
+      
       map_region candidate;
       // iterate over all already placed connected rectangles
       for (int adj_region_id : M[region_id].connected){
         
         if (C[adj_region_id].placed > 0){
     
-          // as staring compute  angle alpha0
+          // as staring compute angle alpha0
           alpha0 = get_angle(M[adj_region_id], M[region_id]);
           
           print_map_reagion(C[adj_region_id]);
@@ -277,31 +281,30 @@ namespace crecmap{
           std::cout << adj_region_id << "[*]\t" << region_id << 
               "[ ]\talpha0 =" << 180 * alpha0 / PI << std::endl;
           
-          //do{
-            place_rectanle(C[adj_region_id], alpha0, C[region_id]);
-            C[region_id].placed++;
-            C[adj_region_id].connected.push_back(region_id);
-            C[region_id].connected.push_back(adj_region_id);
+          alpha = alpha0;
+ 
             
-            print_map_reagion(C[adj_region_id]);
-            print_map_reagion(C[region_id]);
-            std:: cout << std::endl;
-            //print_map_reagion(M[region_id]);
-            //print_map_reagion(M[adj_region_id]);
-            //print_map_reagion(C[adj_region_id]);
+            place_rectanle(C[adj_region_id], alpha, C[region_id]);
             
-          //  std::cout << "alpha = " <<  180 * alpha0 / PI << std::endl;
-          //  alpha0 += PI/1800;
-          //} while (!check_mbb_intersection(C, C[adj_region_id]) && count++ < 180);
-          
-          // try to place the rectangle
-          
-          // update C
-         
-          return;
+            if (!map_region_intersect(C, C[region_id])) {
+              C[region_id].placed++;
+              C[adj_region_id].connected.push_back(region_id);
+              C[region_id].connected.push_back(adj_region_id);
+              
+              print_map_reagion(C[adj_region_id]);
+              print_map_reagion(C[region_id]);
+              std:: cout << std::endl;
+              
+              break;
+            }
+              
+
           }
-        }
-      // return
+      } // END for (int adj_region_id : M[region_id].connected)
+           
+         // update C
+     
+          return;
     }
     
     

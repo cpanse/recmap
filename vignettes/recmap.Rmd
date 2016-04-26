@@ -12,12 +12,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r fig.width=8, fig.retina=3, echo=FALSE}
+```{r fig.width=8, fig.height=8, fig.retina=3, echo=FALSE}
 
 library(recmap)
-par(mfcol=c(2,4), mar=c(0,0,0,0))
+par(mfcol=c(2,2), mar=c(0,0,0,0))
 
-lapply(c(3,5,7,9), function(n){
+lapply(c(8,4), function(n){
   r <- recmap:::.checker_board(n);
   plot.recmapFrame(r)
   r2 <- recmap(r); 
