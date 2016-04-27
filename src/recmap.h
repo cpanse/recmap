@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <vector>
 #include <stack>
+#include <list>
 #include <iostream>
 #include <string>
 #include <iterator>
@@ -32,6 +33,7 @@
 #include <cmath>
   
 
+  
 namespace crecmap{
 
   // keeps map and pseudo dual
@@ -267,41 +269,48 @@ namespace crecmap{
       double alpha0, alpha;
       
       map_region candidate;
-      // iterate over all already placed connected rectangles
-      for (int adj_region_id : M[region_id].connected){
+      double beta_sign = 1.0;
+      
+      for (double beta = 0.0; beta <= 2 * PI && C[region_id].placed == 0; beta += PI/180){
+        // iterate over all already placed connected rectangles
         
-        if (C[adj_region_id].placed > 0){
-    
+        for (int adj_region_id : M[region_id].connected){
           // as staring compute angle alpha0
           alpha0 = get_angle(M[adj_region_id], M[region_id]);
           
-          print_map_reagion(C[adj_region_id]);
-          print_map_reagion(C[region_id]);
-          
-          std::cout << adj_region_id << "[*]\t" << region_id << 
-              "[ ]\talpha0 =" << 180 * alpha0 / PI << std::endl;
-          
-          alpha = alpha0;
- 
-            
-            place_rectanle(C[adj_region_id], alpha, C[region_id]);
-            
-            if (!map_region_intersect(C, C[region_id])) {
-              C[region_id].placed++;
-              C[adj_region_id].connected.push_back(region_id);
-              C[region_id].connected.push_back(adj_region_id);
-              
-              print_map_reagion(C[adj_region_id]);
-              print_map_reagion(C[region_id]);
-              std:: cout << std::endl;
-              
-              break;
-            }
-              
-
-          }
-      } // END for (int adj_region_id : M[region_id].connected)
+          if (C[adj_region_id].placed > 0){
+      
            
+            alpha = alpha0 + (beta_sign * beta);
+            beta_sign *= -1;
+            
+            print_map_reagion(C[adj_region_id]);
+            print_map_reagion(C[region_id]);
+            
+            std::cout << adj_region_id << "[*]\t" << region_id << 
+                "[ ]\talpha0 =" << 180 * alpha / PI << std::endl;
+            
+            
+   
+              
+              place_rectanle(C[adj_region_id], alpha, C[region_id]);
+              
+              if (!map_region_intersect(C, C[region_id])) {
+                C[region_id].placed++;
+                C[adj_region_id].connected.push_back(region_id);
+                C[region_id].connected.push_back(adj_region_id);
+                
+                print_map_reagion(C[adj_region_id]);
+                print_map_reagion(C[region_id]);
+                std:: cout << std::endl;
+                
+                break;
+              }
+                
+  
+            }
+        } // END for (int adj_region_id : M[region_id].connected)
+      }    
          // update C
      
           return;

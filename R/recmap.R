@@ -73,7 +73,7 @@
   res
 }
 
-plot.recmapFrame <- function(S, colormap=c('#FFFFFF', '#000000'), ...){
+plot.recmap <- function(S, colormap=c('#FFFFFF', '#000000'), ...){
   plot(S$x, S$y, 
        xlim = c(min(S$x - S$dx), max(S$x + S$dx)), 
        ylim = c(min(S$y - S$dy), max(S$y + S$dy)), 
@@ -90,18 +90,48 @@ plot.recmapFrame <- function(S, colormap=c('#FFFFFF', '#000000'), ...){
        xright = S$x + S$dx, 
        ytop = S$y + S$dy, 
        col = colormap[col.idx], 
-       border = 'green')
+       border = 'darkgreen')
   
   colormap.rev <- rev(colormap)
   
   if (sqrt(length(S$x)) < 10){
     text(S$x, S$y, 
          S$name,
-         col = colormap.rev[col.idx])
+         
+         col = colormap.rev[col.idx], ...)
+    
     text(S$x, S$y, 
          S$dfs_num,
          col = colormap.rev[col.idx], 
-         pos=4, cex=0.75)
+         pos=1, cex=1/sqrt(sqrt(length(S$x))))
     }
 }
 
+.get_us_states <- function(){
+  usa <- lapply(map('state', plot = FALSE)$names, 
+                function(state){
+                  m <- map('state', state, plot=FALSE); 
+                  
+                  x <- round(as.numeric(m$x),2)
+                  y <- round(as.numeric(m$y),2)
+                  
+                  xmin <- min(x, na.rm = TRUE)
+                  xmax <- max(x, na.rm = TRUE)
+                  
+                  ymin <- min(y, na.rm = TRUE)
+                  ymax <- max(y, na.rm = TRUE)
+                  
+                  dx <- round(0.5 * (xmax - xmin),2)
+                  dy <- round(0.5 * (ymax - ymin),2)
+                  
+                  x <- xmin + dx
+                  y <- ymin + dy
+                  
+                  name <- m$name
+                  
+                  data.frame(x = x, y=y, dx=dx, dy=dy, z=dx*dy*4, name=m$name);
+                })
+  
+  
+  usa<- droplevels(as.data.frame(do.call('rbind', usa)))
+}
