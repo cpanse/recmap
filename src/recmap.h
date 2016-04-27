@@ -271,7 +271,8 @@ namespace crecmap{
       map_region candidate;
       double beta_sign = 1.0;
       
-      for (double beta = 0.0; beta <= 2 * PI && C[region_id].placed == 0; beta += PI/180){
+      // strategy one: try to place it in the neighborhood
+      for (double beta = 0.0; beta <=  2 * PI && C[region_id].placed == 0; beta += PI/180){
         // iterate over all already placed connected rectangles
         
         for (int adj_region_id : M[region_id].connected){
@@ -289,10 +290,7 @@ namespace crecmap{
             
             std::cout << adj_region_id << "[*]\t" << region_id << 
                 "[ ]\talpha0 =" << 180 * alpha / PI << std::endl;
-            
-            
-   
-              
+
               place_rectanle(C[adj_region_id], alpha, C[region_id]);
               
               if (!map_region_intersect(C, C[region_id])) {
@@ -304,15 +302,14 @@ namespace crecmap{
                 print_map_reagion(C[region_id]);
                 std:: cout << std::endl;
                 
-                break;
+                return;
               }
-                
-  
             }
         } // END for (int adj_region_id : M[region_id].connected)
       }    
-         // update C
-     
+      
+      // strategy one: try to place it in the neighborhood
+        std::cout << std::endl << ">" << M[region_id].name << " could not be placed." << std::endl;
           return;
     }
     

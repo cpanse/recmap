@@ -12,8 +12,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-
-
 # Introduction
 
 This package contains a C++ implementation of the recmap algorithm 
@@ -22,13 +20,13 @@ The input consist of a map represented by overlapping rectangles.
 Furthermore the algorithm reqires as input for each map region:
 
 - a tuple of (x, y) values corresponding to the (longitude, latitude) position 
-- a map ratio, 
+- a tuple of (dx, dy) of expansion along (longitude, latitude) 
 - and a statistical value z.
 
-The (x, y) coordinates represents the center of the minimal bounding boxes (MBB), 
-the ratio the longitude / latitude 
-ratios, and the  statistical values define the desired 
-area of each map region. 
+The (x, y) coordinates represents the center of the minimal bounding boxes (MBB),
+The coordinates of the MBB are derived by adding or substracting the (dx, dy) 
+tuple accordingly. The tuple (dx, dy) defines also the ratio of the map region.
+The statistical values define the desired area of each map region. 
 
 The output is a rectangular cartogram where the map regions are:
 
@@ -50,7 +48,7 @@ the as input given statistical value z.
 
 The power of a cartogram based visualization is demonstrated below.
 
-```{r fig.width=7, fig.retina=2, fig.align='center', fig.cap="Rectangular Cartogram of the U.S. election 2004; The area corresponds to the number of electors (red: demo / blue: rep). The graphic was computed by using the original implementation of the construction heuristic RecMap MP2 introduced in [@recmap].", echo=FALSE, warning=FALSE, comment="ccc", error=FALSE, message=FALSE}
+```{r fig.width=7, fig.retina=2, fig.align='left', fig.cap="Rectangular Cartogram of the U.S. election 2004; The area corresponds to the number of electors (color indicates the party red: democrates / blue: republican; the color intensity ~ outcome of the vote.). The graphic was computed by using the original implementation of the construction heuristic RecMap MP2 introduced in [@recmap].", echo=FALSE, warning=FALSE, comment="ccc", error=FALSE, message=FALSE}
 
 library(recmap)
 op<-par(mar=c(0,0,0,0), bg='black')
