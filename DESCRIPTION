@@ -4,7 +4,9 @@ Title: RecMap - Compute The Rectangular Statistical Cartogram
 Version: 0.1.2
 Author: Christian Panse
 Maintainer: Christian Panse <Christian.Panse@gmail.com>
-Description: xxx xxx xxxx xxx xxx xxx xxx
+Description: The 'recmap' package provides an R interface for a C++ implementation of the 
+  RecMap MP2 construction heuristic (see 'citation("recmap")' for details).
+  Documentation about 'recmap' is provided by a vignette included in this package.
 License: GPL-3
 LazyData: TRUE
 Depends: R (>= 3.2), Rcpp (>= 0.12.4)
