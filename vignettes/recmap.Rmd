@@ -93,8 +93,8 @@ core region
 regions) by placing it next to a neighbour use BFS
 
 
-The local placement function $f: [-\pi,\pi] \rightarrow (\mathbb{R}, \mathbb{R})$ maps an angle into a coordinate.
-There are special cases for quad I, II, III, and IV indicated by different colors.
+A local placement function can place an rectangle a around a given rectangle b of any angle between $[-\pi,\pi]$.
+There are special cases for quad I, II, III, and IV indicated by different colors in the gaphic below.
 
 ```{r echo=FALSE, fig.width=2, fig.height=2, fig.align='center'}
 
@@ -213,7 +213,7 @@ par(op)
 - refactoring of C++ code into C++11 code
 
 ## RecMap
-
+- use sorted arrays and binary search when checking MBB overlap
 - allow multiple connected components dual graph, e.g., world map
 
 
