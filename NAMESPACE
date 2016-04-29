@@ -1,11 +1,8 @@
 useDynLib(recmap)
+import(Rcpp)
 
-exportPattern("^[[:alpha:]]+")
-
-#exportClasses("recmapFrame")
-#export("plot.recmapFrame")
 export("recmap")
-
+export("plot_recmap")
 
 importFrom("graphics", "plot", "polygon", "rect", "text")
 importFrom("utils", "combn", "read.table")

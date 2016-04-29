@@ -13,7 +13,6 @@ double get_angle(double x0, double y0, double x1, double y1){
   return (crecmap::get_angle(a,b));
 }
 
-
 // [[Rcpp::export]]
 DataFrame place_rectanle(double x0, double y0, double dx0, double dy0, double dx1, double dy1, double alpha){
   crecmap::map_region a, b, c;
@@ -38,17 +37,16 @@ DataFrame recmap(DataFrame df) {
   
   NumericVector dfs_num(x.size()); 
   NumericVector topology_error(x.size()); 
-  NumericVector shape_error(x.size()); 
+  NumericVector relpos_error(x.size()); 
   //crecmap::crecmap X(Rcpp::as<double>(x));
   crecmap::RecMap X;
   
-  // TODO(cp@fgcz.ethz.ch): setting and gettings are pain of the art; fix that asap;
+  // TODO(cp): setting and gettings are pain of the art; fix that asap;
   for (int i=0; i<x.size(); i++){
     std::string sname = Rcpp::as<std::string>(name[i]);
     X.push(x[i], y[i], dx[i], dy[i], z[i], sname);
   }
   
-  //X.fun();
   X.run();
   
   for (int i=0; i<x.size(); i++){
@@ -61,17 +59,19 @@ DataFrame recmap(DataFrame df) {
     //z[i] = r.z;
     dfs_num[i] = r.dfs_num;
     topology_error[i] = r.topology_error;
-    shape_error[i] = r.shape_error;
+    relpos_error[i] = r.relative_position_error;
   }
 
   
   while(!X.warnings_empty()){warning(X.warnings_pop());}
   
+  //Rcpp::exception
+    
   // return a new data frame
   return DataFrame::create(_["x"]= x, _["y"]= y, _["dx"]= dx, _["dy"]= dy,
                            _["z"]= z, _["name"]= name, _["dfs.num"] = dfs_num,
                            _["topology.error"] = topology_error,
-                           _["shape.error"] = shape_error);
+                           _["relpos.error"] = relpos_error);
 }
 
 

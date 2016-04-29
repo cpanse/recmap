@@ -1,6 +1,6 @@
 Package: recmap
 Type: Package
-Title: RecMap - Compute The Rectangular Statistical Cartogram
+Title: Compute The Rectangular Statistical Cartogram
 Version: 0.1.2
 Author: Christian Panse
 Maintainer: Christian Panse <Christian.Panse@gmail.com>

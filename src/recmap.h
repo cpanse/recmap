@@ -45,25 +45,12 @@ namespace crecmap{
     std::string name;
     std::vector<int> connected;
     double topology_error;
-    double shape_error;
+    double relative_position_error;
     int dfs_num;
   } map_region;
 
  typedef std::vector<map_region> recmapvector; 
 
- void print_map_reagion(map_region &r){
-   if (r.placed > 0) std::cout << "[*]"; else std::cout << "[ ]";
-   std::cout << r.name << "(" <<  r.id << "): \t(x, dx, y, dy, z, dfs_num) = ("  << 
-     r.x << ", " << r.dx << ", " << 
-       r.y << ", " << r.dy << 
-         r.z << ", " << r.dfs_num << ")\t adj = {";
-   
-   for (int i: r.connected){
-     std::cout << " " <<  i;
-   }
-   
-   std::cout << " }"  << std::endl;
- }
  
   // http://en.cppreference.com/w/cpp/numeric/math/atan2
   double get_angle(const map_region &a, const map_region &b){
@@ -154,6 +141,7 @@ namespace crecmap{
     recmapvector Cartogram;
     int num_regions;
     
+    std::list<std::string> msg;
     std::list<std::string> warnings;
     
   public:
@@ -268,7 +256,7 @@ namespace crecmap{
       for (map_region b : C){
         if (a.id != b.id && b.placed > 0){
         if(mbb_check(a, b)){
-          //std::cout << a.name << " intersect with " << b.name << std::endl;
+          
           return true;
         }}
       }
@@ -314,7 +302,7 @@ namespace crecmap{
       // make it as not placed
       C[region_id].x = -1;
       C[region_id].y = -1;
-      warnings.push_back(M[region_id].name + " could not be placed;");
+      warnings.push_back(M[region_id].name + " could not be placed on the first attempt;");
       return false;
     }
     
@@ -379,7 +367,7 @@ namespace crecmap{
       }
       }
       warnings.push_back(M[region_id].name + " could not be placed. RecMap MP2 failed! please report.");
-      //std::cout << std::endl << ">!!" << M[region_id].name << " could not be placed." << std::endl;
+      
       C[region_id].x = -1;
       C[region_id].y = -1;
       
@@ -426,15 +414,24 @@ namespace crecmap{
       
       std::for_each(C.begin(), C.end(), [&] (map_region &r) {
         if (r.placed == 0){
-          warnings.push_back(r.name + "was not placed!!");
-          //PlaceRectangle(M, C, r.id);
+          PlaceRectangle(M, C, r.id);
+          if (r.placed == 0){
+            warnings.push_back(r.name + " was not placed!!");
+          }
+          //
         }});
     }
   
     
+    bool CheckConnectedComponents(const recmapvector &M){
+      std::vector<int> visited(M.size(),0);
+      
+      return true;
+    }
+    
     void ComputeError(const recmapvector &M, recmapvector &C){
       std::for_each(C.begin(), C.end(), [&] (map_region &r) {
-        r.shape_error = -1; 
+        r.relative_position_error = -1; 
         //r.topology_error = -100;
         });
     }
@@ -442,12 +439,17 @@ namespace crecmap{
     void run(){
       
       ComputePseudoDual(Map);
+      
+      if (!CheckConnectedComponents(Map)){
+        
+      };
+      
       //print_pseudo_dual(RecMap);
       
       ComputeDesiredArea(Map, Cartogram);
       
       int core_region_id = ComputeCoreRegion(Map, Cartogram);
-      std::cout << "CORE REGION: "; print_map_reagion(Cartogram[core_region_id]);
+      msg.push_back("CORE REGION: " + Map[core_region_id].name);
      
       DrawCartogram(Map, Cartogram, core_region_id);
       
