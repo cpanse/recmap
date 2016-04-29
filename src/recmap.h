@@ -44,7 +44,8 @@ namespace crecmap{
     int placed;
     std::string name;
     std::vector<int> connected;
-    
+    double topology_error;
+    double shape_error;
     int dfs_num;
   } map_region;
 
@@ -65,7 +66,7 @@ namespace crecmap{
  }
  
   // http://en.cppreference.com/w/cpp/numeric/math/atan2
-  double get_angle(map_region &a, map_region &b){
+  double get_angle(const map_region &a, const map_region &b){
     double dx = b.x - a.x;
     double dy = b.y - a.y;
     
@@ -75,7 +76,7 @@ namespace crecmap{
 
   // http://gamemath.com/2011/09/detecting-whether-two-boxes-overlap/
   // TODO(cp): think of an eps value
-  bool mbb_check(map_region &a, map_region &b){
+  bool mbb_check(const map_region &a, const map_region &b){
     if (a.x + a.dx < b.x - b.dx) return false; // a is left of b
     else if (a.x - a.dx > b.x + b.dx) return false; // a is right of b
     else if (a.y + a.dy < b.y - b.dy) return false; // a is above b
@@ -89,7 +90,7 @@ namespace crecmap{
   // map_region a has a fix position
   // uses c.dx and c.dy for computation
   // TODO(cp): consider giving eps als argument
-  void place_rectanle(map_region &a, double alpha, map_region &c){
+  void place_rectanle(const map_region &a, double alpha, map_region &c){
     double tanx, tany;
     double eps = 0.01;
     
@@ -153,6 +154,8 @@ namespace crecmap{
     recmapvector Cartogram;
     int num_regions;
     
+    std::list<std::string> warnings;
+    
   public:
   
     //template < class Tdouble > 
@@ -178,6 +181,7 @@ namespace crecmap{
       R1.placed = 0;
       R1.name = name;
       R1.dfs_num = -1;
+      R1.topology_error = 100;
       // R.name = name;
       // not needed for the algorithm
      
@@ -189,6 +193,13 @@ namespace crecmap{
         // TODO(cp): call an exception
       }
     }
+    
+    std::string warnings_pop(){
+      std::string s =warnings.front(); warnings.pop_front();
+      return s;
+    }
+    
+    bool warnings_empty(){return warnings.empty();}
     
     int get_size(){
       return num_regions;
@@ -222,6 +233,7 @@ namespace crecmap{
     }
     
 
+    // taken from the CartoDraw scanline approach date back to yr2000
     void ComputeDesiredArea(recmapvector &M, recmapvector &C){
       double sum_z = 0.0;
       double sum_area = 0.0;
@@ -250,11 +262,13 @@ namespace crecmap{
       return core_region_id;
     }
     
-    bool map_region_intersect(recmapvector &C, map_region &a){
+    bool map_region_intersect(const recmapvector &C, const map_region &a){
+      // TODO(cp): use std::lower_bound(...); 
+      // but howto we get a sorted array suing STL? 
       for (map_region b : C){
         if (a.id != b.id && b.placed > 0){
         if(mbb_check(a, b)){
-          std::cout << a.name << " intersect with " << b.name << std::endl;
+          //std::cout << a.name << " intersect with " << b.name << std::endl;
           return true;
         }}
       }
@@ -265,89 +279,165 @@ namespace crecmap{
     
     // place rectangle around predecessor_region_id if this violates the 
     // constrain do a bfs until the box can be placed. 
-    void PlaceRectangle(recmapvector &M, recmapvector &C, int region_id){
+    bool PlaceRectangle(recmapvector &M, recmapvector &C, int region_id){
+
       double alpha0, alpha;
       
-      map_region candidate;
+      //map_region candidate;
       double beta_sign = 1.0;
       
       // strategy one: try to place it in the neighborhood
-      for (double beta = 0.0; beta <=  2 * PI && C[region_id].placed == 0; beta += PI/180){
+      for (double beta = 0.0; beta <=  PI && C[region_id].placed == 0; beta += PI/180){
         // iterate over all already placed connected rectangles
-        
         for (int adj_region_id : M[region_id].connected){
-          // as staring compute angle alpha0
-          alpha0 = get_angle(M[adj_region_id], M[region_id]);
-          
-          if (C[adj_region_id].placed > 0){
-      
-           
+
+          if (C[adj_region_id].placed > 0 ){
+            
+            alpha0 = get_angle(M[adj_region_id], M[region_id]);
+            
             alpha = alpha0 + (beta_sign * beta);
             beta_sign *= -1;
-            
-            print_map_reagion(C[adj_region_id]);
-            print_map_reagion(C[region_id]);
-            
-            std::cout << adj_region_id << "[*]\t" << region_id << 
-                "[ ]\talpha0 =" << 180 * alpha / PI << std::endl;
 
-              place_rectanle(C[adj_region_id], alpha, C[region_id]);
+            place_rectanle(C[adj_region_id], alpha, C[region_id]);
               
-              if (!map_region_intersect(C, C[region_id])) {
-                C[region_id].placed++;
-                C[adj_region_id].connected.push_back(region_id);
-                C[region_id].connected.push_back(adj_region_id);
-                
-                print_map_reagion(C[adj_region_id]);
-                print_map_reagion(C[region_id]);
-                std:: cout << std::endl;
-                
-                return;
-              }
+            if (!map_region_intersect(C, C[region_id])) {
+              C[region_id].placed++;
+              C[region_id].topology_error = 0;
+              C[adj_region_id].connected.push_back(region_id);
+              C[region_id].connected.push_back(adj_region_id);
+              return true;
             }
+          }
         } // END for (int adj_region_id : M[region_id].connected)
       }    
       
-      // strategy one: try to place it in the neighborhood
-        std::cout << std::endl << ">" << M[region_id].name << " could not be placed." << std::endl;
-          return;
+      // make it as not placed
+      C[region_id].x = -1;
+      C[region_id].y = -1;
+      warnings.push_back(M[region_id].name + " could not be placed;");
+      return false;
+    }
+    
+    
+    bool PlaceRectangle_bfs(recmapvector &M, recmapvector &C, int region_id){
+        std::list<int> bfs_list;
+        std::vector<int> visited(M.size(), 0);
+        std::vector<int> bfs_num(M.size(), 0);
+        
+        double alpha0, alpha;
+        double beta_sign = 1.0;
+        
+    
+
+        visited[region_id]++;
+        
+        
+        for (int adj_region_id : M[region_id].connected){
+          
+          if (C[adj_region_id].placed > 0 && visited[adj_region_id] == 0){
+            warnings.push_back( M[region_id].name + "\t--\t" + M[adj_region_id].name );
+            bfs_list.push_back(adj_region_id);
+            
+            }
+        }
+
+        int w;
+      while(!bfs_list.empty()){
+        
+        w = bfs_list.front(); bfs_list.pop_front();
+        visited[w]++;
+        
+        for (int adj_region_id : M[w].connected){
+          if (C[adj_region_id].placed > 0){
+            bfs_list.push_back(adj_region_id);
+          }
+        }
+        
+        alpha0 = get_angle(M[w], M[region_id]);
+        
+        for (double beta = 0.0; beta <=  PI; beta += PI/180){
+          alpha = alpha0 + (beta_sign * beta);
+          beta_sign *= -1;
+        
+        
+          place_rectanle(C[w], alpha, C[region_id]);
+          
+          if (!map_region_intersect(C, C[region_id])) {
+            C[region_id].placed++;
+            C[region_id].topology_error = 0;
+            C[w].connected.push_back(region_id);
+            C[region_id].connected.push_back(w);
+            
+            warnings.push_back(C[region_id].name + " is now a neighbour of");
+            for(int j : C[region_id].connected){
+              warnings.push_back("\t" + C[j].name);
+            }
+            return true;
+          }
+          
+
+      }
+      }
+      warnings.push_back(M[region_id].name + " could not be placed. RecMap MP2 failed! please report.");
+      //std::cout << std::endl << ">!!" << M[region_id].name << " could not be placed." << std::endl;
+      C[region_id].x = -1;
+      C[region_id].y = -1;
+      
+      return false;
     }
     
     
     // dfs exporer of existing map M / placement of rectangles in cartogram C
     void DrawCartogram(recmapvector &M, recmapvector &C, int core_region_id){
-      std::stack<int> stack;
+      std::list<int> stack;
       std::vector<int> visited(num_regions, 0);
       std::vector<int> dfs_num(num_regions, 0);
 
       int dfs_num_counter = 0;
       int current_region_id = core_region_id;
-      stack.push(current_region_id);
+      stack.push_back(current_region_id);
       visited[current_region_id]++;
       //
       //int predecessor_region_id;
         
       while (stack.size()  > 0){
         //predecessor_region_id = current_region_id;
-        current_region_id = stack.top() ; stack.pop();
+        current_region_id = stack.back() ; stack.pop_back();
         dfs_num[current_region_id] = dfs_num_counter++;
         C[current_region_id].dfs_num = dfs_num[current_region_id];
 
         //if (predecessor_region_id != current_region_id)
         
-        PlaceRectangle(M, C, current_region_id);
+        if (!PlaceRectangle(M, C, current_region_id)){
+          // stack.push_front(current_region_id);
+          //PlaceRectangle_bfs(M, C, current_region_id);
+        }
 
         for(int adj_region_id: M[current_region_id].connected){
           if (visited[adj_region_id] == 0) {
             visited[adj_region_id]++;
-            stack.push(adj_region_id);
+            stack.push_back(adj_region_id);
             //dfs_num[adj_region_id] = dfs_num_counter++;
             // C[adj_region_id].dfs_num = dfs_num[adj_region_id];
           }
         }
       } // while
+      
+      
+      std::for_each(C.begin(), C.end(), [&] (map_region &r) {
+        if (r.placed == 0){
+          warnings.push_back(r.name + "was not placed!!");
+          //PlaceRectangle(M, C, r.id);
+        }});
     }
   
+    
+    void ComputeError(const recmapvector &M, recmapvector &C){
+      std::for_each(C.begin(), C.end(), [&] (map_region &r) {
+        r.shape_error = -1; 
+        //r.topology_error = -100;
+        });
+    }
     
     void run(){
       
@@ -358,7 +448,10 @@ namespace crecmap{
       
       int core_region_id = ComputeCoreRegion(Map, Cartogram);
       std::cout << "CORE REGION: "; print_map_reagion(Cartogram[core_region_id]);
+     
       DrawCartogram(Map, Cartogram, core_region_id);
+      
+      ComputeError(Map, Cartogram);
   
       // determine core region to start
       // dfs 

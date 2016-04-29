@@ -37,6 +37,8 @@ DataFrame recmap(DataFrame df) {
   CharacterVector name = df["name"];
   
   NumericVector dfs_num(x.size()); 
+  NumericVector topology_error(x.size()); 
+  NumericVector shape_error(x.size()); 
   //crecmap::crecmap X(Rcpp::as<double>(x));
   crecmap::RecMap X;
   
@@ -58,11 +60,18 @@ DataFrame recmap(DataFrame df) {
     dy[i] = r.dy;
     //z[i] = r.z;
     dfs_num[i] = r.dfs_num;
+    topology_error[i] = r.topology_error;
+    shape_error[i] = r.shape_error;
   }
 
   
+  while(!X.warnings_empty()){warning(X.warnings_pop());}
+  
   // return a new data frame
-  return DataFrame::create(_["x"]= x, _["y"]= y, _["dx"]= dx, _["dy"]= dy,_["z"]= z, _["name"]= name, _["dfs_num"] = dfs_num);
+  return DataFrame::create(_["x"]= x, _["y"]= y, _["dx"]= dx, _["dy"]= dy,
+                           _["z"]= z, _["name"]= name, _["dfs.num"] = dfs_num,
+                           _["topology.error"] = topology_error,
+                           _["shape.error"] = shape_error);
 }
 
 
