@@ -396,10 +396,11 @@ namespace crecmap{
 
         //if (predecessor_region_id != current_region_id)
         
+        if (current_region_id != core_region_id){
         if (!PlaceRectangle(M, C, current_region_id)){
           // stack.push_front(current_region_id);
           //PlaceRectangle_bfs(M, C, current_region_id);
-        }
+        }}
 
         for(int adj_region_id: M[current_region_id].connected){
           if (visited[adj_region_id] == 0) {

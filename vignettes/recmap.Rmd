@@ -63,11 +63,12 @@ par(op)
 
 ```{r}
 usa <- data.frame(x=state.center$x, 
-                  y=state.center$y, 
-                  dx=sqrt(state.area) / 2 / (0.8 * 60 * cos(state.center$y*pi/180)), 
-                  dy=sqrt(state.area) / 2 / (0.8 * 60) , 
-                  z=sqrt(state.area),
-                  name=state.name)
+    y = state.center$y, 
+    # make the rectangles overlapping by correcting lines of longitude distance
+    dx = sqrt(state.area) / 2 / (0.8 * 60 * cos(state.center$y*pi/180)), 
+    dy = sqrt(state.area) / 2 / (0.8 * 60) , 
+    z = sqrt(state.area),
+    name = state.name)
 ```
 
 ## Determine the Desired Areas
@@ -80,7 +81,7 @@ $$\tilde{A_j}= z_j \cdot \frac {\sum_{i=1}^{k}A(r_j)} {\sum_{j=1}^{k} z_{j}}$$ (
 ```{r fig.width=7, fig.height=3}
 op<-par(mfrow=c(1,1), mar=c(0,0,0,0))
 library(recmap)
-plot_recmap(M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ],  cex=0.5)
+plot_recmap(M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ],  col.text = 'black', lwd=2)
 #plot_recmap(C<-recmap(M), cex=0.5)
 ```
 
@@ -158,7 +159,7 @@ head(Cartogram <- recmap(Map <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]))
 op<-par(mfrow=c(1,1), mar=c(0,0,0,0))
 usa$z <- state.x77[, 'Population']
 M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]
-plot_recmap(Cartogram.Population <- recmap(M[order(M$x),]), cex=0.4)
+plot_recmap(Cartogram.Population <- recmap(M[order(M$x),]), col.text = 'black', lwd=2)
 ```
 
 ## `state.x77[, 'Income']`
@@ -167,7 +168,7 @@ plot_recmap(Cartogram.Population <- recmap(M[order(M$x),]), cex=0.4)
 op<-par(mfrow=c(1,1), mar=c(0,0,0,0))
 usa$z <- state.x77[, 'Income']
 M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]
-plot_recmap(Cartogram.Income <- recmap(M[order(M$x),]), cex=0.4)
+plot_recmap(Cartogram.Income <- recmap(M[order(M$x),]), col.text = 'black', lwd=2)
 ```
 
 ## `state.x77[, 'Frost']`
@@ -176,7 +177,7 @@ plot_recmap(Cartogram.Income <- recmap(M[order(M$x),]), cex=0.4)
 op<-par(mfrow=c(1,1), mar=c(0,0,0,0))
 usa$z <- state.x77[, 'Frost'] 
 M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]
-plot_recmap(Cartogram.Income <- recmap(M[order(M$x),]), cex=0.4)
+plot_recmap(Cartogram.Income <- recmap(M[order(M$x),]), col.text = 'black', lwd=2)
 ```
 
 
@@ -189,15 +190,15 @@ strength and weakness of the method.
 recmap:::.checker_board(2)
 ```
 
-```{r fig.width=6, fig.height=2, fig.align='center'}
+```{r fig.width=7, fig.height=2.5, fig.align='center', fig.retina=2}
 op<-par(mar=c(0,0,0,0), 
         mfrow=c(1, 4), 
         bg='white')
 
 lapply(c(2,8), function(n){
   
-  plot_recmap(Map <- recmap:::.checker_board(n))
-  plot_recmap(Cartogram <- recmap(Map))
+  plot_recmap(Map <- recmap:::.checker_board(n), col=c('white','white','white','black')[Map$z])
+  plot_recmap(Cartogram <- recmap(Map), col=c('white','white','white','black')[Map$z])
   
   sum(Map$dx * Map$dy * 4) == sum(Cartogram$dx * Cartogram$dy * 4)
 })
@@ -213,11 +214,14 @@ par(op)
 - refactoring of C++ code into C++11 code
 
 ## RecMap
+
+- define core polygon
+- provide example for meta heutistic
 - use sorted arrays and binary search when checking MBB overlap
 - allow multiple connected components dual graph, e.g., world map
 
 
-# Addendum 
+# History 
 
 The work on recmap was initiated by understanding the limits of contiguous 
 cartogram drawing [@cartodraw] and after studying the visualizations

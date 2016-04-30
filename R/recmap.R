@@ -73,7 +73,7 @@
   res
 }
 
-plot_recmap <- function(S, colormap=c('#FFFFFF', '#000000'), ...){
+plot_recmap <- function(S, col='#00000011', col.text = 'grey', ...){
   plot(S$x, S$y, 
        xlim = c(min(S$x - S$dx), max(S$x + S$dx)), 
        ylim = c(min(S$y - S$dy), max(S$y + S$dy)), 
@@ -83,27 +83,26 @@ plot_recmap <- function(S, colormap=c('#FFFFFF', '#000000'), ...){
        ylab = '',
        axes = FALSE)
   
-  col.idx <- (length(colormap) -1  ) * (S$z - min(S$z) / (max(S$z) - min(S$z))) + 1
+  # col.idx <- (length(colormap) -1  ) * (S$z - min(S$z) / (max(S$z) - min(S$z))) + 1
   
   rect(xleft = S$x - S$dx, 
        ybottom = S$y - S$dy,  
        xright = S$x + S$dx, 
        ytop = S$y + S$dy, 
-       col = colormap[col.idx], 
-       border = 'darkgreen')
-  
-  colormap.rev <- rev(colormap)
+       col = col, 
+       border = 'darkgreen', ...)
   
   if (sqrt(length(S$x)) < 10){
     text(S$x, S$y, 
          S$name,
-         
-         col = colormap.rev[col.idx], ...)
+         cex=1.5/sqrt(sqrt(length(S$x))),
+         col = col.text)
     
     text(S$x, S$y, 
          S$dfs_num,
-         col = colormap.rev[col.idx], 
-         pos=1, cex=1/sqrt(sqrt(length(S$x))))
+         col = col.text, 
+         pos=1, 
+         cex=1/sqrt(sqrt(length(S$x))))
     }
 }
 

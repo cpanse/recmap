@@ -8,14 +8,17 @@ The graphical representation of recmap
 plots the rectangular map regions.
 }
 \usage{
-plot_recmap(S, colormap = c("#FFFFFF", "#000000"), ...)
+plot_recmap(S, col='#00000011', col.text = 'grey', ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{S}{
 a \code{data.frame} can be input or output of \code{recmap}.
 }
-  \item{colormap}{
+  \item{col}{
+  a vector of colors.
+}
+  \item{col.text}{
   a vector of colors.
 }
   \item{\dots}{
