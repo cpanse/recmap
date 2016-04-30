@@ -15,15 +15,15 @@ vignette: >
 # Introduction
 
 This package contains a C++ implementation of the recmap algorithm 
-[[@recmap]](http://dx.doi.org/10.1109/INFVIS.2004.57).
-The input consist of a map represented by overlapping rectangles.
-Furthermore the algorithm reqires as input for each map region:
+[[@recmap]](http://dx.doi.org/10.1109/INFVIS.2004.57) to draw maps according to given statistival values. These so-called cartograms or value-by-area-maps may be used to visualize any geospatial-related data, e. g. political, economical or public health data.
+The input consists of a map represented by overlapping rectangles.
+This map is defined by the following parameters for each map region:
 
 - a tuple of (x, y) values corresponding to the (longitude, latitude) position 
 - a tuple of (dx, dy) of expansion along (longitude, latitude) 
 - and a statistical value z.
 
-The (x, y) coordinates represents the center of the minimal bounding boxes (MBB),
+The (x, y) coordinates represent the center of the minimal bounding boxes (MBB),
 The coordinates of the MBB are derived by adding or substracting the (dx, dy) 
 tuple accordingly. The tuple (dx, dy) defines also the ratio of the map region.
 The statistical values define the desired area of each map region. 
@@ -32,8 +32,8 @@ The output is a rectangular cartogram where the map regions are:
 
 - non overlapping, 
 - connected, 
-- ratio and area of each rectangle corresponds to the desired areas.
-- rectangles are placed parallel to the axes
+- ratio and area of each rectangle correspond to the desired areas,
+- rectangles are placed parallel to the axes.
 
 The construction heuristic  places the rectangles in a way that important 
 spatial constraints, in particular
@@ -233,15 +233,12 @@ par(op)
 
 # History 
 
-The work on recmap was initiated by understanding the limits of contiguous 
+The work on RecMap was initiated by understanding the limits of contiguous 
 cartogram drawing [@cartodraw] and after studying the visualizations
 drawn by Erwin Raisz [@ErwinRaisz].
-While the purpose of the first implementation [@recmap] was more a feasibility 
-check on how computer generated rectangular cartograms could look like and 
-if this could be done  at all, 
-this R package tries to make one rectangular cartogram algorithm available for 
-a broader range of users. This means it is easy to generate input, e.g, no 
-complex polygon mesh, maintainable code, and the algorithm is made robust 
+The purpose of the first implementation [@recmap] was a feasibility 
+check on how computer-generated rectangular cartograms could look like. This R package provides a rectangular cartogram algorithm to be used by any R user. Now, it is easy to generate input (e.g, no 
+complex polygon mesh), the code is maintainable, and the algorithm is made robust 
 to the price of not having all featues implemented.
 Recent research publication on rectangular cartograms drawing include 
 [@Speckmann2004], [@Speckmann2007], [@Speckmann2012].
