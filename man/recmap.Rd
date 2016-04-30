@@ -1,5 +1,6 @@
 \name{recmap}
 \alias{recmap}
+\alias{RecMap}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Rectangular Map Approximations 
