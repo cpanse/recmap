@@ -35,6 +35,11 @@ DataFrame recmap(DataFrame df) {
   NumericVector z = df["z"];
   CharacterVector name = df["name"];
   
+  NumericVector cartogram_x(x.size()); 
+  NumericVector cartogram_y(x.size()); 
+  NumericVector cartogram_dx(x.size()); 
+  NumericVector cartogram_dy(x.size()); 
+  
   NumericVector dfs_num(x.size()); 
   NumericVector topology_error(x.size()); 
   NumericVector relpos_error(x.size()); 
@@ -52,10 +57,10 @@ DataFrame recmap(DataFrame df) {
   for (int i=0; i<x.size(); i++){
     crecmap::map_region r = X.get_map_region(i);
     
-    x[i] = r.x;
-    y[i] = r.y;
-    dx[i] = r.dx;
-    dy[i] = r.dy;
+    cartogram_x[i] = r.x;
+    cartogram_y[i] = r.y;
+    cartogram_dx[i] = r.dx;
+    cartogram_dy[i] = r.dy;
     //z[i] = r.z;
     dfs_num[i] = r.dfs_num;
     topology_error[i] = r.topology_error;
@@ -68,8 +73,13 @@ DataFrame recmap(DataFrame df) {
   //Rcpp::exception
     
   // return a new data frame
-  return DataFrame::create(_["x"]= x, _["y"]= y, _["dx"]= dx, _["dy"]= dy,
-                           _["z"]= z, _["name"]= name, _["dfs.num"] = dfs_num,
+  return DataFrame::create(_["x"]= cartogram_x, 
+                           _["y"]= cartogram_y,
+                           _["dx"]= cartogram_dx, 
+                           _["dy"]= cartogram_dy,
+                           _["z"]= z, 
+                           _["name"]= name, 
+                           _["dfs.num"] = dfs_num,
                            _["topology.error"] = topology_error,
                            _["relpos.error"] = relpos_error);
 }

@@ -210,6 +210,7 @@ namespace crecmap{
     }
     
     
+    
     void ComputePseudoDual(recmapvector &M){
       each_unique_pair(M, [this](map_region &a, map_region &b, recmapvector &M){
                          // add edges tp pseudo dual graph iff boxes are connected 
@@ -425,27 +426,29 @@ namespace crecmap{
   
     
     bool CheckConnectedComponents(const recmapvector &M){
-      std::vector<int> visited(M.size(),0);
-      
+      // t.b.implemented
       return true;
     }
     
+    
+    
     void ComputeError(const recmapvector &M, recmapvector &C){
-      std::for_each(C.begin(), C.end(), [&] (map_region &r) {
-        r.relative_position_error = -1; 
-        //r.topology_error = -100;
-        });
+      for (map_region a : M){
+        for (map_region b : M){
+          double gammaM = get_angle(M[a.id], M[b.id]);
+          double gammaC = get_angle(C[a.id], C[b.id]);
+          double delta = fabs (gammaC - gammaM) / C.size();
+          C[a.id].relative_position_error += delta;
+          
+        }
+      }
     }
     
     void run(){
       
       ComputePseudoDual(Map);
       
-      if (!CheckConnectedComponents(Map)){
-        
-      };
-      
-      //print_pseudo_dual(RecMap);
+      // CheckConnectedComponents(Map))
       
       ComputeDesiredArea(Map, Cartogram);
       
