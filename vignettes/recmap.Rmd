@@ -7,14 +7,14 @@ bibliography:
 csl: ieee.csl
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{recmap primer}
+  %\VignetteIndexEntry{RecMap primer}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
 # Introduction
 
-This package contains a C++ implementation of the recmap algorithm 
+This package contains a C++ implementation of the RecMap algorithm 
 [[@recmap]](http://dx.doi.org/10.1109/INFVIS.2004.57) to draw maps according to given statistival values. These so-called cartograms or value-by-area-maps may be used to visualize any geospatial-related data, e. g. political, economical or public health data.
 The input consists of a map represented by overlapping rectangles.
 This map is defined by the following parameters for each map region:
@@ -78,11 +78,13 @@ $$\tilde{A_j}= z_j \cdot \frac {\sum_{i=1}^{k}A(r_j)} {\sum_{j=1}^{k} z_{j}}$$ (
 
 ## Compute Pseudo Dual Graph (PD)
 
+The rectangles have to  overlap to compute the dual graph. This enables to generate 
+valid input having only the (x, y) coordinates of the map region.
+
 ```{r fig.width=7, fig.height=3}
 op<-par(mfrow=c(1,1), mar=c(0,0,0,0))
 library(recmap)
 plot_recmap(M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ],  col.text = 'black', lwd=2)
-#plot_recmap(C<-recmap(M), cex=0.5)
 ```
 
 ## Construction Heuristic
@@ -91,7 +93,8 @@ plot_recmap(M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ],  col.text = 'black
 - Place region by region along DFS skeleton of pseudo dual starting withe the 
 core region
 - If a rectangle can not be placed find a feasible solution (no overlapping 
-regions) by placing it next to a neighbour use BFS
+regions) by placing it next to a neighbour use BFS 
+(worst-case-szenario; is implemented but not possible to run in the current version)
 
 
 A local placement function can place an rectangle a around a given rectangle b of any angle between $[-\pi,\pi]$.
@@ -123,6 +126,15 @@ r<-lapply(seq(-pi/2, 0, length=90), function(alpha){draw_and_place_rectangle(alp
 
 par(op)
 ```
+
+## Meta Heuristic
+
+The index order of the input map
+has an impact to the resulting cartogram. This is caused due do 
+the computation of the dual graph. In [@recmap] a genetic algorithm was applied 
+as meta heuristic. Due do the limited compute resources on the CRAN package 
+build process no meta heuristic will be applied in this R package.
+
 
 ## Objective Functions
 
@@ -163,8 +175,9 @@ M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]
 plot_recmap(Cartogram.Population <- recmap(M[order(M$x),]), col.text = 'black', lwd=2)
 ```
 
-```{r fig.width=8, fig.height=4, fig.align='center', fig.cap="Area ~ population estimate as of July 1, 1975; a better index order has been determined by a meta heuristic."}
+```{r fig.width=8, fig.height=4, fig.align='center', fig.cap="Area ~ population estimate as of July 1, 1975; a better index order has been choosen to minimize the relative position error."}
 op<-par(mfrow=c(1,1), mar=c(0,0,0,0))
+# index order
 smp <- c(20,47,4,40,9,6,32,33,3,10,34,22,2,28,15,12,39,7,42,45,19,13,43,30,24,
          25,11,17,37,41,26,29,21,35,8,36,14,16,31,48,46,38,23,18,1,5,44,27)
 plot_recmap(Cartogram.Population <- recmap(M[smp,]), col.text = 'black', lwd=2)
@@ -191,34 +204,28 @@ plot_recmap(Cartogram.Income <- recmap(M[order(M$x),]), col.text = 'black', lwd=
 
 ## Syntetic Checker Boards
 
-The in [@cartodraw] introduced checker board examples will demonstarte the 
-strength and weakness of the method.
+Checker boards provide examples of sets of map regions which 
+do not have ideal cartogram solutions according to Def. 1 [@cartodraw].
 
-```{r}
-recmap:::.checker_board(2)
+
+```{r fig.width=7, fig.height=3.5, fig.align='center', fig.retina=2, fig.cap="chess board fun"}
+op<-par(mar=c(0,0,0,0), mfrow=c(1, 2), bg='white')
+
+plot_recmap(ChessBoard <- recmap:::.checker_board(8),
+            col=c('white','white','white','black')[ChessBoard$z])
+
+# found by a Non-deterministic Turing machine
+smp <- c(8,56,18,5,13,57,3,37,62,58,7,16,40,59,17,34,29,41,46,27,54,43,2,21,
+         38,52,31,20,28,48,1,22,55,11,25,19,50,10,24,53,47,30,45,44,32,35,51,
+         15,64,12,14,39,26,6,42,33,4,36,63,49,60,61,9,23)
+
+plot_recmap(Cartogram.ChessBoard <- recmap(ChessBoard[smp,]), 
+            col=c('white','white','white','black')[Cartogram.ChessBoard$z])
 ```
 
-```{r fig.width=7, fig.height=2.5, fig.align='center', fig.retina=2}
-op<-par(mar=c(0,0,0,0), 
-        mfrow=c(1, 4), 
-        bg='white')
+# TODO / Wishlist
 
-lapply(c(2,8), function(n){
-  Map <- recmap:::.checker_board(n)
-  Cartogram <- recmap(Map)
-  
-  plot_recmap(Map, col=c('white','white','white','black')[Map$z])
-  plot_recmap(Cartogram, col=c('white','white','white','black')[Map$z])
-  
-  sum(Map$dx * Map$dy * 4) == sum(Cartogram$dx * Cartogram$dy * 4)
-})
-
-par(op)
-```
-
-# Wishlist
-
-## C++/R
+## C++ / R
 
 - ReferenceClasses
 - refactoring of C++ code into C++11 code
@@ -226,7 +233,8 @@ par(op)
 ## RecMap
 
 - define core polygon
-- provide example for meta heutistic
+- implement the topology error function
+- provide some examples for meta heutistics at the [RecMap Gallery](http://cartodraw.science/recmap/gallery/)
 - use sorted arrays and binary search when checking MBB overlap
 - allow multiple connected components dual graph, e.g., world map
 
