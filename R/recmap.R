@@ -73,6 +73,7 @@
   res
 }
 
+
 plot_recmap <- function(S, col='#00000011', col.text = 'grey', ...){
   plot(S$x, S$y, 
        xlim = c(min(S$x - S$dx), max(S$x + S$dx)), 

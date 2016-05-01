@@ -1,10 +1,10 @@
 Package: recmap
 Type: Package
-Title: Compute The Rectangular Statistical Cartogram
-Version: 0.2.0
+Title: Compute the Rectangular Statistical Cartogram
+Version: 0.2.1
 Author: Christian Panse
 Maintainer: Christian Panse <Christian.Panse@gmail.com>
-Description: The 'recmap' package provides an interface and a C++ implementation 
+Description: Provides an interface and a C++ implementation 
   of the RecMap MP2 construction heuristic (see 'citation("recmap")' 
   for details). This algorithm draws maps according to a given statistical 
   value (e. g. election results, population or epidemiological data). 
