@@ -31,6 +31,7 @@
 #include <iterator>
 #include <sstream>
 #include <cmath>
+#include <set>
   
 
   
@@ -48,6 +49,28 @@ namespace crecmap{
     double relative_position_error;
     int dfs_num;
   } map_region;
+
+
+  struct mbb_node {
+    double key;
+    int id;
+    
+    mbb_node(const double& strKey = 0, const int& intId = 0)
+      : key(strKey),
+        id(intId) {}
+    
+    bool operator<(const mbb_node& rhs) const {
+      return key < rhs.key;
+    }
+  };
+
+
+  // use it as sorted list 
+  // insert/upper_bound: O(ln(n))
+  typedef struct {
+    std::set<mbb_node> x;
+    std::set<mbb_node> y;
+  } mbb_set;
 
  typedef std::vector<map_region> recmapvector; 
 
@@ -135,10 +158,20 @@ namespace crecmap{
       
   }
   
+  // http://stackoverflow.com/questions/17787410/nested-range-based-for-loops
+  template<typename C, typename Op1>
+  void each_unique_pair(C& container, Op1 fun1){
+    for(auto it = container.begin(); it != container.end() - 1; ++it)
+      for(auto it2 = std::next(it); it2 != container.end(); ++it2)
+        fun1(*it, *it2, container);
+  }
+  
   
   class RecMap{
     recmapvector Map;
     recmapvector Cartogram;
+    mbb_set MBB;
+    
     int num_regions;
     
     std::list<std::string> msg;
@@ -201,15 +234,6 @@ namespace crecmap{
         return(Cartogram[i]);
     }
     
-    // http://stackoverflow.com/questions/17787410/nested-range-based-for-loops
-    template<typename C, typename Op1>
-    void each_unique_pair(C& container, Op1 fun1){
-      for(auto it = container.begin(); it != container.end() - 1; ++it)
-        for(auto it2 = std::next(it); it2 != container.end(); ++it2)
-          fun1(*it, *it2, container);
-    }
-    
-    
     
     void ComputePseudoDual(recmapvector &M){
       each_unique_pair(M, [this](map_region &a, map_region &b, recmapvector &M){
@@ -265,6 +289,19 @@ namespace crecmap{
     return false;
     }
     
+    bool map_region_intersect_set(const recmapvector &C, const map_region &a){
+      // TODO(cp): use std::lower_bound(...); 
+      // but howto we get a sorted array suing STL? 
+      for (map_region b : C){
+        if (a.id != b.id && b.placed > 0){
+          if(mbb_check(a, b)){
+            
+            return true;
+          }}
+      }
+      
+      return false;
+    }
     
     // place rectangle around predecessor_region_id if this violates the 
     // constrain do a bfs until the box can be placed. 
@@ -277,6 +314,7 @@ namespace crecmap{
       
       // strategy one: try to place it in the neighborhood
       for (double beta = 0.0; beta <=  PI && C[region_id].placed == 0; beta += PI/180){
+        
         // iterate over all already placed connected rectangles
         for (int adj_region_id : M[region_id].connected){
 
@@ -292,6 +330,19 @@ namespace crecmap{
             if (!map_region_intersect(C, C[region_id])) {
               C[region_id].placed++;
               C[region_id].topology_error = 0;
+              
+              mbb_node mn;
+              mn.key = C[region_id].x;
+              mn.id = C[region_id].id;
+              MBB.x.insert(mn);
+              
+              mn.key = C[region_id].y;
+              mn.id = C[region_id].id;
+              MBB.y.insert(mn);
+              
+              //MBB.y.insert(y);
+              
+              // update dual graph
               C[adj_region_id].connected.push_back(region_id);
               C[region_id].connected.push_back(adj_region_id);
               return true;

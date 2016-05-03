@@ -232,6 +232,7 @@ plot_recmap(Cartogram.ChessBoard <- recmap(ChessBoard[smp,]),
 - ReferenceClasses
 - refactoring of C++ code into C++11 code
 
+
 ## RecMap
 
 - define core polygon
@@ -247,11 +248,14 @@ The work on RecMap was initiated by understanding the limits of contiguous
 cartogram drawing [@cartodraw] and after studying the visualizations
 drawn by Erwin Raisz [@ErwinRaisz].
 The purpose of the first implementation [@recmap] was a feasibility 
-check on how computer-generated rectangular cartograms could look like. This R package provides a rectangular cartogram algorithm to be used by any R user. Now, it is easy to generate input (e.g, no 
-complex polygon mesh), the code is maintainable, and the algorithm is made robust 
+check on how computer-generated rectangular cartograms could look like. 
+This R package provides a rectangular cartogram algorithm to be used by any 
+R user. Now, it is easy to generate input (e.g, no complex polygon mesh), 
+the code is maintainable, and the algorithm is made robust 
 to the price of not having all featues implemented.
 Recent research publication on rectangular cartograms drawing include 
 [@Speckmann2004], [@Speckmann2007], [@Speckmann2012].
+
 
 #References
 
