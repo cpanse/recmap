@@ -3,7 +3,8 @@
 
 \section{Changes in recmap version 0.2.2 (2016-05-02)}{
   \itemize{
-    \item tbd
+    \item refactor linear mbb intersection test by introducing using 
+    \code{std::set}.
   }
 
 \section{Changes in recmap version 0.2.1 (2016-05-01)}{

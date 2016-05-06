@@ -183,7 +183,9 @@ usa$z <- state.x77[, 'Population']
 M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]
 plot_recmap(Cartogram.Population <- recmap(M[order(M$x),]), 
             col.text = 'black', lwd=2)
+
 ```
+
 
 ```{r fig.width=8, fig.height=4, fig.align='left', fig.cap="Area ~ population estimate as of July 1, 1975; a better index order has been choosen to minimize the relative position error."}
 op<-par(mfrow=c(1,1), mar=c(0,0,0,0))
@@ -232,9 +234,6 @@ smp <- c(8,56,18,5,13,57,3,37,62,58,7,16,40,59,17,34,29,41,46,27,54,43,2,21,
 
 plot_recmap(Cartogram.ChessBoard <- recmap(ChessBoard[smp,]), 
             col=c('white','white','white','black')[Cartogram.ChessBoard$z])
-
-recmap:::.plot_recmap_error(Cartogram.ChessBoard)
-
 ```
 
 # TODO / Wishlist
@@ -251,7 +250,6 @@ recmap:::.plot_recmap_error(Cartogram.ChessBoard)
 - implement the topology error function
 - provide some examples for meta heutistics at the 
 [RecMap Gallery](http://cartodraw.science/recmap/gallery/)
-- use sorted arrays and binary search when checking MBB overlap
 - allow multiple connected components dual graph, e.g., world map
 
 

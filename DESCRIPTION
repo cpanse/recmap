@@ -19,7 +19,7 @@ License: GPL-3
 LazyData: TRUE
 Depends: R (>= 3.2), Rcpp (>= 0.12.4)
 SystemRequirements: C++11
-Suggests: knitr, testthat 
+Suggests: knitr, testthat
 LinkingTo: Rcpp (>= 0.12.4)
 VignetteBuilder: knitr
 NeedsCompilation: yes
