@@ -43,6 +43,7 @@ DataFrame recmap(DataFrame df) {
   NumericVector dfs_num(x.size()); 
   NumericVector topology_error(x.size()); 
   NumericVector relpos_error(x.size()); 
+  NumericVector relpos_nh_error(x.size()); 
   //crecmap::crecmap X(Rcpp::as<double>(x));
   crecmap::RecMap X;
   
@@ -53,7 +54,7 @@ DataFrame recmap(DataFrame df) {
   }
   
   X.run();
-  
+  Rcpp::Rcout << "Number of mbb intersection test calls =  " << X.get_intersect_count() << "\n";
   for (int i=0; i<x.size(); i++){
     crecmap::map_region r = X.get_map_region(i);
     
@@ -65,6 +66,7 @@ DataFrame recmap(DataFrame df) {
     dfs_num[i] = r.dfs_num;
     topology_error[i] = r.topology_error;
     relpos_error[i] = r.relative_position_error;
+    relpos_nh_error[i] = r.relative_position_neighborhood_error;
   }
 
   
@@ -81,7 +83,8 @@ DataFrame recmap(DataFrame df) {
                            _["name"]= name, 
                            _["dfs.num"] = dfs_num,
                            _["topology.error"] = topology_error,
-                           _["relpos.error"] = relpos_error);
+                           _["relpos.error"] = relpos_error,
+                           _["relposnh.error"] = relpos_nh_error);
 }
 
 

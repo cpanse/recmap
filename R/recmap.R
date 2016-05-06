@@ -104,7 +104,25 @@ plot_recmap <- function(S, col='#00000011', col.text = 'grey', ...){
          col = col.text, 
          pos=1, 
          cex=1/sqrt(sqrt(length(S$x))))
-    }
+  }
 }
 
+.plot_recmap_error <- function(S){
+  
+  par(mfrow=c(1,3), mar=c(5,5,5,5))
 
+  plot(sort(Cartogram.ChessBoard$relpos.error),
+       main="relpos.error",
+       ylab=expression(paste("normalized angle [in ", pi,"]")))
+
+  axis(4, c(0.25,0.5,0.75)*pi, c(0.25,0.5,0.75))
+  abline(h=c(0.25,0.5,0.75)*pi, col="#55555555")
+  
+  plot(sort(Cartogram.ChessBoard$relposnh.error),
+       main="relposnh.error", 
+       ylab=expression(paste("normalized angle [in ", pi,"]")))
+
+  axis(4, c(0.25,0.5,0.75)*pi, c(0.25,0.5,0.75))
+  abline(h=c(0.25,0.5,0.75)*pi, col="#55555555")
+  
+}

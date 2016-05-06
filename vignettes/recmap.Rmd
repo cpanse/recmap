@@ -15,7 +15,10 @@ vignette: >
 # Introduction
 
 This package contains a C++ implementation of the RecMap algorithm 
-[[@recmap]](http://dx.doi.org/10.1109/INFVIS.2004.57) to draw maps according to given statistival values. These so-called cartograms or value-by-area-maps may be used to visualize any geospatial-related data, e. g. political, economical or public health data.
+[[@recmap]](http://dx.doi.org/10.1109/INFVIS.2004.57) to draw maps according to 
+given statistival values. These so-called cartograms or value-by-area-maps may 
+be used to visualize any geospatial-related data, e. g. political, economical or 
+public health data.
 The input consists of a map represented by overlapping rectangles.
 This map is defined by the following parameters for each map region:
 
@@ -74,17 +77,19 @@ usa <- data.frame(x=state.center$x,
 ## Determine the Desired Areas
 
 The desired area $\tilde{A_j}$ of a map region  $r_j$ is defined as
-$$\tilde{A_j}= z_j \cdot \frac {\sum_{i=1}^{k}A(r_j)} {\sum_{j=1}^{k} z_{j}}$$ (CTRL-C CTRL-V from [@cartodraw]). 
+$$\tilde{A_j}= z_j \cdot \frac {\sum_{i=1}^{k}A(r_j)} {\sum_{j=1}^{k} z_{j}}$$ 
+(CTRL-C CTRL-V from [@cartodraw]). 
 
 ## Compute Pseudo Dual Graph (PD)
 
-The rectangles have to  overlap to compute the dual graph. This enables to generate 
-valid input having only the (x, y) coordinates of the map region.
+The rectangles have to  overlap to compute the dual graph. This enables to 
+generate valid input having only the (x, y) coordinates of the map region.
 
 ```{r fig.width=7, fig.height=3}
 op<-par(mfrow=c(1,1), mar=c(0,0,0,0))
 library(recmap)
-plot_recmap(M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ],  col.text = 'black', lwd=2)
+plot_recmap(M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ],  
+            col.text = 'black', lwd=2)
 ```
 
 ## Construction Heuristic
@@ -94,11 +99,13 @@ plot_recmap(M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ],  col.text = 'black
 core region
 - If a rectangle can not be placed find a feasible solution (no overlapping 
 regions) by placing it next to a neighbour use BFS 
-(worst-case-szenario; is implemented but not possible to run in the current version)
+(worst-case-szenario; is implemented but not possible to run in the current 
+version)
 
 
-A local placement function can place an rectangle a around a given rectangle b of any angle between $[-\pi,\pi]$.
-There are special cases for quad I, II, III, and IV indicated by different colors in the gaphic below.
+A local placement function can place an rectangle a around a given rectangle b 
+of any angle between $[-\pi,\pi]$. There are special cases for quad I, II, III, 
+and IV indicated by different colors in the gaphic below.
 
 ```{r echo=FALSE, fig.width=2, fig.height=2, fig.align='center'}
 
@@ -174,7 +181,8 @@ head(Cartogram <- recmap(Map <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]))
 op<-par(mfrow=c(1,1), mar=c(0,0,0,0))
 usa$z <- state.x77[, 'Population']
 M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]
-plot_recmap(Cartogram.Population <- recmap(M[order(M$x),]), col.text = 'black', lwd=2)
+plot_recmap(Cartogram.Population <- recmap(M[order(M$x),]), 
+            col.text = 'black', lwd=2)
 ```
 
 ```{r fig.width=8, fig.height=4, fig.align='left', fig.cap="Area ~ population estimate as of July 1, 1975; a better index order has been choosen to minimize the relative position error."}
@@ -200,7 +208,8 @@ plot_recmap(Cartogram.Income <- recmap(M[order(M$x),]), col.text = 'black', lwd=
 op<-par(mfrow=c(1,1), mar=c(0,0,0,0))
 usa$z <- state.x77[, 'Frost'] 
 M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]
-plot_recmap(Cartogram.Income <- recmap(M[order(M$x),]), col.text = 'black', lwd=2)
+plot_recmap(Cartogram.Income <- recmap(M[order(M$x),]), 
+            col.text = 'black', lwd=2)
 ```
 
 
@@ -223,6 +232,9 @@ smp <- c(8,56,18,5,13,57,3,37,62,58,7,16,40,59,17,34,29,41,46,27,54,43,2,21,
 
 plot_recmap(Cartogram.ChessBoard <- recmap(ChessBoard[smp,]), 
             col=c('white','white','white','black')[Cartogram.ChessBoard$z])
+
+recmap:::.plot_recmap_error(Cartogram.ChessBoard)
+
 ```
 
 # TODO / Wishlist
@@ -237,7 +249,8 @@ plot_recmap(Cartogram.ChessBoard <- recmap(ChessBoard[smp,]),
 
 - define core polygon
 - implement the topology error function
-- provide some examples for meta heutistics at the [RecMap Gallery](http://cartodraw.science/recmap/gallery/)
+- provide some examples for meta heutistics at the 
+[RecMap Gallery](http://cartodraw.science/recmap/gallery/)
 - use sorted arrays and binary search when checking MBB overlap
 - allow multiple connected components dual graph, e.g., world map
 
