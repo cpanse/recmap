@@ -57,7 +57,10 @@ However, worst case for a range query is O(n), iff dx or dy cover the whole
 x or y range.
 Q.E.D.
 
-In praxis on a 2.4 GHz Intel Core i7 computing the ~50 state U.S. map the computation is less than a second. 
+In praxis on a 2.4 GHz Intel Core i7 (using only one core) computing using the 50 state U.S. map 
+example, recmap can compute ~100 cartograms in one second.
+The number of mbb calls were
+(Min., Median, Mean, Max)  = (1448, 2534, 3174, 17740).
 
 }
 
@@ -93,6 +96,25 @@ Approximations. InfoVis 2004, IEEE Symposium on Information Visualization, Austi
 Cartogram <- recmap(Map <- recmap:::.checker_board(2))
 
 plot_recmap(Cartogram)
+
+## US example
+usa <- data.frame(x = state.center$x, 
+     y = state.center$y, 
+     # make the rectangles overlapping by correcting lines of longitude distance
+     dx = sqrt(state.area) / 2 / (0.8 * 60 * cos(state.center$y*pi/180)), 
+     dy = sqrt(state.area) / 2 / (0.8 * 60) , 
+     z = sqrt(state.area),
+     name = state.name)
+      
+usa$z <- state.x77[, 'Population']
+US.Map <- usa[match(usa$name, c('Hawaii', 'Alaska'), nomatch = 0)  == 0, ]
+
+## benchmark(recmap(US.Map[sample(50,50),]), replications=100)
+##                              test replications elapsed relative user.self
+##1 recmap(US.Map[sample(50, 50), ])          100   1.255        1     1.124
+##  sys.self user.child sys.child
+##1    0.038          0         0
+
 
 ## Have Fun!
 

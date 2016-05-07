@@ -54,7 +54,7 @@ DataFrame recmap(DataFrame df) {
   }
   
   X.run();
-  // Rcpp::Rcout << "Number of mbb intersection test calls =  " << X.get_intersect_count() << "\n";
+  Rcpp::Rcout << "Number of mbb intersection test calls =  " << X.get_intersect_count() << "\n";
   for (int i=0; i<x.size(); i++){
     crecmap::map_region r = X.get_map_region(i);
     
