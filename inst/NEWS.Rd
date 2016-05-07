@@ -1,10 +1,13 @@
 \name{NEWS}
 \title{News for Package 'recmap'}
 
-\section{Changes in recmap version 0.2.2 (2016-05-02)}{
+\section{Changes in recmap version 0.2.2 (2016-05-07)}{
   \itemize{
     \item refactor linear mbb intersection test by introducing using 
-    \code{std::set}.
+    \code{std::set}. 
+    \item added local relative position objective function.
+    \item refactor recmap class, less than 500 lines of C++.
+    \item added benchmark example in man page.
   }
   }
 
