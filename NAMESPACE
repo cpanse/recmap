@@ -6,3 +6,4 @@ export("plot_recmap")
 
 importFrom("graphics", "plot", "polygon", "rect", "text")
 importFrom("utils", "combn", "read.table")
+importFrom("graphics", "abline", "axis")
