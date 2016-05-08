@@ -140,7 +140,7 @@ recmapFitness <- function(idxOrder, Map, ...){
 }
 
 recmapGA <- ga(type = "permutation", fitness = recmapFitness, Map = M,
-    min = 1, max = nrow(M), popSize = 4*nrow(M), maxiter = 100,
+    min = 1, max = nrow(M) , popSize = 4 * nrow(M), maxiter = 1000,
     parallel=TRUE,
     run = 100, pmutation = 0.25)
 
