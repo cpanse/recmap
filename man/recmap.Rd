@@ -76,6 +76,9 @@ Roland Heilmann, Daniel Keim, Christian Panse, and Mike Sips (2004). RecMap: Rec
 Approximations. InfoVis 2004, IEEE Symposium on Information Visualization, Austin, Texas, 33-40.
 \url{http://dx.doi.org/10.1109/INFVIS.2004.57}
 
+ Luca Scrucca (2013). GA: A Package for Genetic Algorithms in R. Journal of Statistical Software, 53(4), 1-37. 
+  \url{http://dx.doi.org/10.18637/jss.v053.i04}. 
+
 }
 
 \author{
@@ -88,7 +91,7 @@ Approximations. InfoVis 2004, IEEE Symposium on Information Visualization, Austi
 
   The package vignette \url{https://cran.r-project.org/web/packages/recmap/vignettes/recmap.html} or 
   by calling \code{vignette("recmap")} on the R command prompt.
-
+  
 }
 
 \examples{
@@ -109,11 +112,44 @@ usa <- data.frame(x = state.center$x,
 usa$z <- state.x77[, 'Population']
 US.Map <- usa[match(usa$name, c('Hawaii', 'Alaska'), nomatch = 0)  == 0, ]
 
-## benchmark(recmap(US.Map[sample(50,50),]), replications=100)
+\dontrun{
+# install.packages('rbenchmark')
+
+library(rbenchmark)
+benchmark(recmap(US.Map[sample(50,50),]), replications=100)
 ##                              test replications elapsed relative user.self
 ##1 recmap(US.Map[sample(50, 50), ])          100   1.255        1     1.124
 ##  sys.self user.child sys.child
 ##1    0.038          0         0
+}
+
+\dontrun{
+## Use Genetic Algorithms as Meta Heuristic
+
+# install.packages(c('doParallel', 'GA'))
+
+library(GA)
+library(parallel)
+library(doParallel)
+
+M <- US.Map
+
+recmapFitness <- function(idxOrder, Map, ...){
+  Cartogram <- recmap(Map[idxOrder, ])
+  1 / sum(Cartogram$z / (sqrt(sum(Cartogram$z^2))) * Cartogram$relpos.error)
+}
+
+recmapGA <- ga(type = "permutation", fitness = recmapFitness, Map = M,
+    min = 1, max = nrow(M), popSize = 4*nrow(M), maxiter = 100,
+    parallel=TRUE,
+    run = 100, pmutation = 0.25)
+
+plot_recmap(recmap(M[recmapGA@solution[1,],]))
+
+plot(recmapGA)
+
+
+}
 
 
 ## Have Fun!

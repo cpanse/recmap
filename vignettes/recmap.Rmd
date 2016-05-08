@@ -11,7 +11,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
+!
 # Introduction
 
 This package contains a C++ implementation of the RecMap algorithm 
