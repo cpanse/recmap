@@ -11,7 +11,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-!
+
 # Introduction
 
 This package contains a C++ implementation of the RecMap algorithm 
@@ -240,16 +240,13 @@ plot_recmap(Cartogram.ChessBoard <- recmap(ChessBoard[smp,]),
 
 ## C++ / R
 
-- ReferenceClasses
-- refactoring of C++ code into C++11 code
+- refactoring; turn C++ code entirely into C++11 code
 
 
 ## RecMap
 
 - define core polygon
 - implement the topology error function
-- provide some examples for meta heutistics at the 
-[RecMap Gallery](http://cartodraw.science/recmap/gallery/)
 - allow multiple connected components dual graph, e.g., world map
 
 
