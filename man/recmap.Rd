@@ -124,6 +124,7 @@ benchmark(recmap(US.Map[sample(50,50),]), replications=100)
 }
 
 \dontrun{
+
 ## Use Genetic Algorithms as Meta Heuristic
 
 # install.packages(c('doParallel', 'GA'))
@@ -148,12 +149,10 @@ plot_recmap(recmap(M[recmapGA@solution[1,],]))
 
 plot(recmapGA)
 
-
 }
 
 
 ## Have Fun!
-
 }
 
 \keyword{cartogram}
