@@ -67,8 +67,8 @@ struct mbb_node {
   typedef struct {
     double max_dx;
     double max_dy;
-    std::set<mbb_node> x;
-    std::set<mbb_node> y;
+    std::multiset<mbb_node> x;
+    std::multiset<mbb_node> y;
   } mbb_set;
 
  typedef std::vector<map_region> recmapvector; 
@@ -293,35 +293,42 @@ struct mbb_node {
     }
     
     bool map_region_intersect_set(recmapvector &C, const mbb_set &S, const map_region &a){
+      double eps = 0.0;
       auto lower_x = std::lower_bound(S.x.begin(), S.x.end(), 
-                                      a.x - a.dx - S.max_dx, 
+                                      a.x - a.dx - S.max_dx - eps, 
                                       [](const mbb_node& f1, const mbb_node& f2) { return f1.key < f2.key; });
       
       auto upper_x = std::upper_bound(S.x.begin(), S.x.end(), 
-                                      a.x + a.dx + S.max_dx, 
+                                      a.x + a.dx + S.max_dx + eps, 
                                       [](const mbb_node& f1, const mbb_node& f2) { return f1.key < f2.key; });
       
       auto lower_y = std::lower_bound(S.y.begin(), S.y.end(), 
-                                      a.y - a.dy - S.max_dy, 
+                                      a.y - a.dy - S.max_dy - eps, 
                                       [](const mbb_node& f1, const mbb_node& f2) { return f1.key < f2.key; });
       
       auto upper_y = std::upper_bound(S.y.begin(), S.y.end(), 
-                                      a.y + a.dy + S.max_dy, 
+                                      a.y + a.dy + S.max_dy + eps, 
                                       [](const mbb_node& f1, const mbb_node& f2) { return f1.key < f2.key; });
       
-      
+      /*
+      std::cout << std::distance(lower_x, upper_x) << "\t" << std::distance(lower_y, upper_y) << "\t"
+                << S.x.size() << "\t"
+                << S.y.size() << "\n";
+      */
       for(auto it_x = lower_x; it_x != upper_x; ++it_x){
         intersect_count++;
         if ((*it_x).id != a.id &&  mbb_check(a, C[(*it_x).id])){
           return true;
         }
       }
+      
       for(auto it_y = lower_y; it_y != upper_y; ++it_y){
         intersect_count++;
         if ((*it_y).id != a.id && mbb_check(a, C[(*it_y).id])){
           return true;
         }
       }
+      
       return false;
     }
     
@@ -349,9 +356,25 @@ struct mbb_node {
             place_rectanle(C[adj_region_id], alpha, C[region_id]);
               
             
-            // this is to enable the linear scan
-            // if (!map_region_intersect(C, C[region_id])) {
+            // this is to enable the linear MBB check
+            //if (!map_region_intersect(C, C[region_id])) {
             if (!map_region_intersect_set(C, MBB, C[region_id])){
+              
+              // DEBUG BEGIN
+              /*
+              if (map_region_intersect(C, C[region_id])){
+                std::cout << "ERROR"<< "\t" 
+                          << C[region_id].name << "\t" 
+                          << C[region_id].x << "\t"
+                          << C[region_id].y << "\t"
+                          << C[region_id].dx << "\t"
+                          << C[region_id].dy << "\t"
+                          << MBB.max_dx << "\t"
+                          << MBB.max_dy << "\t"
+                          << "\n";
+              }*/
+              // DEBUG END
+              
               C[region_id].placed++;
               C[region_id].topology_error = 0;
               
