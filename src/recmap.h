@@ -80,7 +80,7 @@ struct mbb_node {
   }
 
   // http://gamemath.com/2011/09/detecting-whether-two-boxes-overlap/
-  bool mbb_check(const map_region &a, const map_region &b){
+  inline bool mbb_check(const map_region &a, const map_region &b){
     
     if (a.x + a.dx < b.x - b.dx) return false; // a is left of b
     else if (a.x - a.dx > b.x + b.dx) return false; // a is right of b
