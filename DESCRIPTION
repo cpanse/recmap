@@ -9,12 +9,11 @@ Description: Provides an interface and a C++ implementation
   for details). This algorithm draws maps according to a given statistical 
   value (e. g. election results, population or epidemiological data). 
   The basic idea of the RecMap algorithm is that each map region 
-  (e. g. different countries) is 
-  represented by a rectangle. The area of each rectangle represents the 
-  statistical value given as input. 
-  Documentation about 'RecMap' is provided by a 
-  vignette included in this package and a 'RecMap gallery' 
-  site at <http://cartodraw.science/recmap/gallery>.
+  (e. g. different countries) is represented by a rectangle. The area of 
+  each rectangle represents the statistical value given as input. 
+  Documentation about 'RecMap' is provided by a vignette included in this 
+  package and a 'RecMap gallery' site at 
+  <http://cartodraw.science/recmap/gallery>.
 License: GPL-3
 LazyData: TRUE
 Depends: R (>= 3.2), Rcpp (>= 0.12.4)
