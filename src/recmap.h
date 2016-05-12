@@ -302,13 +302,6 @@ struct mbb_node {
                                       a.x + a.dx + S.max_dx + eps, 
                                       [](const mbb_node& f1, const mbb_node& f2) { return f1.key < f2.key; });
       
-      auto lower_y = std::lower_bound(S.y.begin(), S.y.end(), 
-                                      a.y - a.dy - S.max_dy - eps, 
-                                      [](const mbb_node& f1, const mbb_node& f2) { return f1.key < f2.key; });
-      
-      auto upper_y = std::upper_bound(S.y.begin(), S.y.end(), 
-                                      a.y + a.dy + S.max_dy + eps, 
-                                      [](const mbb_node& f1, const mbb_node& f2) { return f1.key < f2.key; });
       
       /*
       std::cout << std::distance(lower_x, upper_x) << "\t" << std::distance(lower_y, upper_y) << "\t"
@@ -321,6 +314,14 @@ struct mbb_node {
           return true;
         }
       }
+ 
+      auto lower_y = std::lower_bound(S.y.begin(), S.y.end(), 
+                                 a.y - a.dy - S.max_dy - eps, 
+                                 [](const mbb_node& f1, const mbb_node& f2) { return f1.key < f2.key; });
+      
+      auto upper_y = std::upper_bound(S.y.begin(), S.y.end(), 
+                                      a.y + a.dy + S.max_dy + eps, 
+                                      [](const mbb_node& f1, const mbb_node& f2) { return f1.key < f2.key; });
       
       for(auto it_y = lower_y; it_y != upper_y; ++it_y){
         intersect_count++;
