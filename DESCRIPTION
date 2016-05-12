@@ -1,7 +1,7 @@
 Package: recmap
 Type: Package
 Title: Compute the Rectangular Statistical Cartogram
-Version: 0.2.4
+Version: 0.2.5
 Author: Christian Panse
 Maintainer: Christian Panse <Christian.Panse@gmail.com>
 Description: Provides an interface and a C++ implementation 
@@ -16,7 +16,7 @@ Description: Provides an interface and a C++ implementation
   <http://cartodraw.science/recmap/gallery>.
 License: GPL-3
 LazyData: TRUE
-Depends: R (>= 3.2), Rcpp (>= 0.12.4)
+Depends: R (>= 3.3), Rcpp (>= 0.12.4)
 SystemRequirements: C++11
 Suggests: knitr, testthat
 LinkingTo: Rcpp (>= 0.12.4)

@@ -47,14 +47,3 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// recmap_linear
-DataFrame recmap_linear(DataFrame df);
-RcppExport SEXP recmap_recmap_linear(SEXP dfSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< DataFrame >::type df(dfSEXP);
-    __result = Rcpp::wrap(recmap_linear(df));
-    return __result;
-END_RCPP
-}

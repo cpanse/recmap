@@ -13,7 +13,3 @@ recmap <- function(df) {
     .Call('recmap_recmap', PACKAGE = 'recmap', df)
 }
 
-recmap_linear <- function(df) {
-    .Call('recmap_recmap_linear', PACKAGE = 'recmap', df)
-}
-
