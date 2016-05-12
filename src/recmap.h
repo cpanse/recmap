@@ -193,7 +193,7 @@ struct mbb_node {
       
       map_region R, R1; 
       
-      R.x=x; R.y=y; R.dx=dx; R.dy = dy; R.z =z;
+      R.x=x; R.y=y; R.dx=dx; R.dy = dy; R.z=z;
       R.id = num_regions;
       R.area_desired = -1;
       R.connected = {};

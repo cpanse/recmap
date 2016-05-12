@@ -274,6 +274,11 @@ to the price of not having all featues implemented.
 Recent research publication on rectangular cartograms drawing include 
 [@Speckmann2004], [@Speckmann2007], [@Speckmann2012].
 
+# Session Info
+
+```{r}
+sessionInfo()
+```
 
 #References
 
