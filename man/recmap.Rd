@@ -140,10 +140,14 @@ recmapFitness <- function(idxOrder, Map, ...){
   1 / sum(Cartogram$z / (sqrt(sum(Cartogram$z^2))) * Cartogram$relpos.error)
 }
 
-recmapGA <- ga(type = "permutation", fitness = recmapFitness, Map = M,
-    min = 1, max = nrow(M) , popSize = 4 * nrow(M), maxiter = 1000,
-    parallel=TRUE,
-    run = 100, pmutation = 0.25)
+recmapGA <- ga(type = "permutation", 
+  fitness = recmapFitness, Map = M,
+  min = 1, max = nrow(M) , 
+  popSize = 4 * nrow(M), 
+  maxiter = 10,
+  run = 100, 
+  parallel=TRUE,
+  pmutation = 0.25)
 
 plot_recmap(recmap(M[recmapGA@solution[1,],]))
 

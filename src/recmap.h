@@ -403,7 +403,76 @@ struct mbb_node {
       return false;
     }
     
-   
+    // place rectangle around predecessor_region_id 
+    bool PlaceRectangle_linear(recmapvector &M, recmapvector &C, int region_id){
+      
+      double alpha0, alpha;
+      mbb_node mn;
+      
+      double beta_sign = 1.0;
+      
+      // strategy one: try to place it in the neighborhood
+      for (double beta = 0.0; beta <=  PI && C[region_id].placed == 0; beta += PI/180){
+        
+        // iterate over all already placed connected rectangles
+        for (int adj_region_id : M[region_id].connected){
+          
+          if (C[adj_region_id].placed > 0 ){
+            
+            alpha0 = get_angle(M[adj_region_id], M[region_id]);
+            
+            alpha = alpha0 + (beta_sign * beta);
+            beta_sign *= -1;
+            
+            place_rectanle(C[adj_region_id], alpha, C[region_id]);
+            
+            
+            // this is to enable the linear MBB check
+            if (!map_region_intersect(C, C[region_id])) {
+              
+              // DEBUG BEGIN
+              /*
+              if (map_region_intersect(C, C[region_id])){
+              std::cout << "ERROR"<< "\t" 
+                        << C[region_id].name << "\t" 
+                        << C[region_id].x << "\t"
+                        << C[region_id].y << "\t"
+                        << C[region_id].dx << "\t"
+                        << C[region_id].dy << "\t"
+                        << MBB.max_dx << "\t"
+                        << MBB.max_dy << "\t"
+                        << "\n";
+              }*/
+              // DEBUG END
+              
+              C[region_id].placed++;
+              C[region_id].topology_error = 0;
+              
+              /*
+              mn.key = C[region_id].x; mn.id = C[region_id].id;
+              MBB.x.insert(mn);
+              
+              mn.key = C[region_id].y; mn.id = C[region_id].id;
+              MBB.y.insert(mn);
+              
+              if (C[region_id].dx > MBB.max_dx) {MBB.max_dx = C[region_id].dx;}
+              if (C[region_id].dy > MBB.max_dy) {MBB.max_dy = C[region_id].dy;}
+              */
+              // update dual graph
+              C[adj_region_id].connected.push_back(region_id);
+              C[region_id].connected.push_back(adj_region_id);
+              return true;
+            }
+        }
+      } // END for (int adj_region_id : M[region_id].connected)
+    }    
+      
+      // placement failed => make it as not placed
+      C[region_id].x = -1;
+      C[region_id].y = -1;
+      warnings.push_back(M[region_id].name + " could not be placed on the first attempt;");
+      return false;
+  }
     // dfs explorer of existing map M / placement of rectangles in cartogram C
     void DrawCartogram(recmapvector &M, recmapvector &C, int core_region_id){
       std::list<int> stack;
@@ -444,6 +513,46 @@ struct mbb_node {
         }});
     }
     
+    // dfs explorer of existing map M / placement of rectangles in cartogram C
+    void DrawCartogram_linear(recmapvector &M, recmapvector &C, int core_region_id){
+      std::list<int> stack;
+      std::vector<int> visited(num_regions, 0);
+      std::vector<int> dfs_num(num_regions, 0);
+      
+      int dfs_num_counter = 0;
+      int current_region_id = core_region_id;
+      stack.push_back(current_region_id);
+      visited[current_region_id]++;
+      
+      while (stack.size()  > 0){
+        current_region_id = stack.back() ; stack.pop_back();
+        dfs_num[current_region_id] = dfs_num_counter++;
+        C[current_region_id].dfs_num = dfs_num[current_region_id];
+        
+        if (current_region_id != core_region_id){
+          if (!PlaceRectangle_linear(M, C, current_region_id)){
+            // bad luck
+          }
+        }
+        
+        for(int adj_region_id : M[current_region_id].connected){
+          if (visited[adj_region_id] == 0) {
+            visited[adj_region_id]++;
+            stack.push_back(adj_region_id);
+          }
+        }
+      } // while
+      
+      std::for_each(C.begin(), C.end(), [&] (map_region &r) {
+        if (r.placed == 0){
+          PlaceRectangle_linear(M, C, r.id);
+          if (r.placed == 0){
+            warnings.push_back(r.name + " was not placed!!");
+          }
+          //
+        }});
+    }
+    
     void ComputeError(const recmapvector &M, recmapvector &C){
       double gammaM, gammaC, delta;
 
@@ -473,6 +582,20 @@ struct mbb_node {
       int core_region_id = ComputeCoreRegion(Map, Cartogram);
       msg.push_back("CORE REGION: " + Map[core_region_id].name);
       DrawCartogram(Map, Cartogram, core_region_id);
+      
+      ComputeError(Map, Cartogram);
+      
+    }//run  
+    
+    void run_linear(){
+      
+      ComputePseudoDual(Map);
+      
+      ComputeDesiredArea(Map, Cartogram);
+      
+      int core_region_id = ComputeCoreRegion(Map, Cartogram);
+      msg.push_back("CORE REGION: " + Map[core_region_id].name);
+      DrawCartogram_linear(Map, Cartogram, core_region_id);
       
       ComputeError(Map, Cartogram);
       
