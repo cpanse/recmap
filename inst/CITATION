@@ -19,5 +19,5 @@ bibentry(bibtype = "Inproceedings",
          paste("Roland Heilmann, Daniel Keim, Christian Panse, and Mike Sips (2004).",
         "RecMap: Rectangular Map Approximations.",
         "10th IEEE Symposium on Information Visualization (InfoVis 2004), 10-12 October 2004, Austin, TX, USA, pp33-40.",
-        "URL http://dx.doi.org/10.1109/INFVIS.2004.57.")
+        "URL http://dx.doi.org/10.1109/INFVIS.2004.57")
         )
