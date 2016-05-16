@@ -134,13 +134,14 @@ r<-lapply(seq(-pi/2, 0, length=90), function(alpha){draw_and_place_rectangle(alp
 par(op)
 ```
 
-## Meta Heuristic
+## Metaheuristic
 
 The index order of the input map
 has an impact to the resulting cartogram. This is caused due do 
 the computation of the dual graph. In [@recmap] a genetic algorithm was applied 
 as meta heuristic. Due do the limited compute resources on the CRAN package 
 build process no meta heuristic will be applied in this R package.
+
 
 
 ## Objective Functions
