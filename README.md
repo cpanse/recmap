@@ -5,7 +5,8 @@
 
 # recmap - Compute the Rectangular Statistical Cartogram
 
-This package contains a C++ implementation of the [RecMap algorithm](http://dx.doi.org/10.1109/INFVIS.2004.57) to draw maps according to 
+This package contains an implementation of the [RecMap algorithm](http://dx.doi.org/10.1109/INFVIS.2004.57) to 
+transform a regular map into rectangular non-oberlapping map partition where the area is defined by the as input 
 given statistival values.
 
 ## Documentation
