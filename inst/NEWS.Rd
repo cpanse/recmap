@@ -6,7 +6,6 @@
     \item refactor linear mbb intersection test by introducing using 
     \code{std::set}. 
     \item added local relative position objective function.
-    \item refactor recmap class, less than 500 lines of C++ code.
     \item added benchmark example in man page.
     \item documentation cosmetics
   }
