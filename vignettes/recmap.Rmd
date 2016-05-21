@@ -92,15 +92,13 @@ plot_recmap(M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ],
             col.text = 'black', lwd=2)
 ```
 
-## Construction Heuristic
+## Construction heuristic
 
 - Determine the core region
 - Place region by region along DFS skeleton of pseudo dual starting withe the 
 core region
 - If a rectangle can not be placed find a feasible solution (no overlapping 
-regions) by placing it next to a neighbour use BFS 
-(worst-case-szenario; is implemented but not possible to run in the current 
-version)
+regions) by placing it next to a neighbour
 
 
 A local placement function can place an rectangle a around a given rectangle b 
@@ -139,9 +137,8 @@ par(op)
 The index order of the input map
 has an impact to the resulting cartogram. This is caused due do 
 the computation of the dual graph. In [@recmap] a genetic algorithm was applied 
-as meta heuristic. Due do the limited compute resources on the CRAN package 
-build process no meta heuristic will be applied in this R package.
-
+as metaheuristic. Due do the limited compute resources on the CRAN package 
+build process no metaheuristic will be applied in this R package.
 
 
 ## Objective Functions
@@ -170,8 +167,6 @@ The output is again a `data.frame`.
 ```{r}
 head(Cartogram <- recmap(Map <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]))
 ```
-
-
 
 # Application
 
@@ -225,6 +220,7 @@ plot_recmap(Cartogram.Income <- recmap(M[order(M$x),]),
             col.text = 'black', lwd=2)
 ```
 
+More examples using `state.x77` data and `shiny` application are available on [shinyapps.io](https://recmap.shinyapps.io/state_x77/).
 
 ## Syntetic Checker Boards
 
@@ -249,14 +245,6 @@ plot_recmap(Cartogram.ChessBoard <- recmap(ChessBoard[smp,]),
 
 # TODO / Wishlist
 
-## C++ / R
-
-- refactoring; turn C++ code entirely into C++11 code
-
-
-## RecMap
-
-- define core polygon
 - implement the topology error function
 - allow multiple connected components dual graph, e.g., world map
 

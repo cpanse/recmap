@@ -46,6 +46,19 @@ recmap(df)
 
 \details{
 
+Basic idea of the current recmap implementation:
+
+1. Determine the core region int(n/2) of index
+
+2. Place region by region along DFS skeleton of pseudo dual starting withe the 
+core region
+
+Note: if a rectangle can not be placed - accept a non feasable solution (avoid 
+solutions having a topology error higher than 100)
+Solving this is compute expensive and due do the likely bad fitness value it 
+will be anyway rejected by the metaheuristic.
+
+
 Time Complexity:
 The time complexity is O(n^2), where n is the number of regions.
 DFS is visiting each map region only once and therefore has 
@@ -57,16 +70,18 @@ However, worst case for a range query is O(n), iff dx or dy cover the whole
 x or y range.
 Q.E.D.
 
-In praxis on a 2.4 GHz Intel Core i7 (using only one core) computing using the 50 state U.S. map 
-example, recmap can compute ~100 cartograms in one second.
+In praxis on a 2.4 GHz Intel Core i7 (using only one core) computing using the 
+50 state U.S. map example, recmap can compute ~100 cartograms in one second.
 The number of mbb calls were
-(Min., Median, Mean, Max)  = (1448, 2534, 3174, 17740).
+(Min., Median, Mean, Max)  = (1448, 2534, 3174, 17740), using in each run
+a different order (\code{sample}) of the index.
 
 }
 
 \value{
 
-  returns a \code{data.frame} object.
+returns a \code{data.frame} object of the transformed map plus additional 
+columns containing information for topology and relative position error.
 
 }
 
@@ -76,8 +91,8 @@ Roland Heilmann, Daniel Keim, Christian Panse, and Mike Sips (2004). RecMap: Rec
 Approximations. InfoVis 2004, IEEE Symposium on Information Visualization, Austin, Texas, 33-40.
 \url{http://dx.doi.org/10.1109/INFVIS.2004.57}
 
- Luca Scrucca (2013). GA: A Package for Genetic Algorithms in R. Journal of Statistical Software, 53(4), 1-37. 
-  \url{http://dx.doi.org/10.18637/jss.v053.i04}. 
+Luca Scrucca (2013). GA: A Package for Genetic Algorithms in R. Journal of Statistical Software, 53(4), 1-37. 
+\url{http://dx.doi.org/10.18637/jss.v053.i04}. 
 
 }
 
@@ -92,6 +107,8 @@ Approximations. InfoVis 2004, IEEE Symposium on Information Visualization, Austi
   The package vignette \url{https://cran.r-project.org/web/packages/recmap/vignettes/recmap.html} or 
   by calling \code{vignette("recmap")} on the R command prompt.
   
+  A shiny web application \url{https://recmap.shinyapps.io/state_x77/}.
+  
 }
 
 \examples{
@@ -104,8 +121,8 @@ plot_recmap(Cartogram)
 usa <- data.frame(x = state.center$x, 
      y = state.center$y, 
      # make the rectangles overlapping by correcting lines of longitude distance
-     dx = sqrt(state.area) / 2 / (0.8 * 60 * cos(state.center$y*pi/180)), 
-     dy = sqrt(state.area) / 2 / (0.8 * 60) , 
+     dx = sqrt(state.area) / 2 / (0.8 * 60 * cos(state.center$y * pi / 180)), 
+     dy = sqrt(state.area) / 2 / (0.8 * 60), 
      z = sqrt(state.area),
      name = state.name)
       
@@ -125,7 +142,7 @@ benchmark(recmap(US.Map[sample(50,50),]), replications=100)
 
 \dontrun{
 
-## Use Genetic Algorithms as Meta Heuristic
+## Use Genetic Algorithms (GA) as metaheuristic
 
 # install.packages(c('doParallel', 'GA'))
 
@@ -135,8 +152,10 @@ library(doParallel)
 
 M <- US.Map
 
-recmapFitness <- function(idxOrder, Map, ...){
+recmap.fitness <- function(idxOrder, Map, ...){
   Cartogram <- recmap(Map[idxOrder, ])
+  # a map region could not be placed; accept only feasible solutions!
+  if (sum(Cartogram$topology.error == 100) > 0){return (0)}
   1 / sum(Cartogram$z / (sqrt(sum(Cartogram$z^2))) * Cartogram$relpos.error)
 }
 

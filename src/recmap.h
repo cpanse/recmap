@@ -1,6 +1,7 @@
 //
 // This file is part of recmap.
-// 
+// https://cran.r-project.org/web/packages/recmap/index.html
+//
 // recmap is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -14,8 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with recmap.  If not, see <http://www.gnu.org/licenses/>.
 
-//  Authors   :  Christian Panse <Christian.Panse@gmail.com> 
-//  2016-04-19/20/21/22 Bristol, UK
+//  Authors:  Christian Panse <Christian.Panse@gmail.com> 
+//  2016-04-19/20/21/22 ACCU2016 Bristol, UK
 
 #ifndef RECMAP_H
 #define RECMAP_H
@@ -35,7 +36,7 @@
   
 namespace crecmap{
 
-  // keeps map and pseudo dual
+  // keeps map and pseudo dual graph
   typedef struct {
     double x, y, dx, dy, z;
     int id;
@@ -179,16 +180,14 @@ struct mbb_node {
     std::list<std::string> warnings;
     
   public:
-  
-    //template < class Tdouble > 
-    
     RecMap() { 
         num_regions = 0;     
         MBB.max_dx = 0;
         MBB.max_dy = 0;
         intersect_count = 0;
         }
-    
+
+    // TODO(cp): think about a destructor
     void push(double x, double y, double dx, double dy, double z, std::string name){
       
       map_region R, R1; 
@@ -248,7 +247,8 @@ struct mbb_node {
       double sum_area = 0.0;
       
       std::for_each(M.begin(), M.end(), [&] (map_region &r) {sum_z += r.z;});
-      std::for_each(M.begin(), M.end(), [&] (map_region &r) {sum_area += (4 * r.dx * r.dy);});
+      std::for_each(M.begin(), M.end(), 
+                    [&] (map_region &r) {sum_area += (4 * r.dx * r.dy);});
       
       std::for_each(C.begin(), C.end(), [&] (map_region &r) {
         double area_desired = r.z * sum_area / sum_z;
@@ -259,7 +259,7 @@ struct mbb_node {
     }
     
     
-    // TODO(cp): has to be implemented
+    // TODO(cp): Is the original core polygon implementation usefull?
     int ComputeCoreRegion(recmapvector &M, recmapvector &C){
       
       int core_region_id = num_regions / 2;
@@ -267,6 +267,7 @@ struct mbb_node {
       C[core_region_id].x = M[core_region_id].x;
       C[core_region_id].y = M[core_region_id].y;
       C[core_region_id].placed++;
+      C[core_region_id].topology_error = 0;
         
       mbb_node mn;
       mn.key = C[core_region_id].x; mn.id = C[core_region_id].id;
@@ -281,10 +282,10 @@ struct mbb_node {
       return core_region_id;
     }
     
+    // obsolet version of the linear intersection test
     bool map_region_intersect(const recmapvector &C, const map_region &a){
       for (map_region b : C){
         if (a.id != b.id && b.placed > 0){
-        //intersect_count++;
         if(mbb_check(a, b)){
           return true;
         }}
@@ -294,6 +295,8 @@ struct mbb_node {
     
     bool map_region_intersect_set(recmapvector &C, const mbb_set &S, const map_region &a){
       double eps = 0.0;
+      
+      // range query on the x-axis
       auto lower_x = std::lower_bound(S.x.begin(), S.x.end(), 
                                       a.x - a.dx - S.max_dx - eps, 
                                       [](const mbb_node& f1, const mbb_node& f2) { return f1.key < f2.key; });
@@ -302,13 +305,16 @@ struct mbb_node {
                                       a.x + a.dx + S.max_dx + eps, 
                                       [](const mbb_node& f1, const mbb_node& f2) { return f1.key < f2.key; });
       
+      
       for(auto it_x = lower_x; it_x != upper_x; ++it_x){
-        //intersect_count++;
+        
         if ((*it_x).id != a.id &&  mbb_check(a, C[(*it_x).id])){
           return true;
         }
       }
  
+      // not intersetions until now; 
+      // now check the y-axis
       auto lower_y = std::lower_bound(S.y.begin(), S.y.end(), 
                                  a.y - a.dy - S.max_dy - eps, 
                                  [](const mbb_node& f1, const mbb_node& f2) { return f1.key < f2.key; });
@@ -318,7 +324,7 @@ struct mbb_node {
                                       [](const mbb_node& f1, const mbb_node& f2) { return f1.key < f2.key; });
       
       for(auto it_y = lower_y; it_y != upper_y; ++it_y){
-        // intersect_count++;
+        
         if ((*it_y).id != a.id && mbb_check(a, C[(*it_y).id])){
           return true;
         }
@@ -335,7 +341,8 @@ struct mbb_node {
   
       double beta_sign = 1.0;
       
-      // strategy one: try to place it in the neighborhood
+      // strategy one: try to place it in the neighborhood; and their will be 
+      // only one 
       for (double beta = 0.0; beta <=  PI && C[region_id].placed == 0; beta += PI/180){
         
         // iterate over all already placed connected rectangles
@@ -379,7 +386,8 @@ struct mbb_node {
       // placement failed => make it as not placed
       C[region_id].x = -1;
       C[region_id].y = -1;
-      warnings.push_back(M[region_id].name + " could not be placed on the first attempt;");
+      warnings.push_back(M[region_id].name 
+                           + " could not be placed on the first attempt;");
       return false;
     }
     
@@ -401,7 +409,7 @@ struct mbb_node {
         
         if (current_region_id != core_region_id){
           if (!PlaceRectangle(M, C, current_region_id)){
-            // bad luck
+            // bad luck - let place first the other map regions
           }
         }
         
@@ -417,6 +425,9 @@ struct mbb_node {
         if (r.placed == 0){
           PlaceRectangle(M, C, r.id);
           if (r.placed == 0){
+            // yes - 
+            // accept a non feasible solution to save computational resources 
+            // the metaheuristic has to fix that with the fitness function
             warnings.push_back(r.name + " was not placed!!");
           }
           //
