@@ -137,8 +137,14 @@ par(op)
 The index order of the input map
 has an impact to the resulting cartogram. This is caused due do 
 the computation of the dual graph. In [@recmap] a genetic algorithm was applied 
+<<<<<<< HEAD
 as metaheuristic. Due do the limited compute resources on the CRAN package 
 build process no metaheuristic will be applied in this R package.
+=======
+as meta heuristic. Due do the limited compute resources on the CRAN package 
+build process no metaheuristic will be applied in this R package.
+
+>>>>>>> 9049dc3109db66fddaf479cafdfbff1507b0adcc
 
 
 ## Objective Functions
@@ -149,11 +155,10 @@ The topology error is an indicator of the deviation of
 the neighborhood relationships.
 The error is computed by counting the differences 
 beween dual graphs or adjacency graphs of map and cartogram 
-(for a more formal definition see [@recmap]).
 
 ### Relative Region Positions 
 
-Measures the angle difference between alles region centers.
+Measures the angle difference between all region centers.
 
 ### Empty Space
 
@@ -162,7 +167,7 @@ the global minimal bounding box.
 
 ## Output
 
-The output is again a `data.frame`.
+The output is a `data.frame` object.
 
 ```{r}
 head(Cartogram <- recmap(Map <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]))
@@ -247,7 +252,6 @@ plot_recmap(Cartogram.ChessBoard <- recmap(ChessBoard[smp,]),
 
 - implement the topology error function
 - allow multiple connected components dual graph, e.g., world map
-
 
 # History 
 
