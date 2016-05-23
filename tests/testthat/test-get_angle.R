@@ -1,6 +1,6 @@
 #R
 
-context("Test 8 reps data")
+context("Test get_angle")
 
 test_that("get angle of two map regions", {
   

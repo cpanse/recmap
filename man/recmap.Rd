@@ -8,7 +8,7 @@ Rectangular Map Approximations
 }
 
 \description{
-The input consist of a map represented by overlapping rectangles. Furthermore the algorithm reqires as input for each map region:
+The input consist of a map represented by overlapping rectangles. Furthermore the algorithm requires as input for each map region:
 
 - a tuple of (x, y) values corresponding to the (longitude, latitude) position
 
@@ -16,7 +16,7 @@ The input consist of a map represented by overlapping rectangles. Furthermore th
 
 - and a statistical value z.
 
-The (x, y) coordinates represents the center of the minimal bounding boxes (MBB), The coordinates of the MBB are derived by adding or substracting the (dx, dy) tuple accordingly. The tuple (dx, dy) defines also the ratio of the map region. The statistical values define the desired area of each map region.
+The (x, y) coordinates represents the center of the minimal bounding boxes (MBB), The coordinates of the MBB are derived by adding or subtracting the (dx, dy) tuple accordingly. The tuple (dx, dy) defines also the ratio of the map region. The statistical values define the desired area of each map region.
 
 The output is a rectangular cartogram where the map regions are:
 
@@ -50,10 +50,10 @@ Basic idea of the current recmap implementation:
 
 1. Determine the core region int(n/2) of index
 
-2. Place region by region along DFS skeleton of pseudo dual starting withe the 
+2. Place region by region along DFS skeleton of pseudo dual starting with the 
 core region
 
-Note: if a rectangle can not be placed - accept a non feasable solution (avoid 
+Note: if a rectangle can not be placed - accept a non feasible solution (avoid 
 solutions having a topology error higher than 100)
 Solving this is compute expensive and due do the likely bad fitness value it 
 will be anyway rejected by the metaheuristic.
@@ -63,7 +63,7 @@ Time Complexity:
 The time complexity is O(n^2), where n is the number of regions.
 DFS is visiting each map region only once and therefore has 
 time complexity O(n). For each placement a constant number of
-mbb intersection are called (max 360). mbb check is implemented using
+MBB intersection are called (max 360). MBB check is implemented using
 \code{std::set}, \code{insert}, \code{upper_bound}, \code{upper_bound} 
 costs are O(log(n)). 
 However, worst case for a range query is O(n), iff dx or dy cover the whole
@@ -72,7 +72,7 @@ Q.E.D.
 
 In praxis on a 2.4 GHz Intel Core i7 (using only one core) computing using the 
 50 state U.S. map example, recmap can compute ~100 cartograms in one second.
-The number of mbb calls were
+The number of MBB calls were
 (Min., Median, Mean, Max)  = (1448, 2534, 3174, 17740), using in each run
 a different order (\code{sample}) of the index.
 
