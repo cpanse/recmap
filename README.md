@@ -10,12 +10,7 @@ This package contains an implementation of the [RecMap](http://dx.doi.org/10.110
 ## Documentation
 
 The package ships with a package [vignette](https://cran.r-project.org/web/packages/recmap/vignettes/recmap.html).
-
-Or read the man page on the R shell via
-
-```{r}
-?recmap
-```
+Or read the man page on the R shell via `?recmap`.
 
 ## Installation
 
