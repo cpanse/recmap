@@ -7,7 +7,7 @@ bibliography:
 csl: ieee.csl
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{RecMap primer}
+  %\VignetteIndexEntry{A quick tour of recmap}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,7 +16,7 @@ vignette: >
 
 This package contains a C++ implementation of the RecMap algorithm 
 [[@recmap]](http://dx.doi.org/10.1109/INFVIS.2004.57) to draw maps according to 
-given statistival values. These so-called cartograms or value-by-area-maps may 
+given statistical values. These so-called cartograms or value-by-area-maps may 
 be used to visualize any geospatial-related data, e. g. political, economical or 
 public health data.
 The input consists of a map represented by overlapping rectangles.
@@ -27,7 +27,7 @@ This map is defined by the following parameters for each map region:
 - and a statistical value z.
 
 The (x, y) coordinates represent the center of the minimal bounding boxes (MBB),
-The coordinates of the MBB are derived by adding or substracting the (dx, dy) 
+The coordinates of the MBB are derived by adding or subtracting the (dx, dy) 
 tuple accordingly. The tuple (dx, dy) defines also the ratio of the map region.
 The statistical values define the desired area of each map region. 
 
@@ -51,7 +51,7 @@ the as input given statistical value z.
 
 The power of a cartogram based visualization is demonstrated below.
 
-```{r fig.width=7, fig.retina=2, fig.align='left', fig.cap="Rectangular Cartogram of the U.S. election 2004; The area corresponds to the number of electors (color indicates the party red: democrates / blue: republican; the color intensity ~ outcome of the vote.). The graphic was computed by using the original implementation of the construction heuristic RecMap MP2 introduced in [@recmap].", echo=FALSE, warning=FALSE, comment="ccc", error=FALSE, message=FALSE}
+```{r fig.width=7, fig.retina=2, fig.align='left', fig.cap="Rectangular Cartogram of the U.S. election 2004; The area corresponds to the number of electors (color indicates the party red: democrats / blue: republican; the color intensity ~ outcome of the vote.). The graphic was computed by using the original implementation of the construction heuristic RecMap MP2 introduced in [@recmap].", echo=FALSE, warning=FALSE, comment="ccc", error=FALSE, message=FALSE}
 
 library(recmap)
 op<-par(mar=c(0,0,0,0), bg='black')
@@ -95,15 +95,15 @@ plot_recmap(M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ],
 ## Construction heuristic
 
 - Determine the core region
-- Place region by region along DFS skeleton of pseudo dual starting withe the 
+- Place region by region along DFS skeleton of pseudo dual starting with the 
 core region
 - If a rectangle can not be placed find a feasible solution (no overlapping 
-regions) by placing it next to a neighbour
+regions) by placing it next to a neighbor
 
 
 A local placement function can place an rectangle a around a given rectangle b 
 of any angle between $[-\pi,\pi]$. There are special cases for quad I, II, III, 
-and IV indicated by different colors in the gaphic below.
+and IV indicated by different colors in the graphic below.
 
 ```{r echo=FALSE, fig.width=2, fig.height=2, fig.align='center'}
 
@@ -137,14 +137,8 @@ par(op)
 The index order of the input map
 has an impact to the resulting cartogram. This is caused due do 
 the computation of the dual graph. In [@recmap] a genetic algorithm was applied 
-<<<<<<< HEAD
 as metaheuristic. Due do the limited compute resources on the CRAN package 
 build process no metaheuristic will be applied in this R package.
-=======
-as meta heuristic. Due do the limited compute resources on the CRAN package 
-build process no metaheuristic will be applied in this R package.
-
->>>>>>> 9049dc3109db66fddaf479cafdfbff1507b0adcc
 
 
 ## Objective Functions
@@ -154,7 +148,7 @@ build process no metaheuristic will be applied in this R package.
 The topology error is an indicator of the deviation of
 the neighborhood relationships.
 The error is computed by counting the differences 
-beween dual graphs or adjacency graphs of map and cartogram 
+between dual graphs or adjacency graphs of map and cartogram 
 
 ### Relative Region Positions 
 
@@ -196,7 +190,7 @@ plot_recmap(Cartogram.Population <- recmap(M[order(M$x),]),
 ```
 
 
-```{r fig.width=8, fig.height=4, fig.align='left', fig.cap="Area ~ population estimate as of July 1, 1975; a better index order has been choosen to minimize the relative position error."}
+```{r fig.width=8, fig.height=4, fig.align='left', fig.cap="Area ~ population estimate as of July 1, 1975; a better index order has been chosen to minimize the relative position error."}
 op<-par(mfrow=c(1,1), mar=c(0,0,0,0))
 # index order
 
@@ -227,7 +221,7 @@ plot_recmap(Cartogram.Income <- recmap(M[order(M$x),]),
 
 More examples using `state.x77` data and `shiny` application are available on [shinyapps.io](https://recmap.shinyapps.io/state_x77/).
 
-## Syntetic Checker Boards
+## Synthetic Checker Boards
 
 Checker boards provide examples of sets of map regions which 
 do not have ideal cartogram solutions according to Definition 1 [@cartodraw].
@@ -263,7 +257,7 @@ check on how computer-generated rectangular cartograms could look like.
 This R package provides a rectangular cartogram algorithm to be used by any 
 R user. Now, it is easy to generate input (e.g, no complex polygon mesh), 
 the code is maintainable, and the algorithm is made robust 
-to the price of not having all featues implemented.
+to the price of not having all features implemented.
 Recent research publication on rectangular cartograms drawing include 
 [@Speckmann2004], [@Speckmann2007], [@Speckmann2012].
 
