@@ -41,25 +41,26 @@ recmap(df)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{df}{a \code{data.frame} having the columns (x, y, dx, dy, z, name) described above.}
+  \item{df}{is the input formated as \code{data.frame} having the 
+  columns (x, y, dx, dy, z, name) as described above.}
 }
 
 \details{
 
-Basic idea of the current recmap implementation:
+Basic idea of the current recmap \emph{implementation}:
 
 1. Determine the core region int(n/2) of index
 
 2. Place region by region along DFS skeleton of pseudo dual starting with the 
 core region
 
-Note: if a rectangle can not be placed - accept a non feasible solution (avoid 
+Note: if a rectangle can not be placed - accept a non \emph{feasible solution} (avoid 
 solutions having a topology error higher than 100)
 Solving this is compute expensive and due do the likely bad fitness value it 
 will be anyway rejected by the metaheuristic.
 
 
-Time Complexity:
+\emph{Time Complexity:}
 The time complexity is O(n^2), where n is the number of regions.
 DFS is visiting each map region only once and therefore has 
 time complexity O(n). For each placement a constant number of
@@ -70,6 +71,8 @@ However, worst case for a range query is O(n), iff dx or dy cover the whole
 x or y range.
 Q.E.D.
 
+
+\emph{Perfomance:}
 In praxis on a 2.4 GHz Intel Core i7 (using only one core) computing using the 
 50 state U.S. map example, recmap can compute ~100 cartograms in one second.
 The number of MBB calls were
@@ -77,12 +80,12 @@ The number of MBB calls were
 a different order (\code{sample}) of the index.
 
 
-Geodetic datum: the \code{recmap} algorithm is not transforming the geodetic datum, e.g., WGS84 or Swissgrid.
+\emph{Geodetic datum:} the \code{recmap} algorithm is not transforming the geodetic datum, e.g., WGS84 or Swissgrid.
 }
 
 \value{
 
-returns a \code{data.frame} object of the transformed map plus additional 
+returns a \code{data.frame} object of the transformed map with new coordinates (x, y, dx, dy) plus additional 
 columns containing information for topology and relative position error.
 
 }
@@ -100,7 +103,7 @@ Luca Scrucca (2013). GA: A Package for Genetic Algorithms in R. Journal of Stati
 
 \author{
 
-  Christian Panse 2016
+  Christian Panse, 2016
 
 }
 
@@ -114,22 +117,35 @@ Luca Scrucca (2013). GA: A Package for Genetic Algorithms in R. Journal of Stati
 }
 
 \examples{
+Map <- recmap:::.checker_board(2)
+Cartogram <- recmap(Map)
 
-Cartogram <- recmap(Map <- recmap:::.checker_board(2))
+Map
+Cartogram
 
+op <- par(mfrow=c(1,2))
+plot_recmap(Map)
 plot_recmap(Cartogram)
 
 ## US example
 usa <- data.frame(x = state.center$x, 
-     y = state.center$y, 
-     # make the rectangles overlapping by correcting lines of longitude distance
-     dx = sqrt(state.area) / 2 / (0.8 * 60 * cos(state.center$y * pi / 180)), 
-     dy = sqrt(state.area) / 2 / (0.8 * 60), 
-     z = sqrt(state.area),
-     name = state.name)
+  y = state.center$y, 
+  # make the rectangles overlapping by correcting 
+  # lines of longitude distance.
+  dx = sqrt(state.area) / 2 
+    / (0.8 * 60 * cos(state.center$y * pi / 180)), 
+  dy = sqrt(state.area) / 2 / (0.8 * 60), 
+  z = sqrt(state.area),
+  name = state.name)
       
 usa$z <- state.x77[, 'Population']
-US.Map <- usa[match(usa$name, c('Hawaii', 'Alaska'), nomatch = 0)  == 0, ]
+US.Map <- usa[match(usa$name, 
+  c('Hawaii', 'Alaska'), nomatch = 0)  == 0, ]
+
+plot_recmap(US.Map)
+plot_recmap(recmap(US.Map))
+par(op)
+
 
 \dontrun{
 # install.packages('rbenchmark')
@@ -142,9 +158,22 @@ benchmark(recmap(US.Map[sample(50,50),]), replications=100)
 ##1    0.038          0         0
 }
 
+
+
+# define a fitness function
+recmap.fitness <- function(idxOrder, Map, ...){
+  Cartogram <- recmap(Map[idxOrder, ])
+  # a map region could not be placed; 
+  # accept only feasible solutions!
+  if (sum(Cartogram$topology.error == 100) > 0){return (0)}
+  1 / sum(Cartogram$z / (sqrt(sum(Cartogram$z^2))) 
+    * Cartogram$relpos.error)
+}
+
+
 \dontrun{
 
-## Use Genetic Algorithms (GA) as metaheuristic
+## use Genetic Algorithms (GA) as metaheuristic
 
 # install.packages(c('doParallel', 'GA'))
 
@@ -154,15 +183,8 @@ library(doParallel)
 
 M <- US.Map
 
-recmap.fitness <- function(idxOrder, Map, ...){
-  Cartogram <- recmap(Map[idxOrder, ])
-  # a map region could not be placed; accept only feasible solutions!
-  if (sum(Cartogram$topology.error == 100) > 0){return (0)}
-  1 / sum(Cartogram$z / (sqrt(sum(Cartogram$z^2))) * Cartogram$relpos.error)
-}
-
 recmapGA <- ga(type = "permutation", 
-  fitness = recmapFitness, Map = M,
+  fitness = recmap.fitness, Map = M,
   min = 1, max = nrow(M) , 
   popSize = 4 * nrow(M), 
   maxiter = 10,
