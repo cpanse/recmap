@@ -76,6 +76,8 @@ The number of MBB calls were
 (Min., Median, Mean, Max)  = (1448, 2534, 3174, 17740), using in each run
 a different order (\code{sample}) of the index.
 
+
+Geodetic datum: the \code{recmap} algorithm is not transforming the geodetic datum, e.g., WGS84 or Swissgrid.
 }
 
 \value{
