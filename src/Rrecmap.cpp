@@ -27,6 +27,8 @@ DataFrame place_rectanle(double x0, double y0, double dx0, double dy0, double dx
 // [[Rcpp::export]]
 DataFrame recmap(DataFrame df) {
   
+  // TODO(cp): check if df contains all required columns
+  
   // access the columns
   NumericVector x = df["x"];
   NumericVector y = df["y"];
@@ -50,7 +52,8 @@ DataFrame recmap(DataFrame df) {
   crecmap::RecMap X;
   
   // TODO(cp): setting and gettings are pain of the art; fix that asap;
-  for (int i=0; i<x.size(); i++){
+  for (int i = 0; i < x.size(); i++){
+  
     std::string sname = Rcpp::as<std::string>(name[i]);
     X.push(x[i], y[i], dx[i], dy[i], z[i],  sname);
   }

@@ -435,9 +435,10 @@ struct mbb_node {
     }
     
 
-    void ComputeError(const recmapvector &M, recmapvector &C){
+    void ComputeError(recmapvector &M, recmapvector &C){
       double gammaM, gammaC, delta;
 
+      // relative position error
       for (const auto & a : M){
         for (const auto & b : M){
           gammaM = get_angle(M[a.id], M[b.id]);
@@ -446,12 +447,30 @@ struct mbb_node {
           C[a.id].relative_position_error += delta;
         }
         
+        
         for (const auto & idx : a.connected){
           gammaM = get_angle(M[a.id], M[idx]);
           gammaC = get_angle(C[a.id], C[idx]);
           delta = fabs (gammaC - gammaM) / a.connected.size();
           C[a.id].relative_position_neighborhood_error += delta;
         }
+        
+        // compute topology error
+        // http://www.cplusplus.com/reference/algorithm/set_symmetric_difference/
+        std::vector<int> v(M[a.id].connected.size() + C[a.id].connected.size());
+        std::vector<int>::iterator it;
+        std::sort (M[a.id].connected.begin(), M[a.id].connected.end());
+        std::sort (C[a.id].connected.begin(), C[a.id].connected.end()); 
+        
+        
+        it = std::set_symmetric_difference (M[a.id].connected.begin(), 
+                                            M[a.id].connected.end(), 
+                                            C[a.id].connected.begin(), 
+                                            C[a.id].connected.end(), 
+                                            v.begin());
+        v.resize(it-v.begin());
+        C[a.id].topology_error = (v.size());
+        // for debug print all three vectors once
       }
     }
     
