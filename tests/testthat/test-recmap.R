@@ -6,7 +6,7 @@ test_that("input 2x2 checker board", {
   
   
  input.map <- data.frame(x = c(1, 1, 2, 2), 
-  	y = c(1, 2, 1, 2), 
+  y = c(1, 2, 1, 2), 
   dx = rep(0.5, 4), 
   dy = rep(0.5, 4), 
   z = c(4, 1, 1, 4), 
