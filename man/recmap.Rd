@@ -4,11 +4,12 @@
 \alias{cartogram}
 
 \title{
-Rectangular Map Approximations 
+Compute a Rectangular Statistical Cartogram
 }
 
 \description{
-The input consist of a map represented by overlapping rectangles. Furthermore the algorithm requires as input for each map region:
+The input consist of a map represented by overlapping rectangles. Furthermore 
+the algorithm requires as input for each map region:
 
 - a tuple of (x, y) values corresponding to the (longitude, latitude) position
 
@@ -16,7 +17,10 @@ The input consist of a map represented by overlapping rectangles. Furthermore th
 
 - and a statistical value z.
 
-The (x, y) coordinates represents the center of the minimal bounding boxes (MBB), The coordinates of the MBB are derived by adding or subtracting the (dx, dy) tuple accordingly. The tuple (dx, dy) defines also the ratio of the map region. The statistical values define the desired area of each map region.
+The (x, y) coordinates represents the center of the minimal bounding boxes 
+(MBB), The coordinates of the MBB are derived by adding or subtracting the 
+(dx, dy) tuple accordingly. The tuple (dx, dy) defines also the ratio of the 
+map region. The statistical values define the desired area of each map region.
 
 The output is a rectangular cartogram where the map regions are:
 
@@ -25,7 +29,8 @@ The output is a rectangular cartogram where the map regions are:
 - ratio and area of each rectangle corresponds to the desired areas.
 - rectangles are placed parallel to the axes
 
-The construction heuristic places the rectangles in a way that important spatial constraints, in particular
+The construction heuristic places the rectangles in a way that important spatial 
+constraints, in particular
 
 - the topology of the pseudo dual graph,
 
@@ -33,7 +38,8 @@ The construction heuristic places the rectangles in a way that important spatial
 
 are tried to be preserved.
 
-The ratios are preserved and the area of each region corresponds to the as input given statistical value z.
+The ratios are preserved and the area of each region corresponds to the as 
+input given statistical value z.
 }
 
 \usage{
@@ -49,13 +55,15 @@ recmap(df)
 
 Basic idea of the current recmap \emph{implementation}:
 
+0. Compute the pseudo dual out of the overlapping map regions
+
 1. Determine the core region int(n/2) of index
 
 2. Place region by region along DFS skeleton of pseudo dual starting with the 
 core region
 
-Note: if a rectangle can not be placed - accept a non \emph{feasible solution} (avoid 
-solutions having a topology error higher than 100)
+Note: if a rectangle can not be placed - accept a non \emph{feasible solution} 
+(avoid solutions having a topology error higher than 100)
 Solving this is compute expensive and due do the likely bad fitness value it 
 will be anyway rejected by the metaheuristic.
 
@@ -80,23 +88,29 @@ The number of MBB calls were
 a different order (\code{sample}) of the index.
 
 
-\emph{Geodetic datum:} the \code{recmap} algorithm is not transforming the geodetic datum, e.g., WGS84 or Swissgrid.
+\emph{Geodetic datum:} the \code{recmap} algorithm is not transforming the 
+geodetic datum, e.g., WGS84 or Swissgrid.
 }
 
 \value{
 
-returns a \code{data.frame} object of the transformed map with new coordinates (x, y, dx, dy) plus additional 
-columns containing information for topology and relative position error.
+returns a \code{data.frame} object of the transformed map with new coordinates 
+(x, y, dx, dy) plus additional columns containing information for topology 
+error, relative position error, and the DFS number.
+The error values are thought to be used for fitness function of the
+metaheuristic.
 
 }
 
 \references{
 
-Roland Heilmann, Daniel Keim, Christian Panse, and Mike Sips (2004). RecMap: Rectangular Map
-Approximations. InfoVis 2004, IEEE Symposium on Information Visualization, Austin, Texas, 33-40.
+Roland Heilmann, Daniel Keim, Christian Panse, and Mike Sips (2004). RecMap: 
+Rectangular Map Approximations. InfoVis 2004, IEEE Symposium on Information 
+Visualization, Austin, Texas, 33-40.
 \url{http://dx.doi.org/10.1109/INFVIS.2004.57}
 
-Luca Scrucca (2013). GA: A Package for Genetic Algorithms in R. Journal of Statistical Software, 53(4), 1-37. 
+Luca Scrucca (2013). GA: A Package for Genetic Algorithms in R. Journal of 
+Statistical Software, 53(4), 1-37. 
 \url{http://dx.doi.org/10.18637/jss.v053.i04}. 
 
 }
@@ -109,8 +123,9 @@ Luca Scrucca (2013). GA: A Package for Genetic Algorithms in R. Journal of Stati
 
 \seealso{
 
-  The package vignette \url{https://cran.r-project.org/web/packages/recmap/vignettes/recmap.html} or 
-  by calling \code{vignette("recmap")} on the R command prompt.
+  The package vignette 
+  \url{https://cran.r-project.org/web/packages/recmap/vignettes/recmap.html} 
+  or by calling \code{vignette("recmap")} on the R command prompt.
   
   A shiny web application \url{https://recmap.shinyapps.io/state_x77/}.
   
