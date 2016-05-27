@@ -74,7 +74,45 @@
 }
 
 
+recmap <- function(df) {
+  if(sum(c("x", "y", "dx", "dy", "z") %in% names(df)) != 5) 
+    stop("column names 'x', 'y', 'dx', 'dy', and 'z' are reqired")
+  
+  if (!is.numeric(df$x))
+    stop("x is not numeric.")
+  
+  if (!is.numeric(df$y))
+    stop("y is not numeric.")
+  
+  if (!is.numeric(df$dx))
+    stop("dx is not numeric.")
+  
+  if (!is.numeric(df$dy))
+    stop("dy is not numeric.")
+  
+  if (!is.numeric(df$z))
+    stop("z is not numeric.")
+  
+  if (sum(df$dx < 0) != 0)
+    stop('dx values have to be greater than 0.')
+  
+  if (sum(df$dy < 0) != 0)
+    stop('dy values have to be greater than 0.')
+  
+  if (sum(df$z <= 0) != 0)
+    stop('z values have to be greater equal than 0.')
+  
+  if (nrow(df) < 2) 
+    stop('reqires at least two map regions.')
+  
+  
+  recmap_(df)
+}
+
 plot_recmap <- function(S, col='#00000011', col.text = 'grey', ...){
+  try (if(sum(c("x", "y", "dx", "dy") %in% names(S)) != 4) 
+    stop("column names 'x', 'y', 'dx', 'dy', and 'z' are reqired"))
+  
   plot(S$x, S$y, 
        xlim = c(min(S$x - S$dx), max(S$x + S$dx)), 
        ylim = c(min(S$y - S$dy), max(S$y + S$dy)), 

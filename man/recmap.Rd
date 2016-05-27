@@ -123,6 +123,8 @@ Statistical Software, 53(4), 1-37.
 
 \seealso{
 
+  \code{\link{plot_recmap}}
+
   The package vignette 
   \url{https://cran.r-project.org/web/packages/recmap/vignettes/recmap.html} 
   or by calling \code{vignette("recmap")} on the R command prompt.
@@ -132,15 +134,15 @@ Statistical Software, 53(4), 1-37.
 }
 
 \examples{
-Map <- recmap:::.checker_board(2)
-Cartogram <- recmap(Map)
+map <- recmap:::.checker_board(2)
+cartogram <- recmap(map)
 
-Map
-Cartogram
+map
+cartogram
 
 op <- par(mfrow=c(1,2))
-plot_recmap(Map)
-plot_recmap(Cartogram)
+plot_recmap(map)
+plot_recmap(cartogram)
 
 ## US example
 usa <- data.frame(x = state.center$x, 

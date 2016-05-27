@@ -2,10 +2,11 @@
 \alias{plot_recmap}
 
 \title{
-The graphical representation of recmap
+recmap Plot Function
 }
 \description{
-plots the rectangular map regions.
+plots input and output of \code{\link{recmap}} function.
+The function reqiures column names (x, y, dx, dy).
 }
 \usage{
 plot_recmap(S, col='#00000011', col.text = 'grey', ...)
@@ -13,7 +14,7 @@ plot_recmap(S, col='#00000011', col.text = 'grey', ...)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{S}{
-a \code{data.frame} can be input or output of \code{recmap}.
+  \code{data.frame} can be input or output of \code{recmap}.
 }
   \item{col}{
   a vector of colors.
@@ -36,7 +37,9 @@ Christian Panse
 
 
 \seealso{
-\code{?recmap} or \code{vignette("recmap")}
+
+\code{\link{recmap}} or \code{vignette("recmap")}
+
 }
 \examples{
 Cartogram <- recmap(Map <- recmap:::.checker_board(2))

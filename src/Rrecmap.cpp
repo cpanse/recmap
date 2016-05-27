@@ -25,7 +25,7 @@ DataFrame place_rectanle(double x0, double y0, double dx0, double dy0, double dx
 }
 
 // [[Rcpp::export]]
-DataFrame recmap(DataFrame df) {
+DataFrame recmap_(DataFrame df) {
   
   // TODO(cp): check if df contains all required columns
   
