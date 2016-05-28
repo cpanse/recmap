@@ -95,7 +95,8 @@ struct mbb_node {
   // computes the new x-y value on the cartogram map region c
   // map_region a has a fix position
   // uses c.dx and c.dy for computation
-  // TODO(cp): consider giving eps als argument
+  // TODO(cp): consider giving eps als argument 
+  //           to have space between the map regions
   void place_rectanle(const map_region &a, double alpha, map_region &c){
     double tanx, tany;
     double eps = 0.01;
@@ -187,7 +188,8 @@ struct mbb_node {
         intersect_count = 0;
         }
 
-    // TODO(cp): think about a destructor
+    // TODO(cp): Think about  a destructor?
+    
     void push(double x, double y, double dx, double dy, double z, std::string name){
       
       map_region R, R1; 
@@ -259,7 +261,8 @@ struct mbb_node {
     }
     
     
-    // TODO(cp): Is the original core polygon implementation usefull?
+    // TODO(cp): Is the original core polygon implementation really usefull?
+    //           if yes; implement it here.
     int ComputeCoreRegion(recmapvector &M, recmapvector &C){
       
       int core_region_id = num_regions / 2;
@@ -390,7 +393,7 @@ struct mbb_node {
       return false;
     }
     
-    // dfs explorer of existing map M / placement of rectangles in cartogram C
+    // dfs explore of existing map M / placement of rectangles in cartogram C
     void DrawCartogram(recmapvector &M, recmapvector &C, int core_region_id){
       std::list<int> stack;
       std::vector<int> visited(num_regions, 0);
