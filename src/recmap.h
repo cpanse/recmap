@@ -452,7 +452,7 @@ struct mbb_node {
           C[a.id].relative_position_error += delta;
         }
         
-        // alternative to relative position error; play with it
+        // alternative to the relative position error; play with it
         for (const auto & idx : a.connected){
           gammaM = get_angle(M[a.id], M[idx]);
           gammaC = get_angle(C[a.id], C[idx]);
