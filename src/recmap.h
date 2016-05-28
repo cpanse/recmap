@@ -1,5 +1,5 @@
 //
-// This file is part of recmap.
+// This file is part of the recmap package on CRAN.
 // https://cran.r-project.org/web/packages/recmap/index.html
 //
 // recmap is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with recmap.  If not, see <http://www.gnu.org/licenses/>.
 
-//  Authors:  Christian Panse <Christian.Panse@gmail.com> 
+//  Author:  Christian Panse <Christian.Panse@gmail.com> 
 //  2016-04-19/20/21/22 ACCU2016 Bristol, UK
 
 #ifndef RECMAP_H
@@ -95,7 +95,8 @@ struct mbb_node {
   // computes the new x-y value on the cartogram map region c
   // map_region a has a fix position
   // uses c.dx and c.dy for computation
-  // TODO(cp): consider giving eps als argument
+  // TODO(cp): consider giving eps als argument 
+  //           to have space between the map regions
   void place_rectanle(const map_region &a, double alpha, map_region &c){
     double tanx, tany;
     double eps = 0.01;
@@ -187,7 +188,8 @@ struct mbb_node {
         intersect_count = 0;
         }
 
-    // TODO(cp): think about a destructor
+    // TODO(cp): Think about  a destructor?
+    
     void push(double x, double y, double dx, double dy, double z, std::string name){
       
       map_region R, R1; 
@@ -259,7 +261,10 @@ struct mbb_node {
     }
     
     
-    // TODO(cp): Is the original core polygon implementation usefull?
+    // TODO(cp): Is the original core polygon implementation really usefull?
+    //           the 8x8 checker board suffers but for the x77 map it seems 
+    //           to work great
+    //           if yes; implement it here.
     int ComputeCoreRegion(recmapvector &M, recmapvector &C){
       
       int core_region_id = num_regions / 2;
@@ -282,7 +287,7 @@ struct mbb_node {
       return core_region_id;
     }
     
-    // obsolet version of the linear intersection test
+    // obsolet version of the linear intersection test; keep it for testing
     bool map_region_intersect(const recmapvector &C, const map_region &a){
       for (map_region b : C){
         if (a.id != b.id && b.placed > 0){
@@ -293,6 +298,7 @@ struct mbb_node {
     return false;
     }
     
+    // MBB intersection test; doing binary search 
     bool map_region_intersect_set(recmapvector &C, const mbb_set &S, const map_region &a){
       double eps = 0.0;
       
@@ -341,29 +347,25 @@ struct mbb_node {
   
       double beta_sign = 1.0;
       
-      // strategy one: try to place it in the neighborhood; and their will be 
-      // only one 
+      // strategy one: try to place it in the neighborhood; 
+      // and only one => allow non feasible solution to be filtered out by the metaheuristic 
       for (double beta = 0.0; beta <=  PI && C[region_id].placed == 0; beta += PI/180){
         
         // iterate over all already placed connected rectangles
         for (const int &adj_region_id : M[region_id].connected){
-
           if (C[adj_region_id].placed > 0 ){
-            
             alpha0 = get_angle(M[adj_region_id], M[region_id]);
-            
             alpha = alpha0 + (beta_sign * beta);
             beta_sign *= -1;
 
             place_rectanle(C[adj_region_id], alpha, C[region_id]);
-              
             
-            // this is to enable the linear MBB check
+            // for linear MBB check use
             //if (!map_region_intersect(C, C[region_id])) {
             if (!map_region_intersect_set(C, MBB, C[region_id])){
               
               C[region_id].placed++;
-              C[region_id].topology_error = 0;
+              C[region_id].topology_error = 0; // for the moment
               
               mn.key = C[region_id].x; mn.id = C[region_id].id;
               MBB.x.insert(mn);
@@ -383,15 +385,17 @@ struct mbb_node {
         } // END for (int adj_region_id : M[region_id].connected)
       }    
       
-      // placement failed => make it as not placed
+      // placement failed => make map region as not placed
       C[region_id].x = -1;
       C[region_id].y = -1;
+      
+      // communicate this to the user later
       warnings.push_back(M[region_id].name 
                            + " could not be placed on the first attempt;");
       return false;
     }
     
-    // dfs explorer of existing map M / placement of rectangles in cartogram C
+    // dfs explore of existing map M / placement of rectangles in cartogram C
     void DrawCartogram(recmapvector &M, recmapvector &C, int core_region_id){
       std::list<int> stack;
       std::vector<int> visited(num_regions, 0);
@@ -439,6 +443,7 @@ struct mbb_node {
       double gammaM, gammaC, delta;
 
       // relative position error
+      // TODO(cp): make the  each_unique_pair construct working to save 50% of the hand shakes
       for (const auto & a : M){
         for (const auto & b : M){
           gammaM = get_angle(M[a.id], M[b.id]);
@@ -447,7 +452,7 @@ struct mbb_node {
           C[a.id].relative_position_error += delta;
         }
         
-        
+        // alternative to the relative position error; play with it
         for (const auto & idx : a.connected){
           gammaM = get_angle(M[a.id], M[idx]);
           gammaC = get_angle(C[a.id], C[idx]);
@@ -455,7 +460,7 @@ struct mbb_node {
           C[a.id].relative_position_neighborhood_error += delta;
         }
         
-        // compute topology error
+        // topology error
         // http://www.cplusplus.com/reference/algorithm/set_symmetric_difference/
         std::vector<int> v(M[a.id].connected.size() + C[a.id].connected.size());
         std::vector<int>::iterator it;
@@ -487,7 +492,6 @@ struct mbb_node {
       ComputeError(Map, Cartogram);
       
     }//run  
-    
   };
 }// namespace
 #endif  
