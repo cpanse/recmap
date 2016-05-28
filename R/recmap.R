@@ -36,10 +36,10 @@
     polygon(recmap_us_state_ev$x, recmap_us_state_ev$y,
             col=cm[round(length(cm)*(us_state_election_2004$V8/(us_state_election_2004$V8 + us_state_election_2004$V9)))+1])
     
-    text(us_state_election_2004$V1,us_state_election_2004$V2-7,
+    text(us_state_election_2004$V1,us_state_election_2004$V2,
          as.character(us_state_election_2004$V3),cex=round(us_state_election_2004$V5*20)/100,
          lwd=2.5,
-         pos=3,
+         #pos=3,
          col="black");
   }
   
