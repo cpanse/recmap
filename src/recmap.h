@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with recmap.  If not, see <http://www.gnu.org/licenses/>.
 
-//  Author(s):  Christian Panse <Christian.Panse@gmail.com> 
+//  Author:  Christian Panse <Christian.Panse@gmail.com> 
 //  2016-04-19/20/21/22 ACCU2016 Bristol, UK
 
 #ifndef RECMAP_H
@@ -492,7 +492,6 @@ struct mbb_node {
       ComputeError(Map, Cartogram);
       
     }//run  
-    
   };
 }// namespace
 #endif  
