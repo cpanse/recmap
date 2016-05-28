@@ -443,7 +443,7 @@ struct mbb_node {
       double gammaM, gammaC, delta;
 
       // relative position error
-      // TODO(cp): use the each_unique_pair construct to save 50% 
+      // TODO(cp): make the  each_unique_pair construct working to save 50% of the hand shakes
       for (const auto & a : M){
         for (const auto & b : M){
           gammaM = get_angle(M[a.id], M[b.id]);
