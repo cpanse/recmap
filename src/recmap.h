@@ -262,6 +262,8 @@ struct mbb_node {
     
     
     // TODO(cp): Is the original core polygon implementation really usefull?
+    //           the 8x8 checker board suffers but for the x77 map it seems 
+    //           to work great
     //           if yes; implement it here.
     int ComputeCoreRegion(recmapvector &M, recmapvector &C){
       
