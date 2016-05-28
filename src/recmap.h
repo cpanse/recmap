@@ -1,5 +1,5 @@
 //
-// This file is part of recmap CRAN package.
+// This file is part of the recmap package on CRAN.
 // https://cran.r-project.org/web/packages/recmap/index.html
 //
 // recmap is free software: you can redistribute it and/or modify
