@@ -282,7 +282,7 @@ struct mbb_node {
       return core_region_id;
     }
     
-    // obsolet version of the linear intersection test
+    // obsolet version of the linear intersection test; keep it for testing
     bool map_region_intersect(const recmapvector &C, const map_region &a){
       for (map_region b : C){
         if (a.id != b.id && b.placed > 0){
@@ -293,6 +293,7 @@ struct mbb_node {
     return false;
     }
     
+    // MBB intersection test; doing binary search 
     bool map_region_intersect_set(recmapvector &C, const mbb_set &S, const map_region &a){
       double eps = 0.0;
       
@@ -341,29 +342,25 @@ struct mbb_node {
   
       double beta_sign = 1.0;
       
-      // strategy one: try to place it in the neighborhood; and their will be 
-      // only one 
+      // strategy one: try to place it in the neighborhood; 
+      // and only one => allow non feasible solution to be filtered out by the metaheuristic 
       for (double beta = 0.0; beta <=  PI && C[region_id].placed == 0; beta += PI/180){
         
         // iterate over all already placed connected rectangles
         for (const int &adj_region_id : M[region_id].connected){
-
           if (C[adj_region_id].placed > 0 ){
-            
             alpha0 = get_angle(M[adj_region_id], M[region_id]);
-            
             alpha = alpha0 + (beta_sign * beta);
             beta_sign *= -1;
 
             place_rectanle(C[adj_region_id], alpha, C[region_id]);
-              
             
-            // this is to enable the linear MBB check
+            // for linear MBB check use
             //if (!map_region_intersect(C, C[region_id])) {
             if (!map_region_intersect_set(C, MBB, C[region_id])){
               
               C[region_id].placed++;
-              C[region_id].topology_error = 0;
+              C[region_id].topology_error = 0; // for the moment
               
               mn.key = C[region_id].x; mn.id = C[region_id].id;
               MBB.x.insert(mn);
@@ -383,9 +380,11 @@ struct mbb_node {
         } // END for (int adj_region_id : M[region_id].connected)
       }    
       
-      // placement failed => make it as not placed
+      // placement failed => make map region as not placed
       C[region_id].x = -1;
       C[region_id].y = -1;
+      
+      // communicate this to the user later
       warnings.push_back(M[region_id].name 
                            + " could not be placed on the first attempt;");
       return false;
@@ -439,6 +438,7 @@ struct mbb_node {
       double gammaM, gammaC, delta;
 
       // relative position error
+      // TODO(cp): use the each_unique_pair construct to save 50% 
       for (const auto & a : M){
         for (const auto & b : M){
           gammaM = get_angle(M[a.id], M[b.id]);
@@ -447,7 +447,7 @@ struct mbb_node {
           C[a.id].relative_position_error += delta;
         }
         
-        
+        // alternative to relative position error; play with it
         for (const auto & idx : a.connected){
           gammaM = get_angle(M[a.id], M[idx]);
           gammaC = get_angle(C[a.id], C[idx]);
@@ -455,7 +455,7 @@ struct mbb_node {
           C[a.id].relative_position_neighborhood_error += delta;
         }
         
-        // compute topology error
+        // topology error
         // http://www.cplusplus.com/reference/algorithm/set_symmetric_difference/
         std::vector<int> v(M[a.id].connected.size() + C[a.id].connected.size());
         std::vector<int>::iterator it;
