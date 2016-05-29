@@ -219,7 +219,8 @@ plot_recmap(Cartogram.Income <- recmap(M[order(M$x),]),
             col.text = 'black', lwd=2)
 ```
 
-More examples using `state.x77` data and `shiny` application are available on [shinyapps.io](https://recmap.shinyapps.io/state_x77/).
+More examples using `state.x77` data and `shiny` application are 
+available through (https://recmap.shinyapps.io/state_x77/).
 
 ## Synthetic Checker Boards
 
