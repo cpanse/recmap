@@ -242,10 +242,6 @@ plot_recmap(Cartogram.ChessBoard <- recmap(ChessBoard[smp,]),
             col=c('white','white','white','black')[Cartogram.ChessBoard$z])
 ```
 
-# TODO / Wishlist
-
-- implement the topology error function
-- allow multiple connected components dual graph, e.g., world map
 
 # History 
 
