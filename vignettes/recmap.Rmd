@@ -7,7 +7,7 @@ bibliography:
 csl: ieee.csl
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{A quick tour of recmap}
+  %\VignetteIndexEntry{recmap primer}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
