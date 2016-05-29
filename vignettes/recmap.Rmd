@@ -94,14 +94,18 @@ plot_recmap(M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ],
 
 ## Construction heuristic
 
-- Determine the core region
-- Place region by region along DFS skeleton of pseudo dual starting with the 
+0. Compute the dual graph
+
+1. Determine the core region
+
+2. Place region by region along DFS skeleton of pseudo dual starting with the 
 core region
-- If a rectangle can not be placed find a feasible solution (no overlapping 
+
+3. If a rectangle can not be placed find a feasible solution (no overlapping 
 regions) by placing it next to a neighbor
 
 
-A local placement function can place an rectangle a around a given rectangle b 
+A *local placement* function can place an rectangle a around a given rectangle b 
 of any angle between $[-\pi,\pi]$. There are special cases for quad I, II, III, 
 and IV indicated by different colors in the graphic below.
 
@@ -124,10 +128,14 @@ draw_and_place_rectangle <- function(alpha=0.0, a.x=2, a.y=-5, a.dx = 20, a.dy =
 
 op <- par(mar=c(0,0,0,0))
 plot(0,0 , xlim=c(-25,25), ylim=c(-25,25), asp=1, xlab='', ylab='', axes=FALSE); abline(v=0,h=0)
-r<-lapply(seq(0, pi/2, length=90), function(alpha){draw_and_place_rectangle(alpha, col='#DD001199', border='#88888877')})
-r<-lapply(seq(pi/2, pi, length=90), function(alpha){draw_and_place_rectangle(alpha, col='#00DD1199', border='#88888877')})
-r<-lapply(seq(-pi, -pi/2, length=90), function(alpha){draw_and_place_rectangle(alpha, col='#11DDDD99', border='#88888877')})
-r<-lapply(seq(-pi/2, 0, length=90), function(alpha){draw_and_place_rectangle(alpha, col='#0011DD99', border='#88888877')})
+r<-lapply(seq(0, pi/2, length=90), function(alpha){
+  draw_and_place_rectangle(alpha, col='#DD001199', border='#88888877')})
+r<-lapply(seq(pi/2, pi, length=90), function(alpha){
+  draw_and_place_rectangle(alpha, col='#00DD1199', border='#88888877')})
+r<-lapply(seq(-pi, -pi/2, length=90), function(alpha){
+  draw_and_place_rectangle(alpha, col='#11DDDD99', border='#88888877')})
+r<-lapply(seq(-pi/2, 0, length=90), function(alpha){
+  draw_and_place_rectangle(alpha, col='#0011DD99', border='#88888877')})
 
 par(op)
 ```
@@ -143,21 +151,14 @@ build process no metaheuristic will be applied in this R package.
 
 ## Objective Functions
 
-### Topology 
-
-The topology error is an indicator of the deviation of
+The **topology error** is an indicator of the deviation of
 the neighborhood relationships.
 The error is computed by counting the differences 
 between dual graphs or adjacency graphs of map and cartogram 
 
-### Relative Region Positions 
+The **relative positions error**
+measures the angle difference between all region centers.
 
-Measures the angle difference between all region centers.
-
-### Empty Space
-
-The empty space is the ratio between the areas of the regions and the area of 
-the global minimal bounding box.
 
 ## Output
 
@@ -220,7 +221,7 @@ plot_recmap(Cartogram.Income <- recmap(M[order(M$x),]),
 ```
 
 More examples using `state.x77` data and `shiny` application are 
-available through [https://recmap.shinyapps.io/state_x77/].
+available through <https://recmap.shinyapps.io/state_x77/>.
 
 ## Synthetic Checker Boards
 
