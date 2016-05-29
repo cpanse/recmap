@@ -237,7 +237,7 @@ op<-par(mar=c(0,0,0,0), mfrow=c(1, 2), bg='white')
 plot_recmap(ChessBoard <- recmap:::.checker_board(8),
             col=c('white','white','white','black')[ChessBoard$z])
 
-# found by a Non-deterministic Turing machine
+# found by a Non-deterministic Turing machine (NTM)
 smp <- c(8,56,18,5,13,57,3,37,62,58,7,16,40,59,17,34,29,41,46,27,54,43,2,21,
          38,52,31,20,28,48,1,22,55,11,25,19,50,10,24,53,47,30,45,44,32,35,51,
          15,64,12,14,39,26,6,42,33,4,36,63,49,60,61,9,23)
@@ -252,14 +252,14 @@ plot_recmap(Cartogram.ChessBoard <- recmap(ChessBoard[smp,]),
 The work on RecMap was initiated by understanding the limits of contiguous 
 cartogram drawing [@cartodraw] and after studying the visualizations
 drawn by Erwin Raisz [@ErwinRaisz].
-The purpose of the first implementation [@recmap] was a feasibility 
-check on how computer-generated rectangular cartograms could look like. 
-This R package provides a rectangular cartogram algorithm to be used by any 
-R user. Now, it is easy to generate input (e.g, no complex polygon mesh), 
-the code is maintainable, and the algorithm is made robust 
-to the price of not having all features implemented.
-Recent research publication on rectangular cartograms drawing include 
-[@Speckmann2004], [@Speckmann2007], [@Speckmann2012].
+The purpose of the first implementation [@recmap] was a feasibility
+check on how computer-generated rectangular cartograms could look like.
+The `recmap` R package on CRAN provides a rectangular cartogram algorithm to be used by any
+R user. Now, it is easy to generate input (e.g, no complex polygon mesh),
+the code is maintainable(<500 lines of `C++` code), and the algorithm is made robust
+to the price of not having all features implemented (no empty space error / no MP1 yet).
+Recent research publication on rectangular cartograms drawing include
+[@Speckmann2004], [@Speckmann2007], [@Speckmann2012], [@CRANrecmap2016].
 
 # Session Info
 
