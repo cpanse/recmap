@@ -8,8 +8,8 @@ Compute a Rectangular Statistical Cartogram
 }
 
 \description{
-The input consist of a map represented by overlapping rectangles. Furthermore 
-the algorithm requires as input for each map region:
+The input consist of a map represented by overlapping rectangles. 
+Concretely, the algorithm requires as input for each map region:
 
 - a tuple of (x, y) values corresponding to the (longitude, latitude) position
 
@@ -17,7 +17,7 @@ the algorithm requires as input for each map region:
 
 - and a statistical value z.
 
-The (x, y) coordinates represents the center of the minimal bounding boxes 
+The (x, y) coordinates represent the center of the minimal bounding boxes 
 (MBB), The coordinates of the MBB are derived by adding or subtracting the 
 (dx, dy) tuple accordingly. The tuple (dx, dy) defines also the ratio of the 
 map region. The statistical values define the desired area of each map region.
@@ -25,8 +25,11 @@ map region. The statistical values define the desired area of each map region.
 The output is a rectangular cartogram where the map regions are:
 
 - non overlapping,
+
 - connected,
+
 - ratio and area of each rectangle corresponds to the desired areas.
+
 - rectangles are placed parallel to the axes
 
 The construction heuristic places the rectangles in a way that important spatial 
