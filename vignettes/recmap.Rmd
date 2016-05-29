@@ -5,7 +5,9 @@ date: "`r Sys.Date()`"
 bibliography:
   - recmap.bib
 csl: ieee.csl
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true
 vignette: >
   %\VignetteIndexEntry{recmap primer}
   %\VignetteEngine{knitr::rmarkdown}
