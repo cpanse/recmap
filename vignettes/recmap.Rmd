@@ -5,9 +5,11 @@ date: "`r Sys.Date()`"
 bibliography:
   - recmap.bib
 csl: ieee.csl
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true
 vignette: >
-  %\VignetteIndexEntry{A quick tour of recmap}
+  %\VignetteIndexEntry{recmap primer}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -94,14 +96,18 @@ plot_recmap(M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ],
 
 ## Construction heuristic
 
-- Determine the core region
-- Place region by region along DFS skeleton of pseudo dual starting with the 
+0. Compute the dual graph
+
+1. Determine the core region
+
+2. Place region by region along DFS skeleton of pseudo dual starting with the 
 core region
-- If a rectangle can not be placed find a feasible solution (no overlapping 
+
+3. If a rectangle can not be placed find a feasible solution (no overlapping 
 regions) by placing it next to a neighbor
 
 
-A local placement function can place an rectangle a around a given rectangle b 
+A *local placement* function can place an rectangle a around a given rectangle b 
 of any angle between $[-\pi,\pi]$. There are special cases for quad I, II, III, 
 and IV indicated by different colors in the graphic below.
 
@@ -124,10 +130,14 @@ draw_and_place_rectangle <- function(alpha=0.0, a.x=2, a.y=-5, a.dx = 20, a.dy =
 
 op <- par(mar=c(0,0,0,0))
 plot(0,0 , xlim=c(-25,25), ylim=c(-25,25), asp=1, xlab='', ylab='', axes=FALSE); abline(v=0,h=0)
-r<-lapply(seq(0, pi/2, length=90), function(alpha){draw_and_place_rectangle(alpha, col='#DD001199', border='#88888877')})
-r<-lapply(seq(pi/2, pi, length=90), function(alpha){draw_and_place_rectangle(alpha, col='#00DD1199', border='#88888877')})
-r<-lapply(seq(-pi, -pi/2, length=90), function(alpha){draw_and_place_rectangle(alpha, col='#11DDDD99', border='#88888877')})
-r<-lapply(seq(-pi/2, 0, length=90), function(alpha){draw_and_place_rectangle(alpha, col='#0011DD99', border='#88888877')})
+r<-lapply(seq(0, pi/2, length=90), function(alpha){
+  draw_and_place_rectangle(alpha, col='#DD001199', border='#88888877')})
+r<-lapply(seq(pi/2, pi, length=90), function(alpha){
+  draw_and_place_rectangle(alpha, col='#00DD1199', border='#88888877')})
+r<-lapply(seq(-pi, -pi/2, length=90), function(alpha){
+  draw_and_place_rectangle(alpha, col='#11DDDD99', border='#88888877')})
+r<-lapply(seq(-pi/2, 0, length=90), function(alpha){
+  draw_and_place_rectangle(alpha, col='#0011DD99', border='#88888877')})
 
 par(op)
 ```
@@ -143,21 +153,14 @@ build process no metaheuristic will be applied in this R package.
 
 ## Objective Functions
 
-### Topology 
-
-The topology error is an indicator of the deviation of
+The **topology error** is an indicator of the deviation of
 the neighborhood relationships.
 The error is computed by counting the differences 
 between dual graphs or adjacency graphs of map and cartogram 
 
-### Relative Region Positions 
+The **relative positions error**
+measures the angle difference between all region centers.
 
-Measures the angle difference between all region centers.
-
-### Empty Space
-
-The empty space is the ratio between the areas of the regions and the area of 
-the global minimal bounding box.
 
 ## Output
 
@@ -219,7 +222,8 @@ plot_recmap(Cartogram.Income <- recmap(M[order(M$x),]),
             col.text = 'black', lwd=2)
 ```
 
-More examples using `state.x77` data and `shiny` application are available on [shinyapps.io](https://recmap.shinyapps.io/state_x77/).
+More examples using `state.x77` data and `shiny` application are 
+available through <https://recmap.shinyapps.io/state_x77/>.
 
 ## Synthetic Checker Boards
 
@@ -227,13 +231,13 @@ Checker boards provide examples of sets of map regions which
 do not have ideal cartogram solutions according to Definition 1 [@cartodraw].
 
 
-```{r fig.width=7, fig.height=3.5, fig.align='center', fig.retina=2, fig.cap="chess board fun"}
+```{r fig.width=7, fig.height=3.5, fig.align='center', fig.retina=2, fig.cap="chess board fun (left input; right output of `recmap`) - the area of a black box needs to be four times as large as the area of a white box."}
 op<-par(mar=c(0,0,0,0), mfrow=c(1, 2), bg='white')
 
 plot_recmap(ChessBoard <- recmap:::.checker_board(8),
             col=c('white','white','white','black')[ChessBoard$z])
 
-# found by a Non-deterministic Turing machine
+# found by a Non-deterministic Turing machine (NTM)
 smp <- c(8,56,18,5,13,57,3,37,62,58,7,16,40,59,17,34,29,41,46,27,54,43,2,21,
          38,52,31,20,28,48,1,22,55,11,25,19,50,10,24,53,47,30,45,44,32,35,51,
          15,64,12,14,39,26,6,42,33,4,36,63,49,60,61,9,23)
@@ -242,23 +246,20 @@ plot_recmap(Cartogram.ChessBoard <- recmap(ChessBoard[smp,]),
             col=c('white','white','white','black')[Cartogram.ChessBoard$z])
 ```
 
-# TODO / Wishlist
-
-- implement the topology error function
-- allow multiple connected components dual graph, e.g., world map
 
 # History 
 
 The work on RecMap was initiated by understanding the limits of contiguous 
 cartogram drawing [@cartodraw] and after studying the visualizations
 drawn by Erwin Raisz [@ErwinRaisz].
-The purpose of the first implementation [@recmap] was a feasibility 
-check on how computer-generated rectangular cartograms could look like. 
-This R package provides a rectangular cartogram algorithm to be used by any 
-R user. Now, it is easy to generate input (e.g, no complex polygon mesh), 
-the code is maintainable, and the algorithm is made robust 
-to the price of not having all features implemented.
-Recent research publication on rectangular cartograms drawing include 
+The purpose of the first implementation [@recmap] was a feasibility
+check on how computer-generated rectangular cartograms could look like.
+The `recmap` R package on CRAN provides a rectangular cartogram algorithm to be used by any
+R user. Now, it is easy to generate input (e.g, no complex polygon mesh),
+the code is maintainable(<500 lines of `C++` code), and the algorithm is made robust
+to the price of not having all features implemented (simplified local placement; 
+no empty space error; no MP1 version yet).
+Recent research publication on rectangular cartograms drawing include
 [@Speckmann2004], [@Speckmann2007], [@Speckmann2012].
 
 # Session Info
