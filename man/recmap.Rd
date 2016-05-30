@@ -134,7 +134,7 @@ Statistical Software, 53(4), 1-37.
 }
 
 \examples{
-map <- recmap:::.checker_board(2)
+map <- recmap:::.checkerboard(2)
 cartogram <- recmap(map)
 
 map

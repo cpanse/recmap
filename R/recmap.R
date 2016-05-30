@@ -47,7 +47,7 @@
 }
 
 
-.checker_board <- function(n = 8, ratio = 4){
+.checkerboard <- function(n = 8, ratio = 4){
   xy <- (t(combn(1:n, 2)))
   xy <- rbind(cbind(xy[,1], xy[,2]), cbind(xy[,2], xy[,1]), cbind(1:n, 1:n))
   
