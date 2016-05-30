@@ -231,10 +231,10 @@ Checker boards provide examples of sets of map regions which
 do not have ideal cartogram solutions according to Definition 1 [@cartodraw].
 
 
-```{r fig.width=7, fig.height=3.5, fig.align='center', fig.retina=2, fig.cap="chess board fun (left input; right output of `recmap`) - the area of a black box needs to be four times as large as the area of a white box."}
+```{r fig.width=7, fig.height=3.5, fig.align='center', fig.retina=2, fig.cap="checkerboard fun (left input; right output of `recmap`) - the area of a black box needs to be four times as large as the area of a white box."}
 op<-par(mar=c(0,0,0,0), mfrow=c(1, 2), bg='white')
 
-plot_recmap(ChessBoard <- recmap:::.checker_board(8),
+plot_recmap(checkerboard <- recmap:::.checkerboard(8),
             col=c('white','white','white','black')[ChessBoard$z])
 
 # found by a Non-deterministic Turing machine (NTM)
@@ -242,8 +242,8 @@ smp <- c(8,56,18,5,13,57,3,37,62,58,7,16,40,59,17,34,29,41,46,27,54,43,2,21,
          38,52,31,20,28,48,1,22,55,11,25,19,50,10,24,53,47,30,45,44,32,35,51,
          15,64,12,14,39,26,6,42,33,4,36,63,49,60,61,9,23)
 
-plot_recmap(Cartogram.ChessBoard <- recmap(ChessBoard[smp,]), 
-            col=c('white','white','white','black')[Cartogram.ChessBoard$z])
+plot_recmap(Cartogram.checkerboard <- recmap(checkerboard[smp,]), 
+            col=c('white','white','white','black')[Cartogram.checkerboard$z])
 ```
 
 
