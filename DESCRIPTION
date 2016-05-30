@@ -1,7 +1,7 @@
 Package: recmap
 Type: Package
 Title: Compute the Rectangular Statistical Cartogram
-Version: 0.2.14
+Version: 0.3.0
 Author: Christian Panse
 Maintainer: Christian Panse <Christian.Panse@gmail.com>
 Description: Provides an interface and a C++ implementation 
@@ -10,7 +10,8 @@ Description: Provides an interface and a C++ implementation
   value (e. g. election results, population or epidemiological data). 
   The basic idea of the RecMap algorithm is that each map region 
   (e. g. different countries) is represented by a rectangle. The area of 
-  each rectangle represents the statistical value given as input. 
+  each rectangle represents the statistical value given as input 
+  (maintain zero cartographic error). 
   Documentation about 'RecMap' is provided by a vignette included in this 
   package and a 'RecMap gallery' site at 
   <http://cartodraw.science/recmap/gallery>.

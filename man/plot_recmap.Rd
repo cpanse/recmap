@@ -42,7 +42,7 @@ Christian Panse
 
 }
 \examples{
-Cartogram <- recmap(Map <- recmap:::.checker_board(2))
+Cartogram <- recmap(Map <- recmap:::.checkerboard(2))
 
 plot_recmap(Map)
 plot_recmap(Cartogram)

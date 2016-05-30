@@ -235,7 +235,7 @@ do not have ideal cartogram solutions according to Definition 1 [@cartodraw].
 op<-par(mar=c(0,0,0,0), mfrow=c(1, 2), bg='white')
 
 plot_recmap(checkerboard <- recmap:::.checkerboard(8),
-            col=c('white','white','white','black')[ChessBoard$z])
+            col=c('white','white','white','black')[checkerboard$z])
 
 # found by a Non-deterministic Turing machine (NTM)
 smp <- c(8,56,18,5,13,57,3,37,62,58,7,16,40,59,17,34,29,41,46,27,54,43,2,21,
@@ -253,7 +253,8 @@ The work on RecMap was initiated by understanding the limits of contiguous
 cartogram drawing [@cartodraw] and after studying the visualizations
 drawn by Erwin Raisz [@ErwinRaisz].
 The purpose of the first implementation [@recmap] was a feasibility
-check on how computer-generated rectangular cartograms could look like.
+check on how computer-generated rectangular cartograms with zero area error
+could look like.
 The `recmap` R package on CRAN provides a rectangular cartogram algorithm to be used by any
 R user. Now, it is easy to generate input (e.g, no complex polygon mesh),
 the code is maintainable(<500 lines of `C++` code), and the algorithm is made robust
@@ -261,6 +262,9 @@ to the price of not having all features implemented (simplified local placement;
 no empty space error; no MP1 version yet).
 Recent research publication on rectangular cartograms drawing include
 [@Speckmann2004], [@Speckmann2007], [@Speckmann2012].
+However, according to to recent publication [@TheStateoftheArtInCartograms]
+`recmap` remains the only rectangular cartogram algorithm 'maintain zero 
+cartographic error'. 
 
 # Session Info
 
