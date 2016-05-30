@@ -231,7 +231,7 @@ Checker boards provide examples of sets of map regions which
 do not have ideal cartogram solutions according to Definition 1 [@cartodraw].
 
 
-```{r fig.width=7, fig.height=3.5, fig.align='center', fig.retina=2, fig.cap="chess board fun"}
+```{r fig.width=7, fig.height=3.5, fig.align='center', fig.retina=2, fig.cap="chess board fun (left input; right output of `recmap`) - the area of a black box needs to be four times as large as the area of a white box."}
 op<-par(mar=c(0,0,0,0), mfrow=c(1, 2), bg='white')
 
 plot_recmap(ChessBoard <- recmap:::.checker_board(8),
@@ -257,9 +257,10 @@ check on how computer-generated rectangular cartograms could look like.
 The `recmap` R package on CRAN provides a rectangular cartogram algorithm to be used by any
 R user. Now, it is easy to generate input (e.g, no complex polygon mesh),
 the code is maintainable(<500 lines of `C++` code), and the algorithm is made robust
-to the price of not having all features implemented (no empty space error / no MP1 yet).
+to the price of not having all features implemented (simplified local placement; 
+no empty space error; no MP1 version yet).
 Recent research publication on rectangular cartograms drawing include
-[@Speckmann2004], [@Speckmann2007], [@Speckmann2012], [@CRANrecmap2016].
+[@Speckmann2004], [@Speckmann2007], [@Speckmann2012].
 
 # Session Info
 
