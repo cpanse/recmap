@@ -14,7 +14,7 @@ Or read the man page on the R shell via `?recmap`.
 
 ## Installation
 
-```{r}
+```
 install.package('recmap')
 ```
 
