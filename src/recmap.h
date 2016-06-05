@@ -17,6 +17,7 @@
 
 //  Author:  Christian Panse <Christian.Panse@gmail.com> 
 //  2016-04-19/20/21/22 ACCU2016 Bristol, UK
+//  see also: https://arxiv.org/abs/1606.00464
 
 #ifndef RECMAP_H
 #define RECMAP_H
@@ -74,13 +75,13 @@ struct mbb_node {
 
  typedef std::vector<map_region> recmapvector; 
 
-  // http://en.cppreference.com/w/cpp/numeric/math/atan2
+  // source: http://en.cppreference.com/w/cpp/numeric/math/atan2
   double get_angle(const map_region &a, const map_region &b){
     double alpha = std::atan2(b.x - a.x, b.y - a.y);
     return (alpha);
   }
 
-  // http://gamemath.com/2011/09/detecting-whether-two-boxes-overlap/
+  // source: http://gamemath.com/2011/09/detecting-whether-two-boxes-overlap/
   inline bool mbb_check(const map_region &a, const map_region &b){
     
     if (a.x + a.dx < b.x - b.dx) return false; // a is left of b
@@ -154,7 +155,7 @@ struct mbb_node {
       }
   }
   
-  // http://stackoverflow.com/questions/17787410/nested-range-based-for-loops
+  // source: http://stackoverflow.com/questions/17787410/nested-range-based-for-loops
   template<typename C, typename Op1>
   void each_unique_pair(C& container, Op1 fun1){
     for(auto it = container.begin(); it != container.end() - 1; ++it)
@@ -189,7 +190,6 @@ struct mbb_node {
         }
 
     // TODO(cp): Think about  a destructor?
-    
     void push(double x, double y, double dx, double dy, double z, std::string name){
       
       map_region R, R1; 
@@ -216,7 +216,7 @@ struct mbb_node {
       num_regions++;
       
       if (num_regions != Map.size()){
-        // TODO(cp): call an exception
+        // TODO(cp): call an exception?
       }
     }
     
@@ -302,7 +302,7 @@ struct mbb_node {
     bool map_region_intersect_set(recmapvector &C, const mbb_set &S, const map_region &a){
       double eps = 0.0;
       
-      // range query on the x-axis
+      // 1st: range query on the x-axis
       auto lower_x = std::lower_bound(S.x.begin(), S.x.end(), 
                                       a.x - a.dx - S.max_dx - eps, 
                                       [](const mbb_node& f1, const mbb_node& f2) { return f1.key < f2.key; });
@@ -320,7 +320,7 @@ struct mbb_node {
       }
  
       // not intersetions until now; 
-      // now check the y-axis
+      // 2nd: check the y-axis
       auto lower_y = std::lower_bound(S.y.begin(), S.y.end(), 
                                  a.y - a.dy - S.max_dy - eps, 
                                  [](const mbb_node& f1, const mbb_node& f2) { return f1.key < f2.key; });
@@ -460,7 +460,7 @@ struct mbb_node {
           C[a.id].relative_position_neighborhood_error += delta;
         }
         
-        // topology error
+        // topology error, 
         // http://www.cplusplus.com/reference/algorithm/set_symmetric_difference/
         std::vector<int> v(M[a.id].connected.size() + C[a.id].connected.size());
         std::vector<int>::iterator it;

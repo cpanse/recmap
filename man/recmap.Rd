@@ -4,10 +4,13 @@
 \alias{cartogram}
 
 \title{
+
 Compute a Rectangular Statistical Cartogram
+
 }
 
 \description{
+
 The input consist of a map represented by overlapping rectangles. 
 Concretely, the algorithm requires as input for each map region:
 
@@ -110,7 +113,10 @@ metaheuristic.
 Roland Heilmann, Daniel Keim, Christian Panse, and Mike Sips (2004). RecMap: 
 Rectangular Map Approximations. InfoVis 2004, IEEE Symposium on Information 
 Visualization, Austin, Texas, 33-40.
-\url{http://dx.doi.org/10.1109/INFVIS.2004.57}
+\url{http://dx.doi.org/10.1109/INFVIS.2004.57}.
+
+Christian Panse (2016). Rectangular Statistical Cartograms in R: The recmap 
+Package. \url{https://arxiv.org/abs/1606.00464}.
 
 Luca Scrucca (2013). GA: A Package for Genetic Algorithms in R. Journal of 
 Statistical Software, 53(4), 1-37. 
