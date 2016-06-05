@@ -161,6 +161,7 @@ struct mbb_node {
       }
   }
 
+  // iterating over distinct pairs
   // source: http://stackoverflow.com/questions/17787410/nested-range-based-for-loops
   template<typename C, typename Op1>
   void each_unique_pair(C& container, Op1 fun1) {
@@ -169,11 +170,11 @@ struct mbb_node {
         fun1(*it, *it2, container);
   }
 
-  template<typename C, typename C1, typename Op1>
-  void each_unique_pair2(C& container, C1& container1, Op1 fun2) {
-    for (auto it = container.begin(); it != container.end() - 1; ++it)
-      for (auto it2 = std::next(it); it2 != container.end(); ++it2)
-        fun2(*it, *it2, container, container1);
+  template<typename C0, typename C1, typename Op>
+  void each_unique_pair(C0& container0, C1& container1, Op fun) {
+    for (auto it = container0.begin(); it != container0.end() - 1; ++it)
+      for (auto it2 = std::next(it); it2 != container0.end(); ++it2)
+        fun(*it, *it2, container0, container1);
   }
   
 // keeps map and cartogram data
@@ -426,7 +427,7 @@ class RecMap{
 
       if (current_region_id != core_region_id) {
         if (!PlaceRectangle(M, C, current_region_id)) {
-          // bad luck - let place first the other map regions
+          // bad luck - lets place first the other map regions
         }
       }
 
