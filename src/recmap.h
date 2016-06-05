@@ -64,7 +64,7 @@ struct mbb_node {
     return key < rhs.key;
   }
 };
-
+  // keeps all (x, y) centers
   // use it as sorted list
   // insert/upper_bound: O(ln(n))
   typedef struct {
@@ -76,12 +76,14 @@ struct mbb_node {
 
   typedef std::vector<map_region> recmapvector;
 
+  // computes the bearing of two points in R^2
   // source: http://en.cppreference.com/w/cpp/numeric/math/atan2
   double get_angle(const map_region &a, const map_region &b) {
     double alpha = std::atan2(b.x - a.x, b.y - a.y);
     return (alpha);
   }
 
+  // detects whether two minimal bounding boxes (MBB) overlap
   // source: http://gamemath.com/2011/09/detecting-whether-two-boxes-overlap/
   inline bool mbb_check(const map_region &a, const map_region &b) {
     if (a.x + a.dx < b.x - b.dx) return false;  // a is left of b
@@ -93,9 +95,9 @@ struct mbb_node {
     return true;
   }
 
-  // computes the new x-y value on the cartogram map region c
+  // computes the new center (x, y) values on the cartogram map region c
   // map_region a has a fix position
-  // uses c.dx and c.dy for computation
+  // uses c.dx and c.dy for the computation
   // TODO(cp): consider giving eps als argument
   //           to have space between the map regions
   void place_rectanle(const map_region &a, double alpha, map_region &c) {
@@ -173,7 +175,11 @@ struct mbb_node {
       for (auto it2 = std::next(it); it2 != container.end(); ++it2)
         fun2(*it, *it2, container, container1);
   }
-
+  
+// keeps map and cartogram data
+// input is feeded by using the push function
+// the run method invokes the generation of the cartogram
+// output is returned by get_map_region
 class RecMap{
   recmapvector Map;
   recmapvector Cartogram;
