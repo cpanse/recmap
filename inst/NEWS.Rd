@@ -3,7 +3,13 @@
 
 \section{Changes in recmap version 0.3.3 (2016-06-07)}{
   \itemize{
-    \item bug fix topology error; if a region can not be placed return 100
+    \item bugfix - topology error; if a region can not be placed
+    return topology error 100. 
+    this has a major impact to the return value of the fitness function.
+    
+    \code{# accept only feasible solutions!}
+    
+    \code{if (sum(cartogram$topology.error == 100) > 0){return (0)}
   }
 }
 
