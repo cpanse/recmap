@@ -402,7 +402,7 @@ class RecMap{
     // placement failed => make map region as not placed
     C[region_id].x = -1;
     C[region_id].y = -1;
-
+    C[region_id].topology_error = 100;
     // communicate this to the user later
     warnings.push_back(M[region_id].name
                          + " could not be placed on the first attempt;");
@@ -488,7 +488,9 @@ class RecMap{
                                           C[a.id].connected.end(),
                                           v.begin());
       v.resize(it-v.begin());
-      C[a.id].topology_error = (v.size());
+      
+      if (C[a.id].topology_error != 100)
+        C[a.id].topology_error = (v.size());
       // for debug print all three vectors once
     }
   }
