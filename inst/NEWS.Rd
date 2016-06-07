@@ -1,6 +1,12 @@
 \name{NEWS}
 \title{News for Package 'recmap'}
 
+\section{Changes in recmap version 0.3.3 (2016-06-07)}{
+  \itemize{
+    \item bug fix topology error; if a region can not be placed return 100
+  }
+}
+
 \section{Changes in recmap version 0.3.0 (2016-05-30)}{
   \itemize{
     \item refactor linear MBB intersection test by introducing using 

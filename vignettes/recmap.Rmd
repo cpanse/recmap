@@ -261,7 +261,7 @@ the code is maintainable(<500 lines of `C++` code), and the algorithm is made ro
 to the price of not having all features implemented (simplified local placement; 
 no empty space error; no MP1 version yet).
 Recent research publication on rectangular cartograms drawing include
-[@Speckmann2004], [@Speckmann2007], [@Speckmann2012].
+[@Speckmann2004], [@Speckmann2007], [@Speckmann2012], [@Buchin:2016].
 However, according to to recent publication [@TheStateoftheArtInCartograms]
 `recmap` remains the only rectangular cartogram algorithm 'maintain zero 
 cartographic error'. 
