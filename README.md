@@ -1,8 +1,3 @@
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/recmap)](https://cran.r-project.org/package=recmap)
-[![](http://cranlogs.r-pkg.org/badges/recmap)](https://cran.r-project.org/package=recmap)
-[![](http://cranlogs.r-pkg.org/badges/grand-total/recmap)](https://cran.r-project.org/package=recmap)
-
-
 # recmap - Compute the Rectangular Statistical Cartogram
 
 This package contains an implementation of the [RecMap](http://dx.doi.org/10.1109/INFVIS.2004.57) construction algorithm (MP2).
@@ -20,7 +15,7 @@ install.package('recmap')
 
 ## Author
 
-Christian Panse
+Christian Panse, 2016
 
 ## License
 
