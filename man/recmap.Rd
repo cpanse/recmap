@@ -87,12 +87,12 @@ Q.E.D.
 
 
 \emph{Perfomance:}
-In praxis on a 2.4 GHz Intel Core i7 (using only one core) computing using the 
-50 state U.S. map example, recmap can compute ~100 cartograms in one second.
+
+In praxis, computing on a 2.4 GHz Intel Core i7 machine (using only one core), using the 
+50 state U.S. map example, recmap can compute approximately 100 cartograms in one second.
 The number of MBB calls were
 (Min., Median, Mean, Max)  = (1448, 2534, 3174, 17740), using in each run
-a different order (\code{sample}) of the index.
-
+a different index order using the (\code{\link{sample}}) method.
 
 \emph{Geodetic datum:} the \code{recmap} algorithm is not transforming the 
 geodetic datum, e.g., WGS84 or Swissgrid.
@@ -183,7 +183,6 @@ benchmark(recmap(US.Map[sample(50,50),]), replications=100)
 ##  sys.self user.child sys.child
 ##1    0.038          0         0
 }
-
 
 
 # define a fitness function
