@@ -51,7 +51,7 @@ input given statistical value z.
 \usage{
 recmap(df)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
   \item{df}{is the input formated as \code{data.frame} having the 
   columns (x, y, dx, dy, z, name) as described above.}
@@ -199,7 +199,7 @@ recmap.fitness <- function(idxOrder, Map, ...){
 
 \dontrun{
 
-## use Genetic Algorithms (GA) as metaheuristic
+## use Genetic Algorithms (GA >=3.0.0) as metaheuristic
 
 # install.packages(c('doParallel', 'GA'))
 
@@ -210,7 +210,9 @@ library(doParallel)
 M <- US.Map
 
 recmapGA <- ga(type = "permutation", 
-  fitness = recmap.fitness, Map = M,
+  fitness = recmap.fitness, 
+  Map = M,
+  monitor = gaMonitor,
   min = 1, max = nrow(M) , 
   popSize = 4 * nrow(M), 
   maxiter = 10,
