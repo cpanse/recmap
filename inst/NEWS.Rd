@@ -1,6 +1,12 @@
 \name{NEWS}
 \title{News for Package 'recmap'}
 
+\section{Changes in recmap version 0.4.0 (2016-07-01)}{
+  \itemize{
+	  \item added test case for topology error
+  }
+}
+
 \section{Changes in recmap version 0.3.3 (2016-06-07)}{
   \itemize{
     \item bugfix - topology error; if a region can not be placed
