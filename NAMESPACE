@@ -4,6 +4,7 @@ import(Rcpp)
 export("recmap")
 export("plot_recmap")
 
+importFrom("utils", "packageVersion")
 importFrom("graphics", "plot", "polygon", "rect", "text")
 importFrom("utils", "combn", "read.table")
 importFrom("graphics", "abline", "axis")
