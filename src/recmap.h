@@ -333,7 +333,7 @@ class RecMap{
       }
     }
 
-    // not intersetions until now;
+    // no intersetions until now;
     // 2nd: check the y-axis
     auto lower_y = std::lower_bound(S.y.begin(), S.y.end(),
                                a.y - a.dy - S.max_dy - eps,
@@ -409,7 +409,7 @@ class RecMap{
     return false;
   }
 
-  // dfs explore of existing map M / placement of rectangles in cartogram C
+  // dfs explore of existing input map M; output cartogram C
   void DrawCartogram(recmapvector &M, recmapvector &C, int core_region_id) {
     std::list<int> stack;
     std::vector<int> visited(num_regions, 0);
