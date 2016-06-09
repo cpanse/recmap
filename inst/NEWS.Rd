@@ -4,6 +4,7 @@
 \section{Changes in recmap version 0.4.0 (2016-07-01)}{
   \itemize{
 	  \item added test case for topology error
+	  \item added startup message for package version
   }
 }
 
