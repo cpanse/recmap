@@ -76,7 +76,8 @@ DataFrame recmap_(DataFrame df) {
   // crecmap::crecmap X(Rcpp::as<double>(x));
   crecmap::RecMap X;
 
-  // TODO(cp): setting and gettings are pain of the art; fix that asap;
+  //  TODO(cp): setting and gettings are not optimal
+  //    think about operating on the R allocated memory and avoid copying.
   for (int i = 0; i < x.size(); i++) {
     std::string sname = Rcpp::as<std::string>(name[i]);
     X.push(x[i], y[i], dx[i], dy[i], z[i],  sname);
