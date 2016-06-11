@@ -9,7 +9,7 @@ This package contains an implementation of the [RecMap](http://dx.doi.org/10.110
 
 Released and tested versions of `recmap` are available via the 
 [CRAN](https://cran.r-project.org/package=recmap) network, 
-and can be installed from within R via
+and can be installed using the R shell via
 
 ```
 install.package('recmap')
@@ -17,9 +17,10 @@ install.package('recmap')
 
 ## Documentation
 
-The package ships with a package [vignette](https://cran.r-project.org/web/packages/recmap/vignettes/recmap.html)
+The package ships with a package vignette (`browseVignettes('recmap')` 
 and a reference manual (just type `?recmap` on the R shell).
 
+Both documents are also available on the package's [CRAN](https://cran.r-project.org/package=recmap) page.
 ## Examples
 
 The [recmap gallery](http://cartodraw.science/recmap/gallery/) gives an impression what can
