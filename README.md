@@ -9,9 +9,15 @@ Or read the man page on the R shell via `?recmap`.
 
 ## Installation
 
+- install R 3.3 or later
+
 ```
 install.package('recmap')
 ```
+
+## Examples
+
+The [recmap gallery](http://cartodraw.science/recmap/gallery/) provides some cartograms generated with recmap.
 
 ## Author
 
