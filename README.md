@@ -2,10 +2,6 @@
 
 This package contains an implementation of the [RecMap](http://dx.doi.org/10.1109/INFVIS.2004.57) construction algorithm (MP2).
 
-## Documentation
-
-The package ships with a package [vignette](https://cran.r-project.org/web/packages/recmap/vignettes/recmap.html).
-Or read the man page on the R shell via `?recmap`.
 
 ## Installation
 
@@ -19,9 +15,15 @@ and can be installed from within R via
 install.package('recmap')
 ```
 
+## Documentation
+
+The package ships with a package [vignette](https://cran.r-project.org/web/packages/recmap/vignettes/recmap.html)
+and a reference manual (just type `?recmap` on the R shell).
+
 ## Examples
 
-The [recmap gallery](http://cartodraw.science/recmap/gallery/) provides some cartograms generated with recmap.
+The [recmap gallery](http://cartodraw.science/recmap/gallery/) gives an impression what can
+be expected from the cartogram drawing algorithm.
 
 ## Author
 
