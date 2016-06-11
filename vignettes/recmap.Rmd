@@ -107,15 +107,17 @@ core region
 regions) by placing it next to a neighbor
 
 
-A *local placement* function can place an rectangle A (rainbow colored rectangles) around a given rectangle B  
-of any angle between $[-\pi,\pi]$. There are special cases for quad I, II, III, 
+A *local placement* function can place an rectangle `b` 
+(rainbow colored rectangles) around a given rectangle `a` 
+of any angle $\alpha$ between $[-\pi,\pi]$. There are special cases for quad I, II, III, 
 and IV 
 (see also the graphics on [`std::atan2`](http://en.cppreference.com/w/cpp/numeric/math/atan2))
 indicated by different colors in the graphic below.
 
-```{r echo=FALSE, fig.width=4, fig.height=3, fig.align='center', fig.retina=3}
+```{r echo=FALSE, fig.width=4, fig.height=3, fig.align='center', fig.retina=3, fig.cap="`a.x = 2, a.y = -5, a.dx = 20, a.dy = 5, b.dx = 1.5, b.dy = 5`"}
 
-draw_and_place_rectangle <- function(alpha=0.0, a.x=2, a.y=-5, a.dx = 20, a.dy = 5, b.dx=1.5, b.dy=5, ...){
+draw_and_place_rectangle <- function(alpha=0.0, a.x=2, a.y=-5, a.dx = 20, 
+                                     a.dy = 5, b.dx=1.5, b.dy=5, ...){
    
    rect(a.x - a.dx - b.dx, a.y - a.dy - b.dy, 
         a.x + a.dx + b.dx, a.y + a.dy + b.dy, 
@@ -130,10 +132,10 @@ draw_and_place_rectangle <- function(alpha=0.0, a.x=2, a.y=-5, a.dx = 20, a.dy =
    rect(c$x - c$dx, c$y - c$dy, c$x + c$dx, c$y + c$dy, ...)
 }
 
-op <- par(mar=c(5, 5, 0.5, 0.5))
+op <- par(mar=c(4, 4, 0.5, 0.5))
 plot(0,0 , 
      xlim=c(-35,25), ylim=c(-35,25), 
-     asp=1, xlab='x', ylab='y', axes=FALSE); abline(v=0,h=0)
+     asp=1, xlab='x return value', ylab='y return value', axes=FALSE); abline(v=0,h=0)
 
 n <- 90
 
@@ -153,7 +155,7 @@ legend("bottomleft",
        fill=rainbow(9, alpha=0.5),
        border=rainbow(9, alpha=0.5),
        col=rainbow(9, alpha=0.5),
-       title="bearing [radian]",
+       title=expression(paste(alpha, " argument", sep=" ")),
        cex=0.5,horiz = FALSE)
 
 
@@ -196,7 +198,9 @@ head(Cartogram <- recmap(Map <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]))
 ## Rectangular Map Approximation
 ```{r fig.width=8,  fig.height=4.5, fig.align='left', fig.cap="Rectangular Map Approximation." }
 
-smp<- c(29,22,30,3,17,8,9,41,18,15,38,35,21,23,19,6,31,32,20,28,48,4,13,14,42,37,5,16,36,43,25,33,12,7,39,44,2,47,45,46,24,10,1,11,40,26,27,34)
+smp<- c(29, 22, 30, 3, 17, 8, 9, 41, 18, 15, 38, 35, 21, 23, 19, 6, 31, 32, 20, 
+        28, 48, 4, 13, 14, 42, 37, 5, 16, 36 , 43, 25, 33, 12, 7, 39, 44, 2, 47,
+        45, 46, 24, 10, 1,11 ,40 ,26 ,27 ,34)
 plot_recmap(Cartogram.Population <- recmap(M[smp, ]), 
             col.text = 'black', lwd=2)
 ```
