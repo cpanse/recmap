@@ -9,7 +9,11 @@ Or read the man page on the R shell via `?recmap`.
 
 ## Installation
 
-- install R 3.3 or later
+`recmap` requrires R 3.3 or later.
+
+Released and tested versions of `recmap` are available via the 
+[CRAN](https://cran.r-project.org/package=recmap) network, 
+and can be installed from within R via
 
 ```
 install.package('recmap')
