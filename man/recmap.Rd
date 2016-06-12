@@ -14,11 +14,14 @@ Compute a Rectangular Statistical Cartogram
 The input consist of a map represented by overlapping rectangles. 
 Concretely, the algorithm requires as input for each map region:
 
-- a tuple of (x, y) values corresponding to the (longitude, latitude) position
+\itemize{
+  \item{a tuple of (x, y) values corresponding to the 
+  (longitude, latitude) position,}
 
-- a tuple of (dx, dy) of expansion along (longitude, latitude)
+  \item{a tuple of (dx, dy) of expansion along (longitude, latitude),}
 
-- and a statistical value z.
+  \item{and a statistical value z.}
+}
 
 The (x, y) coordinates represent the center of the minimal bounding boxes 
 (MBB), The coordinates of the MBB are derived by adding or subtracting the 
@@ -26,22 +29,23 @@ The (x, y) coordinates represent the center of the minimal bounding boxes
 map region. The statistical values define the desired area of each map region.
 
 The output is a rectangular cartogram where the map regions are:
+\itemize{
+  \item{non overlapping,}
 
-- non overlapping,
+  \item{connected,}
 
-- connected,
+  \item{ratio and area of each rectangle corresponds to the desired areas,}
 
-- ratio and area of each rectangle corresponds to the desired areas.
-
-- rectangles are placed parallel to the axes
-
+  \item{rectangles are placed parallel to the axes.}
+}
 The construction heuristic places the rectangles in a way that important spatial 
 constraints, in particular
 
-- the topology of the pseudo dual graph,
+\itemize{
+  \item{the topology of the pseudo dual graph,}
 
-- the relative position of MBB centers.
-
+  \item{the relative position of MBB centers.}
+}
 are tried to be preserved.
 
 The ratios are preserved and the area of each region corresponds to the as 
@@ -61,18 +65,19 @@ recmap(df)
 
 Basic idea of the current recmap \emph{implementation}:
 
-0. Compute the pseudo dual out of the overlapping map regions
+\enumerate{
+  \item{Compute the pseudo dual out of the overlapping map regions.}
 
-1. Determine the core region int(n/2) of index
+  \item{Determine the \emph{core region} by \code{index <- int(n / 2)}.}
 
-2. Place region by region along DFS skeleton of pseudo dual starting with the 
-core region
+  \item{Place region by region along DFS skeleton of 
+pseudo dual starting with the \emph{core region}.}
+}
 
 Note: if a rectangle can not be placed - accept a non \emph{feasible solution} 
 (avoid solutions having a topology error higher than 100)
 Solving this is compute expensive and due do the likely bad fitness value it 
 will be anyway rejected by the metaheuristic.
-
 
 \emph{Time Complexity:}
 The time complexity is O(n^2), where n is the number of regions.
@@ -173,16 +178,7 @@ plot_recmap(recmap(US.Map))
 par(op)
 
 
-\dontrun{
-# install.packages('rbenchmark')
 
-library(rbenchmark)
-benchmark(recmap(US.Map[sample(50,50),]), replications=100)
-##                              test replications elapsed relative user.self
-##1 recmap(US.Map[sample(50, 50), ])          100   1.255        1     1.124
-##  sys.self user.child sys.child
-##1    0.038          0         0
-}
 
 
 # define a fitness function
@@ -225,6 +221,17 @@ plot(recmapGA)
 
 }
 
+
+\dontrun{
+# install.packages('rbenchmark')
+
+library(rbenchmark)
+benchmark(recmap(US.Map[sample(50,50),]), replications=100)
+##                              test replications elapsed relative user.self
+##1 recmap(US.Map[sample(50, 50), ])          100   1.255        1     1.124
+##  sys.self user.child sys.child
+##1    0.038          0         0
+}
 
 ## Have Fun!
 }

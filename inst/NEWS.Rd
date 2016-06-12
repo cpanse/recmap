@@ -2,6 +2,7 @@
 \title{News for Package 'recmap'}
 
 \section{Changes in recmap version 0.3.5 (2016-06-09)}{
+
   \itemize{
 	  \item added test case for topology error
 	  \item added startup message for package version
