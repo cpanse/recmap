@@ -5,7 +5,7 @@ This package contains an implementation of the [RecMap](http://dx.doi.org/10.110
 
 ## Installation
 
-`recmap` requrires R 3.3 or later.
+`recmap` requires R 3.3 or later.
 
 Released and tested versions of `recmap` are available via the 
 [CRAN](https://cran.r-project.org/package=recmap) network, 
@@ -21,6 +21,8 @@ The package ships with a package vignette (`browseVignettes('recmap')`
 and a reference manual (just type `?recmap` on the R shell).
 
 Both documents are also available on the package's [CRAN](https://cran.r-project.org/package=recmap) page.
+
+
 ## Examples
 
 The [recmap gallery](http://cartodraw.science/recmap/gallery/) gives an impression what can
