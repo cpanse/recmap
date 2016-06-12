@@ -1,12 +1,17 @@
 \name{NEWS}
 \title{News for Package 'recmap'}
 
-\section{Changes in recmap version 0.3.5 (2016-06-09)}{
+\section{Changes in recmap version 0.4.0 (2016-06-12)}{
 
   \itemize{
+    \item \emph{bugfix} - \code{valgrind} 
+    'Conditional jump or move depends on uninitialised value(s)'.
+    
 	  \item added test case for topology error
+	  
 	  \item added startup message for package version
-    \item bugfix - topology error; if a region can not be placed
+    
+    \item \emph{bugfix} - topology error; if a region can not be placed
     return topology error 100. 
     this has a major impact to the return value of the fitness function.
     
@@ -16,6 +21,8 @@
     
     \item make \code{recmap.h} passing google/styleguides using
     \href{https://github.com/google/styleguide/tree/gh-pages/cpplint}{cpplint}
+    
+    \item manual and vignette cosmetics
 
   }
 }

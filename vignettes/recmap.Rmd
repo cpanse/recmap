@@ -106,6 +106,7 @@ core region
 3. If a rectangle can not be placed find a feasible solution (no overlapping 
 regions) by placing it next to a neighbor
 
+## Computational geometry help functions
 
 A *local placement* function can place an rectangle `b` 
 (rainbow colored rectangles) around a given rectangle `a` 
@@ -250,25 +251,37 @@ plot_recmap(Cartogram.Income <- recmap(M[order(M$x),]),
 More examples using `state.x77` data and `shiny` application are 
 available through <https://recmap.shinyapps.io/state_x77/>.
 
-## Synthetic Checker Boards
+## Synthetic checkerboard
 
 Checker boards provide examples of sets of map regions which 
 do not have ideal cartogram solutions according to Definition 1 [@cartodraw].
 
 
-```{r fig.width=7, fig.height=3.5, fig.align='center', fig.retina=2, fig.cap="checkerboard fun (left input; right output of `recmap`) - the area of a black box needs to be four times as large as the area of a white box."}
-op<-par(mar=c(0,0,0,0), mfrow=c(1, 2), bg='white')
+```{r fig.width=7, fig.height=2.5, fig.align='center', fig.retina=2, fig.cap="checkerboard fun - input, area of black regions have to be four times as big as white regions (left); solution found by a greedy random algorithm (middle); solution found by genetic algorithm (right)", fig.align='left'}
+op<-par(mar=c(0,0,0,0), mfrow=c(1, 3), bg='white')
 
-plot_recmap(checkerboard <- recmap:::.checkerboard(8),
-            col=c('white','white','white','black')[checkerboard$z])
+plot_recmap(checkerboard8x8 <- recmap:::.checkerboard(8),
+            col=c('white','white','white','black')[checkerboard8x8$z])
 
-# found by a Non-deterministic Turing machine (NTM)
-smp <- c(8,56,18,5,13,57,3,37,62,58,7,16,40,59,17,34,29,41,46,27,54,43,2,21,
-         38,52,31,20,28,48,1,22,55,11,25,19,50,10,24,53,47,30,45,44,32,35,51,
-         15,64,12,14,39,26,6,42,33,4,36,63,49,60,61,9,23)
+# found by a greedy randomized search
+index.greedy <- c(8, 56, 18, 5, 13, 57, 3, 37, 62, 58, 7, 16, 40, 59, 17, 34,
+                  29, 41, 46, 27, 54, 43, 2, 21, 38, 52, 31, 20, 28, 48, 1, 22,
+                  55, 11, 25, 19, 50, 10, 24, 53, 47, 30, 45, 44, 32, 35, 51,
+                  15, 64, 12, 14, 39, 26, 6, 42, 33, 4, 36, 63, 49, 60, 61, 9,
+                  23)
 
-plot_recmap(Cartogram.checkerboard <- recmap(checkerboard[smp,]), 
-            col=c('white','white','white','black')[Cartogram.checkerboard$z])
+plot_recmap(Cartogram.checkerboard8x8.greedy <- recmap(checkerboard8x8[index.greedy,]),
+            col=c('white','white','white','black')[Cartogram.checkerboard8x8.greedy$z])
+
+# found by a genetic algorithm
+index.ga <- c(52, 10, 27, 63, 7, 20, 32, 18, 47, 28, 6, 55, 11, 61, 38, 50, 5,
+              21, 36, 34, 2, 22, 3, 1, 29, 57, 43, 4, 51, 58, 31, 49, 44, 25,
+              59, 33, 17, 40, 8, 41, 26, 37, 19, 56, 45, 35, 62, 53, 24, 64,
+              30, 15, 39, 12, 60, 48, 16, 23, 46, 42, 13, 54, 14, 9)
+
+plot_recmap(Cartogram.checkerboard8x8.ga <- recmap(checkerboard8x8[index.ga,]),
+            col=c('white','white','white','black')[Cartogram.checkerboard8x8.ga$z])
+
 ```
 
 
