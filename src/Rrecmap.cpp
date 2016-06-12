@@ -52,8 +52,6 @@ DataFrame place_rectanle(double x0, double y0, double dx0, double dy0,
 
 // [[Rcpp::export]]
 DataFrame recmap_(DataFrame df) {
-  // TODO(cp): check if df contains all required columns
-
   // access the columns
   NumericVector x = df["x"];
   NumericVector y = df["y"];
