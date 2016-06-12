@@ -5,7 +5,7 @@
 recmap Plot Function
 }
 \description{
-plots input and output of \code{\link{recmap}} function.
+plots input and output of the \code{\link{recmap}} function.
 The function reqiures column names (x, y, dx, dy).
 }
 \usage{
