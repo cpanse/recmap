@@ -221,6 +221,8 @@ class RecMap{
     R1.name = name;
     R1.dfs_num = -1;
     R1.topology_error = 100;
+    R1.relative_position_error = 0.0;
+    R1.relative_position_neighborhood_error = 0.0;
 
     Map.push_back(R);
     Cartogram.push_back(R1);
