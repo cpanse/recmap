@@ -76,7 +76,7 @@ pseudo dual starting with the \emph{core region}.}
 
 Note: if a rectangle can not be placed - accept a non \emph{feasible solution} 
 (avoid solutions having a topology error higher than 100)
-Solving this is compute expensive and due do the likely bad fitness value it 
+Solving this is compute expensive and due to the assumably bad fitness value it 
 will be anyway rejected by the metaheuristic.
 
 \emph{Time Complexity:}
