@@ -6,7 +6,9 @@ RUN apt-get update && apt-get install ssh -y \
   && cd /tmp/ \
   && git clone git@github.com:cpanse/recmap.git \
   && R CMD build recmap \
-  && R CMD INSTALL recmap*gz
+  && R CMD INSTALL recmap*gz \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/ /tmp/recmap*
   
   
   
