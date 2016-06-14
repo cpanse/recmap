@@ -6,7 +6,6 @@ RUN apt-get update && apt-get install ssh -y \
   && cd /tmp/ \
   && mkdir ~/.ssh/ \
   && ssh-keyscan -t rsa github.com > ~/.ssh/known_hosts \
-  && eval `ssh-agent -s` && ssh-add id_rsa \
   && git clone git@github.com:cpanse/recmap.git \
   && R CMD build recmap \
   && R CMD INSTALL recmap*gz \
