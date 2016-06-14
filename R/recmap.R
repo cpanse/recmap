@@ -36,10 +36,10 @@
     polygon(recmap_us_state_ev$x, recmap_us_state_ev$y,
             col=cm[round(length(cm)*(us_state_election_2004$V8/(us_state_election_2004$V8 + us_state_election_2004$V9)))+1])
     
-    text(us_state_election_2004$V1,us_state_election_2004$V2-7,
+    text(us_state_election_2004$V1,us_state_election_2004$V2,
          as.character(us_state_election_2004$V3),cex=round(us_state_election_2004$V5*20)/100,
          lwd=2.5,
-         pos=3,
+         #pos=3,
          col="black");
   }
   
@@ -47,7 +47,7 @@
 }
 
 
-.checker_board <- function(n = 8, ratio = 4){
+.checkerboard <- function(n = 8, ratio = 4){
   xy <- (t(combn(1:n, 2)))
   xy <- rbind(cbind(xy[,1], xy[,2]), cbind(xy[,2], xy[,1]), cbind(1:n, 1:n))
   
@@ -74,7 +74,45 @@
 }
 
 
+recmap <- function(df) {
+  if(sum(c("x", "y", "dx", "dy", "z") %in% names(df)) != 5) 
+    stop("column names 'x', 'y', 'dx', 'dy', and 'z' are reqired")
+  
+  if (!is.numeric(df$x))
+    stop("x is not numeric.")
+  
+  if (!is.numeric(df$y))
+    stop("y is not numeric.")
+  
+  if (!is.numeric(df$dx))
+    stop("dx is not numeric.")
+  
+  if (!is.numeric(df$dy))
+    stop("dy is not numeric.")
+  
+  if (!is.numeric(df$z))
+    stop("z is not numeric.")
+  
+  if (sum(df$dx < 0) != 0)
+    stop('dx values have to be greater than 0.')
+  
+  if (sum(df$dy < 0) != 0)
+    stop('dy values have to be greater than 0.')
+  
+  if (sum(df$z <= 0) != 0)
+    stop('z values have to be greater equal than 0.')
+  
+  if (nrow(df) < 2) 
+    stop('reqires at least two map regions.')
+  
+  
+  recmap_(df)
+}
+
 plot_recmap <- function(S, col='#00000011', col.text = 'grey', ...){
+  try (if(sum(c("x", "y", "dx", "dy") %in% names(S)) != 4) 
+    stop("column names 'x', 'y', 'dx', 'dy', and 'z' are reqired"))
+  
   plot(S$x, S$y, 
        xlim = c(min(S$x - S$dx), max(S$x + S$dx)), 
        ylim = c(min(S$y - S$dy), max(S$y + S$dy)), 
@@ -128,3 +166,12 @@ plot_recmap <- function(S, col='#00000011', col.text = 'grey', ...){
 }
 
 
+.onAttach <- function(lib, pkg){
+	if(interactive()){
+		version <- packageVersion('recmap')
+		packageStartupMessage("Package 'recmap' version ", version)
+		# packageStartupMessage("Type 'citation(\"recmap\")' for citing this R package in publications.")
+	  invisible()
+	}
+
+}

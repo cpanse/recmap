@@ -9,7 +9,7 @@ place_rectanle <- function(x0, y0, dx0, dy0, dx1, dy1, alpha) {
     .Call('recmap_place_rectanle', PACKAGE = 'recmap', x0, y0, dx0, dy0, dx1, dy1, alpha)
 }
 
-recmap <- function(df) {
-    .Call('recmap_recmap', PACKAGE = 'recmap', df)
+recmap_ <- function(df) {
+    .Call('recmap_recmap_', PACKAGE = 'recmap', df)
 }
 

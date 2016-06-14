@@ -36,14 +36,14 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// recmap
-DataFrame recmap(DataFrame df);
-RcppExport SEXP recmap_recmap(SEXP dfSEXP) {
+// recmap_
+DataFrame recmap_(DataFrame df);
+RcppExport SEXP recmap_recmap_(SEXP dfSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< DataFrame >::type df(dfSEXP);
-    __result = Rcpp::wrap(recmap(df));
+    __result = Rcpp::wrap(recmap_(df));
     return __result;
 END_RCPP
 }
