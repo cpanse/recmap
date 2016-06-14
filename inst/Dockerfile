@@ -6,4 +6,4 @@ RUN echo "install.packages(c('recmap', 'doParallel', 'GA'))" \
 && cd /tmp/ \
 && git@github.com:cpanse/recmap.git \
 && R CMD build recmap 
-&& R CMD INSTALL recmap*.z
+&& R CMD INSTALL recmap*gz
