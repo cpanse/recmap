@@ -19,9 +19,7 @@ and can be installed using the R shell via
 install.package('recmap')
 ```
 
-### Install using docker
-
-- recmap on [docker hub](https://hub.docker.com/r/cpanse/recmap/) - public | automated build
+### Use the docker public | automated build [recmap image](https://hub.docker.com/r/cpanse/recmap/) 
 
 ```
 docker pull cpanse/recmap \
