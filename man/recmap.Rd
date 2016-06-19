@@ -12,7 +12,7 @@ Compute a Rectangular Statistical Cartogram
 \description{
 
 The input consist of a map represented by overlapping rectangles. 
-Concretely, the algorithm requires as input for each map region:
+The algorithm requires as input for each map region:
 
 \itemize{
   \item{a tuple of (x, y) values corresponding to the 
@@ -25,7 +25,7 @@ Concretely, the algorithm requires as input for each map region:
 
 The (x, y) coordinates represent the center of the minimal bounding boxes 
 (MBB), The coordinates of the MBB are derived by adding or subtracting the 
-(dx, dy) tuple accordingly. The tuple (dx, dy) defines also the ratio of the 
+(dx, dy)/2 tuple accordingly. The tuple (dx, dy) defines also the ratio of the 
 map region. The statistical values define the desired area of each map region.
 
 The output is a rectangular cartogram where the map regions are:
@@ -38,18 +38,23 @@ The output is a rectangular cartogram where the map regions are:
 
   \item{rectangles are placed parallel to the axes.}
 }
+
 The construction heuristic places the rectangles in a way that important spatial 
 constraints, in particular
 
 \itemize{
+
   \item{the topology of the pseudo dual graph,}
 
   \item{the relative position of MBB centers.}
+
 }
+
 are tried to be preserved.
 
 The ratios are preserved and the area of each region corresponds to the as 
 input given statistical value z.
+
 }
 
 \usage{
@@ -74,7 +79,7 @@ Basic idea of the current recmap \emph{implementation}:
 pseudo dual starting with the \emph{core region}.}
 }
 
-Note: if a rectangle can not be placed - accept a non \emph{feasible solution} 
+Note: if a rectangle can not be placed - acccept a non \emph{feasible solution} 
 (avoid solutions having a topology error higher than 100)
 Solving this is compute expensive and due to the assumably bad fitness value it 
 will be anyway rejected by the metaheuristic.
