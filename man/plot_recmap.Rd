@@ -6,7 +6,7 @@ recmap Plot Function
 }
 \description{
 plots input and output of the \code{\link{recmap}} function.
-The function reqiures column names (x, y, dx, dy).
+The function requires column names (x, y, dx, dy).
 }
 \usage{
 plot_recmap(S, col='#00000011', col.text = 'grey', ...)

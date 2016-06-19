@@ -11,7 +11,7 @@ Compute a Rectangular Statistical Cartogram
 
 \description{
 
-The input consist of a map represented by overlapping rectangles. 
+The input consist of a map represented by overlapping rectangles.
 The algorithm requires as input for each map region:
 
 \itemize{
@@ -62,7 +62,7 @@ recmap(df)
 }
 
 \arguments{
-  \item{df}{is the input formated as \code{data.frame} having the 
+  \item{df}{is the input formatted as \code{data.frame} having the
   columns (x, y, dx, dy, z, name) as described above.}
 }
 
@@ -79,7 +79,7 @@ Basic idea of the current recmap \emph{implementation}:
 pseudo dual starting with the \emph{core region}.}
 }
 
-Note: if a rectangle can not be placed - acccept a non \emph{feasible solution} 
+Note: if a rectangle can not be placed - accept a non \emph{feasible solution}
 (avoid solutions having a topology error higher than 100)
 Solving this is compute expensive and due to the assumably bad fitness value it 
 will be anyway rejected by the metaheuristic.
