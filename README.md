@@ -7,6 +7,8 @@ This package contains an implementation of the [RecMap](http://dx.doi.org/10.110
 
 ## Installation
 
+### using CRAN
+
 `recmap` requires R 3.3 or later.
 
 Released and tested versions of `recmap` are available via the 
@@ -16,6 +18,16 @@ and can be installed using the R shell via
 ```
 install.package('recmap')
 ```
+
+### using docker
+
+- recmap on [docker hub](https://hub.docker.com/r/cpanse/recmap/) - public | automated build
+
+```
+docker pull cpanse/recmap && docker run -d -p 8791:8787 cpanse/recmap
+```
+
+connect to http://yourdockerhost:8791 
 
 ## Documentation
 
