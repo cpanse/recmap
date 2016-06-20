@@ -14,8 +14,6 @@ RUN chmod 700 /root/.ssh/id_rsa \
   >> /root/.ssh/config \
   && git clone git@github.com:cpanse/recmap.git \
   && R CMD build --no-build-vignettes recmap \
-  && R CMD INSTALL recmap_*gz;
-  # clean up
-  rm -rvf /root/.ssh/id_rsa /recmap*
+  && R CMD INSTALL recmap_*gz; rm -rvf /root/.ssh/id_rsa /recmap*
    
    
