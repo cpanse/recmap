@@ -1,7 +1,7 @@
 FROM rocker/rstudio
 MAINTAINER Christian Panse <Christian.Panse@gmail.com>
 
-RUN echo "install.packages(c('doParallel', 'GA', 'Rcpp'))" \ 
+RUN echo "install.packages(c('doParallel', 'GA', 'Rcpp', 'knitr', 'testthat'))" \ 
   | R --no-save \
   && apt-get update \
   && apt-get install git ssh -y \
