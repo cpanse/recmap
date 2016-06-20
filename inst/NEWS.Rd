@@ -27,7 +27,7 @@
     
     \code{if (sum(cartogram$topology.error == 100) > 0){return (0)}}
     
-    \item make \code{recmap.h} passing google/styleguides using
+    \item make \code{recmap.h} pass google/styleguides using
     \href{https://github.com/google/styleguide/tree/gh-pages/cpplint}{cpplint}
     
     \item manual and vignette cosmetics
