@@ -11,7 +11,7 @@ ADD id_rsa /root/.ssh/id_rsa
 RUN chmod 700 /root/.ssh/id_rsa \
   && chown -R root:root /root/.ssh \
   && touch /root/.ssh/known_hosts \
-  && echo "Host github.org\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
+  && echo "Host github.org\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config \
   && git clone git@github.com:cpanse/recmap.git /tmp/recmap \
   && rm -vf /root/.ssh/id_rsa
    
