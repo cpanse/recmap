@@ -3,7 +3,7 @@ MAINTAINER Christian Panse <Christian.Panse@gmail.com>
 
 RUN echo "install.packages(c('doParallel', 'GA', 'recmap'))" | R --no-save \
 && apt-get update \
-&& apt-get install git -y \
+&& apt-get install git ssh -y \
 && mkdir /root/.ssh/
 
 ADD id_rsa /root/.ssh/id_rsa
