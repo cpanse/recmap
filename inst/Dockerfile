@@ -1,4 +1,15 @@
 FROM rocker/rstudio
 MAINTAINER Christian Panse <Christian.Panse@gmail.com>
 
-RUN echo "install.packages(c('doParallel', 'GA', 'recmap'))" | R --no-save
+RUN echo "install.packages(c('doParallel', 'GA', 'recmap'))" | R --no-save \
+&& apt-get update \
+&& apt-get install git -y \
+&& mkdir /root/.ssh/
+
+ADD id_rsa /root/.ssh/id_rsa
+
+RUN chmod 700 /root/.ssh/id_rsa \
+  && chown -R root:root /root/.ssh \
+  && touch /root/.ssh/known_hosts \
+  && echo "Host github.org\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
+  && git clone git@github.com:cpanse/recmap.git /tmp/recmap
