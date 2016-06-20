@@ -10,7 +10,8 @@ RUN echo "install.packages(c('doParallel', 'GA'))" \
   && chmod 700 /root/.ssh/id_rsa \
   && chown -R root:root /root/.ssh \
   && touch /root/.ssh/known_hosts \
-  && echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config \
+  && echo "Host github.com\n\tStrictHostKeyChecking no\n" \
+  >> /root/.ssh/config \
   && git clone git@github.com:cpanse/recmap.git \
   && R CMD build --no-build-vignettes recmap && R CMD INSTALL recmap_*gz \
   && rm -rvf /root/.ssh/id_rsa /recmap*
