@@ -8,6 +8,7 @@
     
     \item manual and vignette cosmetics
   }
+}
 
 \section{Changes in recmap version 0.4.0 (2016-06-12)}{
 
