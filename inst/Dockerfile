@@ -6,7 +6,7 @@ RUN echo "install.packages(c('doParallel', 'GA'))" \
   && apt-get update \
   && apt-get install git ssh -y \
   && mkdir /root/.ssh/
-ADD cp id_rsa /root/.ssh/id_rsa
+ADD id_rsa /root/.ssh/id_rsa
 RUN chmod 700 /root/.ssh/id_rsa \
   && chown -R root:root /root/.ssh \
   && touch /root/.ssh/known_hosts \
