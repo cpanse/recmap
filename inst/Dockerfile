@@ -1,7 +1,8 @@
 FROM rocker/rstudio
 MAINTAINER Christian Panse <Christian.Panse@gmail.com>
 
-RUN echo "install.packages(c('doParallel', 'GA', 'Rcpp', 'knitr', 'testthat'))" \ 
+RUN echo "install.packages(c('doParallel', 'GA', 'Rcpp', 'knitr', \
+'testthat', 'maps', 'shapefile'))" \ 
   | R --no-save \
   && apt-get update \
   && apt-get install git ssh -y \
@@ -14,6 +15,5 @@ RUN chmod 700 /root/.ssh/id_rsa \
   >> /root/.ssh/config \
   && git clone git@github.com:cpanse/recmap.git \
   && R CMD build --no-build-vignettes recmap \
-  && R CMD INSTALL recmap_*gz; rm -rvf /root/.ssh/id_rsa /recmap*
-   
-   
+  && R CMD INSTALL recmap_*gz; \
+  rm -rvf /root/.ssh/id_rsa /recmap*
