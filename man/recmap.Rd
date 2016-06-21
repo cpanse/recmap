@@ -92,7 +92,7 @@ bad fitness value the candidate cartogram  will be anyway
 rejected by the metaheuristic.
 
 \emph{Time Complexity:}
-The time complexity is \eqn{mathcal{O}(n^2)}, where n is the number of regions.
+The time complexity is \eqn{O(n^2)}, where n is the number of regions.
 DFS is visiting each map region only once and therefore has 
 time complexity \eqn{O(n)}. For each placement a constant number of
 MBB intersection are called (max 360). MBB check is implemented using
