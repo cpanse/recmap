@@ -29,7 +29,9 @@ The (x, y) coordinates represent the center of the minimal bounding boxes
 map region. The statistical values define the desired area of each map region.
 
 The output is a rectangular cartogram where the map regions are:
+
 \itemize{
+
   \item{non overlapping,}
 
   \item{connected,}
@@ -39,7 +41,7 @@ The output is a rectangular cartogram where the map regions are:
   \item{rectangles are placed parallel to the axes.}
 }
 
-The construction heuristic places the rectangles in a way that important spatial 
+The construction heuristic places each rectangle in a way that important spatial 
 constraints, in particular
 
 \itemize{
@@ -62,8 +64,10 @@ recmap(df)
 }
 
 \arguments{
-  \item{df}{is the input formatted as \code{data.frame} having the
+
+  \item{df}{is the input formatted as \code{\link{data.frame}} having the
   columns (x, y, dx, dy, z, name) as described above.}
+
 }
 
 \details{
@@ -71,29 +75,31 @@ recmap(df)
 Basic idea of the current recmap \emph{implementation}:
 
 \enumerate{
+
   \item{Compute the pseudo dual out of the overlapping map regions.}
 
   \item{Determine the \emph{core region} by \code{index <- int(n / 2)}.}
 
-  \item{Place region by region along DFS skeleton of 
-pseudo dual starting with the \emph{core region}.}
+  \item{Place region by region along DFS skeleton of pseudo dual starting 
+  with the \emph{core region}.}
+
 }
 
-Note: if a rectangle can not be placed - accept a non \emph{feasible solution}
+Note: if a rectangle can not be placed, accept a non \emph{feasible solution}
 (avoid solutions having a topology error higher than 100)
-Solving this is compute expensive and due to the assumably bad fitness value it 
-will be anyway rejected by the metaheuristic.
+Solving this constellation can be compute expensive and due to the assumably 
+bad fitness value the candidate cartogram  will be anyway 
+rejected by the metaheuristic.
 
 \emph{Time Complexity:}
-The time complexity is O(n^2), where n is the number of regions.
+The time complexity is \eqn{mathcal{O}(n^2)}, where n is the number of regions.
 DFS is visiting each map region only once and therefore has 
-time complexity O(n). For each placement a constant number of
+time complexity \eqn{O(n)}. For each placement a constant number of
 MBB intersection are called (max 360). MBB check is implemented using
 \code{std::set}, \code{insert}, \code{upper_bound}, \code{upper_bound} 
-costs are O(log(n)). 
-However, worst case for a range query is O(n), iff dx or dy cover the whole
-x or y range.
-Q.E.D.
+costs are \eqn{O(log(n))}. 
+However, worst case for a range query is \eqn{O(n)}, iff dx or dy cover the 
+whole x or y range. Q.E.D.
 
 
 \emph{Perfomance:}
@@ -181,10 +187,6 @@ US.Map <- usa[match(usa$name,
 plot_recmap(US.Map)
 plot_recmap(recmap(US.Map))
 par(op)
-
-
-
-
 
 # define a fitness function
 recmap.fitness <- function(idxOrder, Map, ...){
