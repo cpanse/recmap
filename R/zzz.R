@@ -1,6 +1,5 @@
 #R
 
-
 .onAttach <- function(lib, pkg){
 	if(interactive()){
 		version <- packageVersion('recmap')
@@ -8,5 +7,4 @@
 		# packageStartupMessage("Type 'citation(\"recmap\")' for citing this R package in publications.")
 	  invisible()
 	}
-
 }
