@@ -11,7 +11,7 @@ Compute a Rectangular Statistical Cartogram
 
 \description{
 
-The input consist of a map represented by overlapping rectangles.
+The input consists of a map represented by overlapping rectangles.
 The algorithm requires as input for each map region:
 
 \itemize{
@@ -243,5 +243,6 @@ benchmark(recmap(US.Map[sample(50,50),]), replications=100)
 ## Have Fun!
 }
 
+\keyword{package}
 \keyword{cartogram}
 \keyword{value-by-area-map}
