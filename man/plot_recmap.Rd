@@ -49,5 +49,6 @@ plot_recmap(Cartogram)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{cartogram}% use one of  RShowDoc("KEYWORDS")
-\keyword{recmap}% __ONLY ONE__ keyword per line
+
+\keyword{cartogram}
+\keyword{recmap}
