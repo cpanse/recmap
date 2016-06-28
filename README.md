@@ -23,10 +23,13 @@ install.package('recmap')
 
 ### Use the docker public | automated build [recmap image](https://hub.docker.com/r/cpanse/recmap/) 
 
+this image contains the latest build.
+
 ```
 docker pull cpanse/recmap \
 && docker run -d -p 8791:8787 cpanse/recmap
 ```
+
 connect to http://yourdockerhost:8791  using a web browser
 
 * username: rstudio
@@ -46,9 +49,11 @@ Both documents are also available on the package's [CRAN](https://cran.r-project
 The [recmap gallery](http://cartodraw.science/recmap/gallery/) gives an impression what can
 be expected from the cartogram drawing algorithm.
 
+
 ## Author
 
 Christian Panse, 2016
+
 
 ## License
 
