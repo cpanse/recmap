@@ -1,12 +1,12 @@
 \name{NEWS}
 \title{News for Package 'recmap'}
 
-\section{Changes in recmap version 0.4.1 (2016-06-20)}{
+\section{Changes in recmap version 0.5.0 (2016-07-01)}{
   \itemize{
     \item add docker Public | Automated Build 
     \url{https://hub.docker.com/r/cpanse/recmap/}
-    
     \item manual and vignette cosmetics
+    \item added \code{zzz.R}
   }
 }
 
