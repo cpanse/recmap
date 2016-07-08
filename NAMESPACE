@@ -1,8 +1,10 @@
 useDynLib(recmap)
 import(Rcpp)
 
+
 export("recmap")
-export("plot_recmap")
+export("plot.recmap")
+export("checkerboard")
 
 importFrom("utils", "packageVersion")
 importFrom("graphics", "plot", "polygon", "rect", "text")

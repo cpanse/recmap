@@ -112,6 +112,7 @@ a different index order using the (\code{\link{sample}}) method.
 
 \emph{Geodetic datum:} the \code{recmap} algorithm is not transforming the 
 geodetic datum, e.g., WGS84 or Swissgrid.
+
 }
 
 \value{
@@ -148,7 +149,7 @@ Package. \url{https://arxiv.org/abs/1606.00464}.
 
 \seealso{
 
-  \code{\link{plot_recmap}}
+  \code{\link{plot.recmap}}
 
   The package vignette 
   \url{https://cran.r-project.org/web/packages/recmap/vignettes/recmap.html} 
@@ -159,15 +160,15 @@ Package. \url{https://arxiv.org/abs/1606.00464}.
 }
 
 \examples{
-map <- recmap:::.checkerboard(2)
+map <- checkerboard(2)
 cartogram <- recmap(map)
 
 map
 cartogram
 
-op <- par(mfrow=c(1,2))
-plot_recmap(map)
-plot_recmap(cartogram)
+op <- par(mfrow = c(1, 2))
+plot(map)
+plot(cartogram)
 
 ## US example
 usa <- data.frame(x = state.center$x, 
@@ -184,8 +185,8 @@ usa$z <- state.x77[, 'Population']
 US.Map <- usa[match(usa$name, 
   c('Hawaii', 'Alaska'), nomatch = 0)  == 0, ]
 
-plot_recmap(US.Map)
-plot_recmap(recmap(US.Map))
+plot.recmap(US.Map)
+plot(recmap(US.Map))
 par(op)
 
 # define a fitness function
@@ -222,7 +223,7 @@ recmapGA <- ga(type = "permutation",
   parallel=TRUE,
   pmutation = 0.25)
 
-plot_recmap(recmap(M[recmapGA@solution[1,],]))
+plot.recmap(recmap(M[recmapGA@solution[1,],]))
 
 plot(recmapGA)
 

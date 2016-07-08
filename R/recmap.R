@@ -47,7 +47,7 @@
 }
 
 
-.checkerboard <- function(n = 8, ratio = 4){
+checkerboard <- function(n = 8, ratio = 4){
   xy <- (t(combn(1:n, 2)))
   xy <- rbind(cbind(xy[,1], xy[,2]), cbind(xy[,2], xy[,1]), cbind(1:n, 1:n))
   
@@ -69,7 +69,7 @@
   
   res <- res[with(res, order(x, y)), ]
   row.names(res) <- 1:nrow(res); # paste(letters[1:n][xy[,1]], xy[,2], sep='')
-  class(res) = c('data.frame', 'recmapFrame')
+  class(res) = c('recmap', class(res))
   res
 }
 
@@ -106,10 +106,15 @@ recmap <- function(df) {
     stop('reqires at least two map regions.')
   
   
-  recmap_(df)
+  res <- recmap_(df)
+  
+  class(res) = c('recmap', class(res))
+  res
 }
 
-plot_recmap <- function(S, col='#00000011', col.text = 'grey', ...){
+
+plot.recmap <- function(x, col='#00000011', col.text = 'grey', ...){
+  S <- x
   try (if(sum(c("x", "y", "dx", "dy") %in% names(S)) != 4) 
     stop("column names 'x', 'y', 'dx', 'dy', and 'z' are reqired"))
   
@@ -147,8 +152,6 @@ plot_recmap <- function(S, col='#00000011', col.text = 'grey', ...){
 
 .plot_recmap_error <- function(S){
   
-
-
   plot(sort(S$relpos.error),
        main="relpos.error",
        ylab=expression(paste("normalized angle [in ", pi,"]")))
