@@ -194,3 +194,39 @@ plot.recmap <- function(x, col='#00000011', col.text = 'grey', ...){
 }
 
 
+# define a fitness function
+.recmap.fitness <- function(idxOrder, Map, ...){
+  Cartogram <- recmap(Map[idxOrder, ])
+  # a map region could not be placed; 
+  # accept only feasible solutions!
+  
+  if (sum(Cartogram$topology.error == 100) > 0){return (0)}
+  
+  1 / sum(Cartogram$relpos.error)
+}
+
+
+recmapGA <- function(Map, 
+                      fitness = .recmap.fitness,
+                      pmutation = 0.25, 
+                      popSize = 10 * nrow(Map), 
+                      maxiter = 10, 
+                      run = maxiter,
+                      parallel = FALSE){
+  GA <- ga(type = "permutation", 
+           fitness = fitness, 
+           Map = Map,
+           monitor = gaMonitor,
+           min = 1, max = nrow(Map) , 
+           popSize = popSize, 
+           maxiter = maxiter, 
+           run = run, 
+           parallel = parallel,
+           pmutation = pmutation)
+  
+  list(GA = GA, 
+       Map = Map[GA@solution[1, ], ], 
+       Cartogram = recmap(Map[GA@solution[1, ], ]))
+}
+
+

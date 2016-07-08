@@ -4,6 +4,7 @@ import(Rcpp)
 
 
 export("recmap")
+export("recmapGA")
 export("plot.recmap")
 export("recmap2sp")
 export("checkerboard")
@@ -16,4 +17,4 @@ importFrom("sp", "Polygon", "Polygons", "SpatialPolygons",
            "SpatialPolygonsDataFrame", 
            "spplot")
 
-importFrom("GA", "ga", "plot")
+importFrom("GA", "ga", "gaMonitor", "plot")
