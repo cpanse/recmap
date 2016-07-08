@@ -15,9 +15,9 @@ Description: Provides an interface and a C++ implementation of the RecMap MP2
   <http://cartodraw.science/recmap/gallery>.
 License: GPL-3
 LazyData: TRUE
-Depends: R (>= 3.3), Rcpp (>= 0.12.4)
+Depends: R (>= 3.3), Rcpp (>= 0.12.4), sp, GA
 SystemRequirements: C++11
-Suggests: knitr, testthat, GA
+Suggests: knitr, testthat
 LinkingTo: Rcpp (>= 0.12.4)
 VignetteBuilder: knitr
 NeedsCompilation: yes

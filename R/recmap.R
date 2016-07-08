@@ -1,3 +1,4 @@
+#R
 
 .draw_recmap_us_state_ev <- function(plot=TRUE){
   
@@ -112,6 +113,30 @@ recmap <- function(df) {
   res
 }
 
+recmap2sp <- function(rm, df=NULL){
+  
+  SpP <- SpatialPolygons(lapply(1:nrow(rm), function(i){
+    r <- rm[i, ]
+    Sr <- Polygon(cbind(c(r$x - r$dx, 
+                          r$x - r$dx, 
+                          r$x + r$dx, 
+                          r$x + r$dx), 
+                        c(r$y + r$dy, 
+                          r$y - r$dy, 
+                          r$y - r$dy, 
+                          r$y + r$dy)))
+    
+    Polygons(list(Sr), r$name)
+  }))
+  
+  if (is.null(df)){
+    return(SpatialPolygonsDataFrame(SpP, 
+                                    data.frame(z = rm$z, 
+                                               row.names = rm$name)))}
+  
+  SpatialPolygonsDataFrame(SpP, df)
+  
+}
 
 plot.recmap <- function(x, col='#00000011', col.text = 'grey', ...){
   S <- x

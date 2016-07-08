@@ -2,11 +2,18 @@ useDynLib(recmap)
 import(Rcpp)
 
 
+
 export("recmap")
 export("plot.recmap")
+export("recmap2sp")
 export("checkerboard")
 
 importFrom("utils", "packageVersion")
 importFrom("graphics", "plot", "polygon", "rect", "text")
 importFrom("utils", "combn", "read.table")
 importFrom("graphics", "abline", "axis")
+importFrom("sp", "Polygon", "Polygons", "SpatialPolygons", 
+           "SpatialPolygonsDataFrame", 
+           "spplot")
+
+importFrom("GA", "ga", "plot")
