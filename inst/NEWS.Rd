@@ -1,16 +1,25 @@
 \name{NEWS}
 \title{News for Package 'recmap'}
 
-\section{Changes in recmap version 0.5.0 (2016-07-01)}{
+\section{Changes version 0.5.1 (2016-07-08)}{
+  improvements concerning \href{https://www.jstatsoft.org}{JSS} 
+  prescreening stage:
   \itemize{
-    \item add docker Public | Automated Build 
-    \url{https://hub.docker.com/r/cpanse/recmap/}
-    \item manual and vignette cosmetics
-    \item added \code{zzz.R}
+  \item added \code{plot.recmap()} and registered as an S3 method.
+  \item exported \code{checkerboard()}
   }
 }
 
-\section{Changes in recmap version 0.4.0 (2016-06-12)}{
+\section{Changes version 0.5.0 (2016-07-01)}{
+  \itemize{
+    \item add docker Public | Automated Build
+    \url{https://hub.docker.com/r/cpanse/recmap/}.
+    \item manual and vignette cosmetics.
+    \item added \code{zzz.R}.
+  }
+}
+
+\section{Changes version 0.4.0 (2016-06-12)}{
 
   \itemize{
     \item \emph{bugfix} - \code{valgrind} 
@@ -37,7 +46,7 @@
 }
 
 
-\section{Changes in recmap version 0.3.0 (2016-05-30)}{
+\section{Changes in version 0.3.0 (2016-05-30)}{
   \itemize{
     \item refactor linear MBB intersection test by introducing using 
     \code{std::multiset}. 
@@ -50,14 +59,14 @@
   }
   }
 
-\section{Changes in recmap version 0.2.1 (2016-05-01)}{
+\section{Changes in version 0.2.1 (2016-05-01)}{
   \itemize{
     \item cosmetics in the DESCRIPTION;  on CRAN
   }
 }
 
 
-\section{Changes in recmap version 0.2.0 (2016-05-01)}{
+\section{Changes in version 0.2.0 (2016-05-01)}{
   \itemize{
     \item 1st submit to CRAN
   }
