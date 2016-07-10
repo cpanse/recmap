@@ -6,7 +6,7 @@ Genetic Alorithm wrapper function for recmap
 }
 \description{
 high-level function for \code{\link{recmap}} using a Genetic Algorithm as 
-metaheuristic
+metaheuristic.
 }
 \usage{
 recmapGA(Map, fitness = .recmap.fitness, pmutation = 0.25, 
@@ -14,8 +14,9 @@ popSize = 10 * nrow(Map), maxiter = 10, run = maxiter, parallel = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
+The following arguments are passed through \code{\link[GA]{ga}}.
   \item{Map}{
-%%     ~~Describe \code{Map} here~~
+
 }
   \item{fitness}{
 %%     ~~Describe \code{fitness} here~~
@@ -36,15 +37,10 @@ popSize = 10 * nrow(Map), maxiter = 10, run = maxiter, parallel = FALSE)
 %%     ~~Describe \code{parallel} here~~
 }
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
+
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+returns a list of the input \code{Map}, The solution of the \code{GA}, and
+a \code{\link{recmap}} object containing the cartogram. 
 }
 \references{
 Luca Scrucca (2013). GA: A Package for Genetic Algorithms in R.
@@ -54,11 +50,7 @@ Journal of Statistical Software, 53(4), 1-37.
 \author{
 Christian Panse
 }
-\note{
-%%  ~~further notes~~
-}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
 \itemize{
@@ -68,7 +60,7 @@ Christian Panse
 }
 \examples{
 
-## The function is currently defined as
+## The default fitnes function is currently defined as
 function(idxOrder, Map, ...){
   Cartogram <- recmap(Map[idxOrder, ])
   # a map region could not be placed; 
@@ -84,9 +76,10 @@ function(idxOrder, Map, ...){
 set.seed(1)
 res <- recmapGA(Map = checkerboard(4), pmutation = 0.25)
 
-plot(res$Map)
-plot(res$Cartogram)
-plot(res$GA, )
+op <- par(mfrow = c(1, 3))
+plot(res$Map, main = "Input Map") 
+plot(res$GA, main="Genetic Algorithm")
+plot(res$Cartogram, main = "Output Cartogram")
 
 }
 

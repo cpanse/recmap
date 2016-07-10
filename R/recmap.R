@@ -150,7 +150,7 @@ plot.recmap <- function(x, col='#00000011', col.text = 'grey', ...){
        asp=1,
        xlab = '',
        ylab = '',
-       axes = FALSE)
+       axes = FALSE, ...)
   
   # col.idx <- (length(colormap) -1  ) * (S$z - min(S$z) / (max(S$z) - min(S$z))) + 1
   
@@ -159,7 +159,7 @@ plot.recmap <- function(x, col='#00000011', col.text = 'grey', ...){
        xright = S$x + S$dx, 
        ytop = S$y + S$dy, 
        col = col, 
-       border = 'darkgreen', ...)
+       border = 'darkgreen')
   
   if (sqrt(length(S$x)) < 10){
     text(S$x, S$y, 
