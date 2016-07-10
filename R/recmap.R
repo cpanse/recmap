@@ -212,11 +212,14 @@ recmapGA <- function(Map,
                       popSize = 10 * nrow(Map), 
                       maxiter = 10, 
                       run = maxiter,
+                      monitor = if(interactive()) 
+                      { if(is.RStudio()) gaMonitor else gaMonitor2 } 
+                     else FALSE,
                       parallel = FALSE){
   GA <- ga(type = "permutation", 
            fitness = fitness, 
            Map = Map,
-           monitor = gaMonitor,
+           monitor = monitor,
            min = 1, max = nrow(Map) , 
            popSize = popSize, 
            maxiter = maxiter, 

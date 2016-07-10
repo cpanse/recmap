@@ -10,7 +10,10 @@ metaheuristic.
 }
 \usage{
 recmapGA(Map, fitness = .recmap.fitness, pmutation = 0.25, 
-popSize = 10 * nrow(Map), maxiter = 10, run = maxiter, parallel = FALSE)
+popSize = 10 * nrow(Map), maxiter = 10, run = maxiter, 
+monitor = if (interactive()) { if (is.RStudio())
+                 gaMonitor else gaMonitor2} else FALSE, parallel =
+                 FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -21,6 +24,7 @@ The following arguments are passed through \code{\link[GA]{ga}}.
   \item{fitness}{
 %%     ~~Describe \code{fitness} here~~
 }
+
   \item{pmutation}{
 %%     ~~Describe \code{pmutation} here~~
 }
@@ -32,6 +36,9 @@ The following arguments are passed through \code{\link[GA]{ga}}.
 }
   \item{run}{
 %%     ~~Describe \code{run} here~~
+}
+\item{monitor}{
+%%     ~~Describe \code{pmutation} here~~
 }
   \item{parallel}{
 %%     ~~Describe \code{parallel} here~~
