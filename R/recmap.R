@@ -1,6 +1,13 @@
 #R
 
+# this function reproduces the original election cartogram from 2004 using 
+# the cartogram output from the 2003 implementation.
 .draw_recmap_us_state_ev <- function(plot=TRUE){
+  
+  
+  # red-blue bi-poloar colormap 100; used in all CartoDraw / RecMap 
+  # publications since 2001 for visualizing cartographic error / scaling factor 
+  # and elelction data; exported from CartoView 
   
   cm <- c("#FF0000", "#FF0505", "#FF0A0A", "#FF1010", "#FF1515", "#FF1A1A", "#FF1F1F",
           "#FF2424", "#FF2A2A", "#FF2F2F", "#FF3434", "#FF3939", "#FF3E3E", "#FF4444",
@@ -18,6 +25,8 @@
           "#2A2AFF", "#2424FF", "#1F1FFF", "#1A1AFF", "#1515FF", "#1010FF", "#0A0AFF",
           "#0505FF", "#0000FF")
   
+  # does not look so impressive
+  # cm <- rev(diverge_hcl(100))
   recmap_us_state_ev.file <- system.file("extdata", 
                                          "recmap_us_state_ev.polygon", 
                                          package = "recmap")
@@ -213,7 +222,7 @@ recmapGA <- function(Map,
                       maxiter = 10, 
                       run = maxiter,
                       monitor = if(interactive()) 
-                      { if(is.RStudio()) gaMonitor else gaMonitor2 } 
+                      { gaMonitor2 } 
                      else FALSE,
                       parallel = FALSE){
   GA <- ga(type = "permutation", 

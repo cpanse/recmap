@@ -17,4 +17,4 @@ importFrom("sp", "Polygon", "Polygons", "SpatialPolygons",
            "SpatialPolygonsDataFrame", 
            "spplot")
 
-importFrom("GA", "ga", "gaMonitor", "gaMonitor2", "plot", "is.RStudio")
+importFrom("GA", "ga", "gaMonitor", "gaMonitor2", "plot")
