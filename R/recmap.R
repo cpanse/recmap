@@ -122,6 +122,7 @@ recmap <- function(df) {
   res
 }
 
+# require(sp)
 recmap2sp <- function(rm, df=NULL){
   
   SpP <- SpatialPolygons(lapply(1:nrow(rm), function(i){

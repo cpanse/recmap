@@ -2,7 +2,7 @@
 \alias{recmapGA}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Genetic Alorithm wrapper function for recmap
+Genetic Algorithm Wrapper Function for recmap
 }
 \description{
 high-level function for \code{\link{recmap}} using a Genetic Algorithm as 
@@ -45,8 +45,8 @@ The following arguments are passed through \code{\link[GA]{ga}}.
 }
 
 \value{
-returns a list of the input \code{Map}, The solution of the \code{GA}, and
-a \code{\link{recmap}} object containing the cartogram. 
+returns a list of the input \code{Map}, the solution of the \code{\link[GA]{ga}} 
+function, and a \code{\link{recmap}} object containing the cartogram. 
 }
 \references{
 Luca Scrucca (2013). GA: A Package for Genetic Algorithms in R.
@@ -68,6 +68,7 @@ Christian Panse
 
 ## The default fitnes function is currently defined as
 function(idxOrder, Map, ...){
+
   Cartogram <- recmap(Map[idxOrder, ])
   # a map region could not be placed; 
   # accept only feasible solutions!
