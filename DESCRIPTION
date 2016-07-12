@@ -17,7 +17,7 @@ License: GPL-3
 LazyData: TRUE
 Depends: R (>= 3.3), Rcpp (>= 0.12.4), GA (>= 3.0.0), sp
 SystemRequirements: C++11
-Suggests: knitr, testthat, doParallel, colorspace, maps
+Suggests: knitr, testthat, doParallel, maps
 LinkingTo: Rcpp (>= 0.12.4)
 VignetteBuilder: knitr
 NeedsCompilation: yes
