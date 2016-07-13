@@ -172,7 +172,7 @@ the computation of the dual graph. In [@recmap] a genetic algorithm was applied
 as metaheuristic. Due do the limited compute resources on the CRAN package 
 build process no metaheuristic will be executed to build this vignette file.
 
-Study the examples of the reference manual `?recmap` on 
+Study the examples of the reference manual `?recmapGA` on 
 how the [GA](https://cran.r-project.org/package=GA) package can be used.
 
 

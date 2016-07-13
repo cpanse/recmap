@@ -6,6 +6,7 @@ import(Rcpp)
 export("recmap")
 export("recmapGA")
 export("plot.recmap")
+S3method(print, recmap)
 export("recmap2sp")
 export("checkerboard")
 
