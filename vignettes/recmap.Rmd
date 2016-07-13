@@ -209,7 +209,7 @@ plot(Cartogram.Population <- recmap(M[smp, ]),
 
 ## `state.x77[, 'Population']`
 
-```{r fig.width=8, fig.height=4, fig.align='left', fig.cap="Area ~ population estimate as of July 1, 1975;"}
+```{r fig.width=8, fig.height=4, fig.align='left', fig.cap="Area ~ population estimate as of July 1, 1975;", warning=FALSE}
 
 op<-par(mfrow=c(1,1), mar=c(0,0,0,0))
 usa$z <- state.x77[, 'Population']

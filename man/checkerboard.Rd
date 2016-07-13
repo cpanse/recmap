@@ -1,8 +1,8 @@
 \name{checkerboard}
 \alias{checkerboard}
-%- Also NEED an '\alias' for EACH other topic documented here.
+
 \title{
-Create a checkboard
+Create a Checkboard
 }
 \description{
 
@@ -28,9 +28,11 @@ returns a checkerboard as \code{\link{recmap}} object.
 Christian Panse
 }
 
-
 \seealso{
-See Also as \code{\link{recmap}}.
+
+\itemize{
+  \item \code{\link{recmap}}.
+}
 }
 
 \examples{
