@@ -149,6 +149,9 @@ recmap2sp <- function(rm, df=NULL){
 }
 
 plot.recmap <- function(x, col='#00000011', col.text = 'grey', ...){
+#  col <- '#00000011'
+#  col.text <- 'grey'
+
   S <- x
   try (if(sum(c("x", "y", "dx", "dy") %in% names(S)) != 4) 
     stop("column names 'x', 'y', 'dx', 'dy', and 'z' are reqired"))
