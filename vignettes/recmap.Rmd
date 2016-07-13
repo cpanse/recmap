@@ -19,7 +19,7 @@ vignette: >
 This package contains a C++ implementation of the RecMap algorithm 
 [[@recmap]](http://dx.doi.org/10.1109/INFVIS.2004.57) to draw maps according to 
 given statistical values. These so-called cartograms or value-by-area-maps may 
-be used to visualize any geospatial-related data, e. g. political, economical or 
+be used to visualize any geospatial-related data, e.g. political, economical or 
 public health data.
 The input consists of a map represented by overlapping rectangles.
 This map is defined by the following parameters for each map region:
