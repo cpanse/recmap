@@ -14,8 +14,12 @@ importFrom("GA", "ga", "gaMonitor", "gaMonitor2", "plot")
 
 export("recmap")
 export("recmapGA")
+export("recmapGRASP")
 export("recmap2sp")
 export("checkerboard")
 
 export("plot.recmap")
+export("summary.recmap")
+
 S3method(plot, recmap)
+S3method(summary, recmap)

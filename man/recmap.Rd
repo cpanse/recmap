@@ -117,7 +117,7 @@ geodetic datum, e.g., WGS84 or Swissgrid.
 
 \value{
 
-returns a \code{data.frame} object of the transformed map with new coordinates 
+returns a \code{recmap} S3 object of the transformed map with new coordinates 
 (x, y, dx, dy) plus additional columns containing information for topology 
 error, relative position error, and the DFS number.
 The error values are thought to be used for fitness function of the
@@ -127,13 +127,14 @@ metaheuristic.
 
 \references{
 \itemize{
+
 \item Roland Heilmann, Daniel Keim, Christian Panse, and Mike Sips (2004). 
-RecMap: Rectangular Map Approximations. 
+"RecMap: Rectangular Map Approximations."
 InfoVis 2004, IEEE Symposium on Information Visualization, Austin, Texas, 33-40.
 \url{http://dx.doi.org/10.1109/INFVIS.2004.57}.
 
 \item Christian Panse (2016). 
-Rectangular Statistical Cartograms in R: The recmap Package. 
+"Rectangular Statistical Cartograms in R: The recmap Package."
 \url{https://arxiv.org/abs/1606.00464}.
 }
 }
@@ -147,9 +148,11 @@ Rectangular Statistical Cartograms in R: The recmap Package.
 \seealso{
 
 \itemize{
-  \item \code{\link{plot.recmap}}
+  \item S3 class methods: \code{\link{plot.recmap}} and
+  \code{\link{summary.recmap}}.
 
-  \item \code{\link{recmapGA}}
+  \item the metaheuristic glue methods:
+  \code{\link{recmapGA}} and \code{\link{recmapGRASP}}.
 
   \item The package vignette 
   \url{https://cran.r-project.org/web/packages/recmap/vignettes/recmap.html} 

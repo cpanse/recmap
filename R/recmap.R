@@ -83,8 +83,7 @@ checkerboard <- function(n = 8, ratio = 4){
   res
 }
 
-
-recmap <- function(df) {
+.check_column_names <- function(df){
   if(sum(c("x", "y", "dx", "dy", "z") %in% names(df)) != 5) 
     stop("column names 'x', 'y', 'dx', 'dy', and 'z' are reqired")
   
@@ -116,10 +115,17 @@ recmap <- function(df) {
     stop('reqires at least two map regions.')
   
   
-  res <- recmap_(df)
+  return (TRUE)
+}
+
+recmap <- function(df) {
+
+  if (.check_column_names(df)){
+    res <- recmap_(df)
   
-  class(res) = c('recmap', class(res))
-  res
+    class(res) = c('recmap', class(res))
+    res
+  }
 }
 
 # require(sp)
@@ -145,6 +151,65 @@ recmap2sp <- function(rm, df=NULL){
                                                row.names = rm$name)))}
   
   SpatialPolygonsDataFrame(SpP, df)
+  
+}
+
+.compute_area_error <- function(x){
+  
+  area <- 4 * x$dx * x$dy 
+  sumZ <- sum(x$z)
+  
+  areaDesired <- x$z * sum(area) / sumZ
+  
+  error <- abs(areaDesired - area) / (areaDesired + area)
+  
+  sum(error * x$z) / sumZ
+}
+
+.compute_topology_error <- function(x){
+  
+  if (sum(x$topology.error == 100)>0)
+    return(Inf)
+  
+  sum(x$topology.error) 
+}
+
+
+.compute_relpos_error <- function(x){
+  sum(x$relpos.error) / nrow(x)
+}
+
+summary.recmap <- function(object, ...) {
+  x <- object
+  if (.check_column_names(x)){
+    
+    nRegions <- nrow(x)
+    errorArea <- round(.compute_area_error(x), 2)
+    errorTopology <- NA
+    errorRelPos <- NA
+    
+    if ("dfs.num" %in% names(x)){
+      errorTopology <- .compute_topology_error(x)
+      errorRelPos <-  round(.compute_relpos_error(x), 2)
+    } 
+    
+    
+    
+    data.frame(row.names = c("number of map regions", 
+                      "area error", 
+                      "topology error", 
+                      "relative position error",
+                      "xmin",
+                      "xmax",
+                      "ymin",
+                      "ymax"), 
+          values = c(nRegions, errorArea, errorTopology, errorRelPos,
+                     min(x$x),
+                     max(x$x),
+                     min(x$y),
+                     max(x$y)))
+    
+  }
   
 }
 
@@ -216,6 +281,50 @@ plot.recmap <- function(x, col='#00000011', col.text = 'grey', ...){
   if (sum(Cartogram$topology.error == 100) > 0){return (0)}
   
   1 / sum(Cartogram$relpos.error)
+}
+
+recmapGRASP <-
+  function(Map, 
+           fitness = .recmap.fitness, 
+           n.samples = nrow(Map) * 2,
+           fitness.cutoff = 1.7, 
+           iteration.max = 10){
+    
+    input <- Map
+    solution.best <- NULL; iteration <- 0; f.max <- 0.0;
+    
+    # GRASP stopping criterion not satisfied
+    while (f.max < fitness.cutoff && iteration < iteration.max){
+      iteration <- iteration + 1
+      
+      # Construct Greedy Randomized Solution
+      res <- parallel::mclapply(1:n.samples, function(x){
+        smp <- sample.int(nrow(input))
+        list(solution = smp,
+             fitness = fitness(smp, input))
+      })
+      
+      f.mean <- mean(sapply(res, function(x){x$fitness}))
+      
+      idx <- order(sapply(res, function(x){x$fitness}),
+                   decreasing = TRUE)[1]
+      
+      solution <- res[[idx]]
+      
+      f <- solution$fitness
+      
+      # UpdateSolution
+      if (f > f.max){ f.max <- f; solution.best <- solution; }
+      cat(paste(format(Sys.time(), "%s GRASP"), 
+                round(f.max, 2), 
+                round(f.mean, 2),
+                iteration, "\n"))
+    }
+    
+    list(GRASP = solution.best, 
+         Map = Map, 
+         Cartogram = recmap(Map[solution.best$solution, ])
+         )
 }
 
 

@@ -1,13 +1,15 @@
 \name{NEWS}
 \title{News for Package 'recmap'}
 
-\section{Changes version 0.5.1 (2016-07-12)}{
+\section{Changes version 0.5.4 (2016-07-24)}{
   improvements concerning editorial comments on \href{https://www.jstatsoft.org}{JSS} 
   prescreening stage:
   \itemize{
-  \item added dependencies from \href{https://cran.r-project.org/package=GA}{GA} and \href{https://cran.r-project.org/package=sp}{sp} 
-  \item added \code{plot.recmap()} and registered as an S3 method.
+  \item added dependencies from \href{https://cran.r-project.org/package=GA}{GA}
+  and \href{https://cran.r-project.org/package=sp}{sp} 
+  \item added S3 methods \code{plot.recmap()} and  \code{recmap.summary}.
   \item added \code{recmapGA} to glue \code{ga} and \code{recmap} functions.
+  \item added \code{recmapGRASP} method.
   \item exported \code{checkerboard()} function.
   \item added method \code{recmap2sp} to export a 
   \href{https://cran.r-project.org/package=sp}{sp} object.
