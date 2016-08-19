@@ -187,7 +187,7 @@ summary.recmap <- function(object, ...) {
     errorArea <- round(.compute_area_error(x), 2)
     errorTopology <- NA
     errorRelPos <- NA
-    spaceFilling <- sum(4 * x$dx * x$dy) / ((max(x$x) - min(x$x)) * (max(x$y) - min(x$y)))
+    spaceFilling <- 100 * sum(4 * x$dx * x$dy) / ((max(x$x) - min(x$x)) * (max(x$y) - min(x$y)))
    
     if ("dfs.num" %in% names(x)){
       errorTopology <- .compute_topology_error(x)

@@ -1,6 +1,12 @@
 \name{NEWS}
 \title{News for Package 'recmap'}
 
+\section{Changes version 0.6.0 (2016-09-01)}{
+  \itemize{
+	  \item added screen filling parameter in \code{summary.recmap} function.
+  }
+}
+
 \section{Changes version 0.5.4 (2016-07-24)}{
   improvements concerning editorial comments on \href{https://www.jstatsoft.org}{JSS} 
   prescreening stage:
