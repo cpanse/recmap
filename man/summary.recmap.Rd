@@ -30,7 +30,7 @@ objective functions or number of map regions.
 }
 
 \author{
-Christian Panse
+Christian Panse 2016
 }
 
 \references{

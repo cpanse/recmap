@@ -117,5 +117,8 @@ plot(res$GA, main="Genetic Algorithm")
 plot(res$Cartogram, main = "Output Cartogram")
 }
 par(op)
+
+
+
 }
 

@@ -62,6 +62,7 @@ par(op)
 ```
 
 
+
 # The Algorithm
 
 ## Input using the U.S. `state` Facts and Figures Dataset
@@ -76,10 +77,12 @@ usa <- data.frame(x=state.center$x,
     name = state.name)
 ```
 
+
+
 ## Determine the Desired Areas
 
-The desired area $\tilde{A_j}$ of a map region  $r_j$ is defined as
-$$\tilde{A_j}= z_j \cdot \frac {\sum_{i=1}^{k}A(r_j)} {\sum_{j=1}^{k} z_{j}}$$ 
+The desired area $\tilde{A_j}$ of a map region  $r_j = (x_j, y_j, dx_j, dy_j, z_j)$ is defined as
+$$\tilde{A_j}= z_j \cdot \frac {4 \cdot \sum_{i=1}^{n}dx_i \cdot dy_i} {\sum_{i=1}^{n} z_{i}}$$ 
 (CTRL-C CTRL-V from [@cartodraw]). 
 
 ## Compute Pseudo Dual Graph (PD)
@@ -93,6 +96,7 @@ library(recmap)
 plot.recmap(M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ],  
             col.text = 'black', lwd=2)
 ```
+
 
 ## Construction heuristic
 
@@ -200,11 +204,17 @@ head(Cartogram <- recmap(Map <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]))
 ## Rectangular Map Approximation
 ```{r fig.width=8,  fig.height=4.5, fig.align='left', fig.cap="Rectangular Map Approximation." }
 
-smp<- c(29, 22, 30, 3, 17, 8, 9, 41, 18, 15, 38, 35, 21, 23, 19, 6, 31, 32, 20, 
+smp <- c(29, 22, 30, 3, 17, 8, 9, 41, 18, 15, 38, 35, 21, 23, 19, 6, 31, 32, 20, 
         28, 48, 4, 13, 14, 42, 37, 5, 16, 36 , 43, 25, 33, 12, 7, 39, 44, 2, 47,
         45, 46, 24, 10, 1,11 ,40 ,26 ,27 ,34)
+
 plot(Cartogram.Population <- recmap(M[smp, ]), 
             col.text = 'black', lwd=2)
+```
+
+```{r}
+summary.recmap(M)
+summary(Cartogram.Population)
 ```
 
 ## `state.x77[, 'Population']`
