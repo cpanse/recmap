@@ -4,6 +4,7 @@
 \section{Changes version 0.6.0 (2016-09-01)}{
   \itemize{
 	  \item added screen filling parameter in \code{summary.recmap} function.
+	  \item bugfix in \code{summary.recmap} function for MBB computation.
   }
 }
 
