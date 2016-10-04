@@ -1,4 +1,5 @@
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/recmap)](https://cran.r-project.org/package=recmap)
+[![](https://images.microbadger.com/badges/image/cpanse/recmap.svg)](http://microbadger.com/images/cpanse/recmap "Get your own image badge on microbadger.com")
 
 # recmap - Compute the Rectangular Statistical Cartogram
 
@@ -13,7 +14,7 @@ This package contains an implementation of the [RecMap](http://dx.doi.org/10.110
 `recmap` requires R 3.3 or later.
 
 Released and tested versions of `recmap` are available via the 
-[CRAN](https://cran.r-project.org/package=recmap) network, 
+[CRAN](https://CRAN.R-project.org/package=recmap) network, 
 and can be installed using the R shell via
 
 ```
@@ -41,7 +42,7 @@ connect to http://yourdockerhost:8791  using a web browser
 The package ships with a package vignette (`browseVignettes('recmap')` 
 and a reference manual (just type `?recmap` on the R shell).
 
-Both documents are also available on the package's [CRAN](https://cran.r-project.org/package=recmap) page.
+Both documents are also available on the package's [CRAN](https://CRAN.R-project.org/package=recmap) page.
 
 
 ## Examples

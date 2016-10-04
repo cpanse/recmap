@@ -1,29 +1,24 @@
 \name{recmap2sp}
 \alias{recmap2sp}
-%- Also NEED an '\alias' for EACH other topic documented here.
+
 \title{
-Export recmap Object to SpatialPolygonsDataFrame Object
+    Export recmap Object to SpatialPolygonsDataFrame Object
 }
+
 \description{
-The method generates a SpatialPolygons object out of the a as input given
-recmap object. Both tables are mergerd by the index order.
+    The method generates a SpatialPolygons object out of the a as input given
+    recmap object. Both tables are mergerd by the index order.
 }
 \usage{
 recmap2sp(rm, df = NULL)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
-  \item{rm}{
-a \code{\link{recmap}} object.
-}
-  \item{df}{
-a \code{data.frame} object. default is NULL.
-}
+  \item{rm}{ a \code{\link{recmap}} object.  }
+  \item{df}{ a \code{data.frame} object. default is NULL.  }
 }
 
-\value{
-returns a \code{\link[sp]{SpatialPolygonsDataFrame}}
-}
+\value{ returns a \code{\link[sp]{SpatialPolygonsDataFrame}} }
 
 \references{
 Roger S. Bivand, Edzer Pebesma, Virgilio Gomez-Rubio, 2013. 
@@ -35,13 +30,12 @@ Applied spatial data analysis with R, Second edition. Springer, NY.
   Christian Panse
 }
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
 \itemize{
 \item{\code{\link[sp]{sp}}}
 }
 }
+
 \examples{
   SpDf<- recmap2sp(recmap(checkerboard(8)))
   summary(SpDf)

@@ -5,6 +5,7 @@
   \itemize{
 	  \item added screen filling parameter in \code{summary.recmap} function.
 	  \item man page cosmetics.
+	  \item bugfix in \code{summary.recmap} function for MBB computation.
   }
 }
 
