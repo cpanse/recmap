@@ -207,12 +207,6 @@ recmap.fitness <- function(idxOrder, Map, ...){
 
 ## use Genetic Algorithms (GA >=3.0.0) as metaheuristic
 
-# install.packages(c('doParallel', 'GA'))
-
-library(GA)
-library(parallel)
-library(doParallel)
-
 M <- US.Map
 
 recmapGA <- ga(type = "permutation", 
