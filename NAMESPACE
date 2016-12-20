@@ -20,6 +20,8 @@ export("checkerboard")
 
 export("plot.recmap")
 export("summary.recmap")
+export("summary.recmapGA")
 
 S3method(plot, recmap)
+S3method(plot, recmapGA)
 S3method(summary, recmap)

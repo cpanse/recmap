@@ -219,7 +219,7 @@ summary.recmap <- function(object, ...) {
 plot.recmap <- function(x, col='#00000011', col.text = 'grey', ...){
 #  col <- '#00000011'
 #  col.text <- 'grey'
-
+  label.text <- TRUE
   S <- x
   try (if(sum(c("x", "y", "dx", "dy") %in% names(S)) != 4) 
     stop("column names 'x', 'y', 'dx', 'dy', and 'z' are reqired"))
@@ -242,17 +242,19 @@ plot.recmap <- function(x, col='#00000011', col.text = 'grey', ...){
        col = col, 
        border = 'darkgreen')
   
-  if (sqrt(length(S$x)) < 10){
+  if (sqrt(length(S$x)) < 10 & label.text){
     text(S$x, S$y, 
          S$name,
-         cex=1.5/sqrt(sqrt(length(S$x))),
+	       cex = S$dx / strwidth(S$name),
+         #cex=1.5/sqrt(sqrt(length(S$x))),
          col = col.text)
     
-    text(S$x, S$y, 
-         S$dfs_num,
-         col = col.text, 
-         pos=1, 
-         cex=1/sqrt(sqrt(length(S$x))))
+    #text(S$x, S$y, 
+    #     S$dfs_num,
+    #     col = col.text, 
+    #     pos=1, 
+    #     cex=1/sqrt(sqrt(length(S$x)))
+	  # )
   }
 }
 
@@ -352,9 +354,28 @@ recmapGA <- function(Map,
            parallel = parallel,
            pmutation = pmutation)
   
-  list(GA = GA, 
+  res <- list(GA = GA, 
        Map = Map[GA@solution[1, ], ], 
        Cartogram = recmap(Map[GA@solution[1, ], ]))
+
+  class(res) = c('recmapGA', class(res))
+  res
 }
 
 
+plot.recmapGA <- function(x,...){
+	plot(x$GA, main="GA")
+	plot.recmap(x$Map, main="input map", ...)
+	plot.recmap(x$Cartogram, main = "output cartogram", ...)
+}
+
+summary.recmapGA <- function(x){
+	cat("summary of the map:\n")
+	(summary.recmap(x$Map))
+
+	cat("summary of the GA:\n")
+	(summary(x$GA))
+
+	cat("summary of the cartogram:\n")
+	(summary.recmap(x$Cartogram))
+}

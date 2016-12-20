@@ -311,7 +311,7 @@ no empty space error; no MP1 variant yet).
 Recent research publication on rectangular cartograms drawing include
 [@Speckmann2004], [@Speckmann2007], [@Speckmann2012], [@Buchin:2016].
 However, according to to recent publication [@TheStateoftheArtInCartograms]
-`recmap` remains the only rectangular cartogram algorithm 'maintain zero 
+`recmap` remains the only rectangular cartogram algorithm that 'maintain zero 
 cartographic error'. 
 
 # Session Info
