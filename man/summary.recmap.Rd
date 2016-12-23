@@ -3,7 +3,7 @@
 \title{Summary for recmap}
 \alias{summary}
 \alias{summary.recmap}
-
+\alias{summary.recmapGA}
 
 
 \description{

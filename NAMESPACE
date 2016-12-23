@@ -3,14 +3,14 @@ useDynLib(recmap)
 import(Rcpp)
 
 importFrom("utils", "packageVersion")
-importFrom("graphics", "plot", "polygon", "rect", "text")
+importFrom("graphics", "plot", "polygon", "rect", "text", "strwidth")
 importFrom("utils", "combn", "read.table")
 importFrom("graphics", "abline", "axis")
 importFrom("sp", "Polygon", "Polygons", "SpatialPolygons", 
            "SpatialPolygonsDataFrame", 
            "spplot")
 
-importFrom("GA", "ga", "gaMonitor", "gaMonitor2", "plot")
+importFrom("GA", "ga", "gaMonitor", "gaMonitor2", "plot", 'summary.ga')
 
 export("recmap")
 export("recmapGA")
@@ -19,9 +19,11 @@ export("recmap2sp")
 export("checkerboard")
 
 export("plot.recmap")
+
 export("summary.recmap")
 export("summary.recmapGA")
 
 S3method(plot, recmap)
 S3method(plot, recmapGA)
 S3method(summary, recmap)
+S3method(summary, recmapGA)

@@ -112,13 +112,10 @@ getUS_map <- function(){
 \dontrun{
 # takes 34.268 seconds on CRAN
 res <- recmapGA(getUS_map(), maxiter = 5)
-plot(res$Map, main = "Input Map") 
-plot(res$GA, main="Genetic Algorithm")
-plot(res$Cartogram, main = "Output Cartogram")
-}
+op <- par(ask = TRUE)
+plot(res)
 par(op)
-
-
-
+summary(res)
+}
 }
 

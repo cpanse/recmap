@@ -41,19 +41,49 @@
   us_state_election_2004 <- read.table(us_state_election_2004.file, 
                                        sep = ',')
   if(plot){
-    plot(recmap_us_state_ev$x, recmap_us_state_ev$y, type='n', asp = 1, xlab='', ylab='', axes=FALSE)
+
+    idx <- seq(1, nrow(recmap_us_state_ev), by=5)
     
-    polygon(recmap_us_state_ev$x, recmap_us_state_ev$y,
-            col=cm[round(length(cm)*(us_state_election_2004$V8/(us_state_election_2004$V8 + us_state_election_2004$V9)))+1])
+    x.max <- apply(cbind(recmap_us_state_ev$x[idx], 
+                         recmap_us_state_ev$x[idx+1], 
+                         recmap_us_state_ev$x[idx+2],
+                         recmap_us_state_ev$x[idx+3]), 1, max)
+    x.min <- apply(cbind(recmap_us_state_ev$x[idx], 
+                         recmap_us_state_ev$x[idx+1], 
+                         recmap_us_state_ev$x[idx+2], 
+                         recmap_us_state_ev$x[idx+3]), 1, min)
     
-    text(us_state_election_2004$V1,us_state_election_2004$V2,
-         as.character(us_state_election_2004$V3),cex=round(us_state_election_2004$V5*20)/100,
-         lwd=2.5,
-         #pos=3,
-         col="black");
+    y.max <- apply(cbind(recmap_us_state_ev$y[idx], 
+                         recmap_us_state_ev$y[idx+1], 
+                         recmap_us_state_ev$y[idx+2], 
+                         recmap_us_state_ev$y[idx+3]), 1, max) 
+    
+    y.min <- apply(cbind(recmap_us_state_ev$y[idx],
+                         recmap_us_state_ev$y[idx+1],
+                         recmap_us_state_ev$y[idx+2],
+                         recmap_us_state_ev$y[idx+3]), 1, min)
+    
+    
+    dx <- 0.5 * (x.max - x.min)
+    dy <- 0.5 * (y.max - y.min)
+    
+    
+    M <- data.frame(x=x.min + dx, 
+                    y=y.min + dy, 
+                    dx=dx, dy=dy, 
+                    z=(us_state_election_2004$V8/(us_state_election_2004$V8 + us_state_election_2004$V9)),
+                    name=gsub(' ', '\n', as.character(us_state_election_2004$V3)))
+
+    tcol <- rep('black', nrow(us_state_election_2004))
+    tcol[8] <- 'white'
+    
+    plot.recmap(M,
+                col.text = tcol,
+                border=NULL,
+                col=cm[round(length(cm) * (us_state_election_2004$V8/(us_state_election_2004$V8 + us_state_election_2004$V9)))+1])
+  }else{
+    M
   }
-  
-  # res <- data.frame()
 }
 
 
@@ -216,7 +246,7 @@ summary.recmap <- function(object, ...) {
   
 }
 
-plot.recmap <- function(x, col='#00000011', col.text = 'grey', ...){
+plot.recmap <- function(x, col='#00000011', col.text = 'grey', border = 'darkgreen', ...){
 #  col <- '#00000011'
 #  col.text <- 'grey'
   label.text <- TRUE
@@ -240,7 +270,7 @@ plot.recmap <- function(x, col='#00000011', col.text = 'grey', ...){
        xright = S$x + S$dx, 
        ytop = S$y + S$dy, 
        col = col, 
-       border = 'darkgreen')
+       border = border)
   
   if (sqrt(length(S$x)) < 10 & label.text){
     text(S$x, S$y, 
@@ -363,19 +393,20 @@ recmapGA <- function(Map,
 }
 
 
-plot.recmapGA <- function(x,...){
+plot.recmapGA <- function(x, ...){
 	plot(x$GA, main="GA")
 	plot.recmap(x$Map, main="input map", ...)
 	plot.recmap(x$Cartogram, main = "output cartogram", ...)
 }
 
-summary.recmapGA <- function(x){
-	cat("summary of the map:\n")
-	(summary.recmap(x$Map))
-
-	cat("summary of the GA:\n")
-	(summary(x$GA))
-
-	cat("summary of the cartogram:\n")
-	(summary.recmap(x$Cartogram))
+summary.recmapGA <- function(object, ...){
+  cat("summary of class recmapGA:\n")
+	
+  cat("summary of the GA:\n")
+  print(summary.ga(object$GA))
+  
+  S <- summary.recmap(object$Map)
+	names(S) <- "Map"
+	S$Cartogram <- summary.recmap(object$Cartogram)$values
+	print(S)
 }
