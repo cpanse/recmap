@@ -12,7 +12,7 @@ metaheuristic.
 recmapGA(Map, fitness = .recmap.fitness, pmutation = 0.25, 
 popSize = 10 * nrow(Map), maxiter = 10, run = maxiter, 
 monitor = if (interactive()) { gaMonitor2} else FALSE, parallel =
-                 FALSE)
+                 FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -41,6 +41,9 @@ The following arguments are passed through \code{\link[GA]{ga}}.
 }
   \item{parallel}{
 %%     ~~Describe \code{parallel} here~~
+}
+  \item{...}{
+passed through the \code{\link{ga}} method.
 }
 }
 

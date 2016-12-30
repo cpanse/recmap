@@ -372,7 +372,7 @@ recmapGA <- function(Map,
                       monitor = if(interactive()) 
                       { gaMonitor2 } 
                      else FALSE,
-                      parallel = FALSE){
+                      parallel = FALSE, ...){
   GA <- ga(type = "permutation", 
            fitness = fitness, 
            Map = Map,
@@ -382,7 +382,7 @@ recmapGA <- function(Map,
            maxiter = maxiter, 
            run = run, 
            parallel = parallel,
-           pmutation = pmutation)
+           pmutation = pmutation, ...)
   
   res <- list(GA = GA, 
        Map = Map[GA@solution[1, ], ], 
