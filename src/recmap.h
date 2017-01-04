@@ -78,6 +78,7 @@ struct mbb_node {
 
   // computes the bearing of two points in R^2
   // source: http://en.cppreference.com/w/cpp/numeric/math/atan2
+  // http://www.cplusplus.com/reference/cmath/atan2/
   double get_angle(const map_region &a, const map_region &b) {
     double alpha = std::atan2(b.x - a.x, b.y - a.y);
     return (alpha);

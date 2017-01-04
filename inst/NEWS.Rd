@@ -1,16 +1,30 @@
 \name{NEWS}
 \title{News for Package 'recmap'}
 
-\section{Changes version 0.6.0 (2016-09-01)}{
+\section{Changes until version 0.5.12 (2017-01-02)}{
+improvements concerning \href{https://www.jstatsoft.org}{JSS} reviewer comments
   \itemize{
-	  \item added screen filling parameter in \code{summary.recmap} function.
+  
+      \item added \code{sp2recmap} method
+      \item added a 'meta' plot methods \code{plot.recmapGA} and 
+      \code{plot.recmapGRAP}
+
+    \item added \code{border} attribute in \code{plot.recmap} method
+    \item place-labelled cartograms: \code{plot.recmap} labeles are no scaled 
+    by using \code{S$dx / strwidth(S$name)}.
+  }
+  }
+  
+\section{Changes until version 0.5.4 (2016-12-13)}{
+  \itemize{
+  	\item added screen filling parameter in \code{summary.recmap} function.
 	  \item man page cosmetics.
 	  \item bugfix in \code{summary.recmap} function for MBB computation.
   }
 }
 
 \section{Changes version 0.5.4 (2016-07-24)}{
-  improvements concerning editorial comments on \href{https://www.jstatsoft.org}{JSS} 
+  improvements concerning \href{https://www.jstatsoft.org}{JSS} editorial comments
   prescreening stage:
   \itemize{
   \item added dependencies from \href{https://cran.r-project.org/package=GA}{GA}

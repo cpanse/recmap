@@ -4,7 +4,7 @@
 \alias{plot}
 \alias{plot.recmap}
 \alias{plot.recmapGA}
-
+\alias{plot.recmapGRASP}
 \description{
   plots input and output of the \code{\link{recmap}} function.
   The function requires column names (x, y, dx, dy).
