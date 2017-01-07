@@ -8,7 +8,7 @@ importFrom("utils", "combn", "read.table")
 importFrom("graphics", "abline", "axis")
 importFrom("sp", "Polygon", "Polygons", "SpatialPolygons", 
            "SpatialPolygonsDataFrame", 
-           "spplot")
+           "spplot", "bbox")
 
 importFrom("GA", "ga", "gaMonitor", "gaMonitor2", "plot", 'summary.ga')
 
@@ -16,6 +16,7 @@ export("recmap")
 export("recmapGA")
 export("recmapGRASP")
 export("recmap2sp")
+export("sp2recmap")
 export("checkerboard")
 
 export("plot.recmap")

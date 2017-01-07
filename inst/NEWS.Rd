@@ -5,13 +5,12 @@
 improvements concerning \href{https://www.jstatsoft.org}{JSS} reviewer comments
   \itemize{
   
-      \item added \code{sp2recmap} method
-      \item added a 'meta' plot methods \code{plot.recmapGA} and 
-      \code{plot.recmapGRAP}
+  \item added \code{sp2recmap} method
+  \item added a 'meta' plot methods \code{plot.recmapGA} and 
+  \code{plot.recmapGRAP}
 
     \item added \code{border} attribute in \code{plot.recmap} method
-    \item place-labelled cartograms: \code{plot.recmap} labeles are no scaled 
-    by using \code{S$dx / strwidth(S$name)}.
+    \item \code{plot.recmap} labels are now scaled by using \code{S$dx / strwidth(S$name)}.
   }
   }
   

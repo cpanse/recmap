@@ -238,12 +238,38 @@ recmap2sp <- function(rm, df=NULL){
 }
 
 
-# requires https://CRAN.R-project.org/package=sp
-sp2recmap <- function(sp, Z){
-  df <- data.frame()
+sp2recmap <- function(X){
   
-  class(df) <- c('data.frame', 'recmap')
-  df
+  if (class(X) == "SpatialPolygonsDataFrame"){
+    n <- length(X@polygons)
+    
+    df <- do.call('rbind', lapply(1:n, function(id){
+      
+      
+      do.call('rbind', lapply(X@polygons[id], function(p){
+        mbb <- bbox(p)
+        
+        x.min <- mbb['x','min']
+        x.max <- mbb['x','max']
+        y.min <- mbb['y','min']
+        y.max <- mbb['y','max']
+        
+        dx <- 0.5 * (x.max - x.min)
+        dy <- 0.5 * (y.max - y.min)
+        
+        data.frame(x=x.min + dx, y = y.min + dy, dx=dx, dy=dy, name=p@ID)
+      }))
+      
+    }))
+    
+   df <- cbind(df, X@data) 
+   class(df) <- c('recmap', class(df))
+  return(df)
+  }else{
+    message('requires a "SpatialPolygonsDataFrame" class as argument')
+    return (NULL)
+  }
+
 }
 
 .compute_area_error <- function(x){
