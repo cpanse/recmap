@@ -38,14 +38,14 @@ double get_angle(double x0, double y0, double x1, double y1) {
 }
 
 // [[Rcpp::export]]
-DataFrame place_rectanle(double x0, double y0, double dx0, double dy0,
+DataFrame place_rectangle(double x0, double y0, double dx0, double dy0,
                          double dx1, double dy1, double alpha) {
   crecmap::map_region a, b, c;
 
   a.x = x0; a.y = y0; a.dx = dx0; a.dy = dy0;
   c.dx = dx1; c.dy = dy1;
 
-  crecmap::place_rectanle(a, alpha, c);
+  crecmap::place_rectangle(a, alpha, c);
   return DataFrame::create(_["x"]= c.x, _["y"]= c.y, _["dx"]= dx1,
                            _["dy"]= dy1);
 }

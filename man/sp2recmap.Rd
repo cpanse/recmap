@@ -9,11 +9,11 @@
     The method generates a recmap class out of a \code{\link{SpatialPolygonsDataFrame}} object.
 }
 \usage{
-sp2recmap(sp)
+sp2recmap(X)
 }
 
 \arguments{
-  \item{sp}{ a \code{\link{SpatialPolygonsDataFrame}} object.  }
+  \item{X}{ a \code{\link{SpatialPolygonsDataFrame}} object.  }
 }
 
 \value{ returns a \code{\link{recmap}} object.}

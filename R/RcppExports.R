@@ -5,8 +5,8 @@ get_angle <- function(x0, y0, x1, y1) {
     .Call('recmap_get_angle', PACKAGE = 'recmap', x0, y0, x1, y1)
 }
 
-place_rectanle <- function(x0, y0, dx0, dy0, dx1, dy1, alpha) {
-    .Call('recmap_place_rectanle', PACKAGE = 'recmap', x0, y0, dx0, dy0, dx1, dy1, alpha)
+place_rectangle <- function(x0, y0, dx0, dy0, dx1, dy1, alpha) {
+    .Call('recmap_place_rectangle', PACKAGE = 'recmap', x0, y0, dx0, dy0, dx1, dy1, alpha)
 }
 
 recmap_ <- function(df) {

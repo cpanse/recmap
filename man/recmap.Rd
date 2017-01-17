@@ -154,8 +154,8 @@ InfoVis 2004, IEEE Symposium on Information Visualization, Austin, Texas, 33-40.
   \item the metaheuristic glue methods:
   \code{\link{recmapGA}} and \code{\link{recmapGRASP}}.
 
-  \item The package vignette 
-  \url{https://cran.r-project.org/web/packages/recmap/vignettes/recmap.html} 
+  \item The package vignette
+  \url{https://CRAN.R-project.org/package=recmap/vignettes/recmap.html} 
   or by calling \code{vignette("recmap")} on the R command prompt.
   
   \item A shiny web application \url{https://recmap.shinyapps.io/state_x77/}.

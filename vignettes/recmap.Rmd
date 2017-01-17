@@ -51,7 +51,7 @@ are tried to be preserved.
 The ratios are preserved and the area of each region corresponds to 
 the as input given statistical value z.
 
-The power of a cartogram based visualization is demonstrated below.
+An example of a rectangular cartogram drawing is shown below.
 
 ```{r fig.width=7, fig.retina=2, fig.align='left', fig.cap="Rectangular Cartogram of the U.S. election 2004; The area corresponds to the number of electors (color indicates the party red: democrats / blue: republican; the color intensity ~ outcome of the vote.). The graphic was computed by using the original implementation of the construction heuristic RecMap MP2 introduced in [@recmap].", echo=FALSE, warning=FALSE, comment="ccc", error=FALSE, message=FALSE}
 
@@ -63,7 +63,7 @@ par(op)
 
 
 
-# The Algorithm
+# The Usage
 
 ## Input using the U.S. `state` Facts and Figures Dataset
 
@@ -79,12 +79,6 @@ usa <- data.frame(x=state.center$x,
 
 
 
-## Determine the Desired Areas
-
-The desired area $\tilde{A_j}$ of a map region  $r_j = (x_j, y_j, dx_j, dy_j, z_j)$ is defined as
-$$\tilde{A_j}= z_j \cdot \frac {4 \cdot \sum_{i=1}^{n}dx_i \cdot dy_i} {\sum_{i=1}^{n} z_{i}}$$ 
-(CTRL-C CTRL-V from [@cartodraw]). 
-
 ## Compute Pseudo Dual Graph (PD)
 
 The rectangles have to  overlap to compute the dual graph. This enables to 
@@ -98,75 +92,7 @@ plot.recmap(M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ],
 ```
 
 
-## Construction heuristic
 
-0. Compute the dual graph
-
-1. Determine the core region
-
-2. Place region by region along DFS skeleton of pseudo dual starting with the 
-core region
-
-3. If a rectangle can not be placed find a feasible solution (no overlapping 
-regions) by placing it next to a neighbor
-
-## Computational geometry help functions
-
-A *local placement* function can place an rectangle `b` 
-(rainbow colored rectangles) around a given rectangle `a` 
-of any angle $\alpha$ between $[-\pi,\pi]$. There are special cases for quad I, II, III, 
-and IV 
-(see also the graphics on [`std::atan2`](http://en.cppreference.com/w/cpp/numeric/math/atan2))
-indicated by different colors in the graphic below.
-
-```{r echo=FALSE, fig.width=4, fig.height=3, fig.align='center', fig.retina=3, fig.cap="`a.x = 2, a.y = -5, a.dx = 20, a.dy = 5, b.dx = 1.5, b.dy = 5`"}
-
-draw_and_place_rectangle <- function(alpha=0.0, a.x=2, a.y=-5, a.dx = 20, 
-                                     a.dy = 5, b.dx=1.5, b.dy=5, ...){
-   
-   rect(a.x - a.dx - b.dx, a.y - a.dy - b.dy, 
-        a.x + a.dx + b.dx, a.y + a.dy + b.dy, 
-        lwd=3, border='grey')
-  
-   rect(a.x - a.dx, a.y - a.dy, 
-        a.x + a.dx, a.y + a.dy)
-   
-  
-  c <- recmap:::place_rectanle(a.x, a.y, a.dx, a.dy, b.dx, b.dy, alpha)
-
-   rect(c$x - c$dx, c$y - c$dy, c$x + c$dx, c$y + c$dy, ...)
-}
-
-op <- par(mar=c(4, 4, 1.5, 0.25))
-plot(0,0 , 
-     xlim=c(-35,25), ylim=c(-35,25), 
-     main=expression(f: bold(R)^6 %*%  group("[",list(-pi, pi),"]") %->% bold(R)^2),
-     asp=1, xlab='x return value', ylab='y return value', axes=FALSE); abline(v=0,h=0)
-
-n <- 90
-
-cm <- rainbow(n, alpha = 0.5)
-alpha <- seq(-pi, pi, length = n)
-r <- lapply(1:n,
-            function(idx){
-    draw_and_place_rectangle(alpha[idx], 
-                             col=cm[idx], 
-                             border='#88888877')
-              })
-  
-legend("bottomleft", 
-       as.character(round(seq(-pi,pi, length=9),2)), 
-       pch=22, 
-       bty='n',
-       fill=rainbow(9, alpha=0.5),
-       border=rainbow(9, alpha=0.5),
-       col=rainbow(9, alpha=0.5),
-       title=expression(paste(alpha, " argument", sep=" ")),
-       cex=0.5,horiz = FALSE)
-
-
-par(op)
-```
 
 ## Metaheuristic
 
@@ -196,7 +122,8 @@ measures the angle difference between all region centers.
 The output is a `data.frame` object.
 
 ```{r}
-head(Cartogram <- recmap(Map <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]))
+Cartogram <- recmap(Map <- usa[!usa$name %in% c("Hawaii", "Alaska"), ])
+head(Cartogram)
 ```
 
 # Application

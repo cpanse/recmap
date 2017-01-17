@@ -99,9 +99,9 @@ struct mbb_node {
   // computes the new center (x, y) values on the cartogram map region c
   // map_region a has a fix position
   // uses c.dx and c.dy for the computation
-  // TODO(cp): consider giving eps als argument
+  // TODO(cp): consider giving eps as argument
   //           to have space between the map regions
-  void place_rectanle(const map_region &a, double alpha, map_region &c) {
+  void place_rectangle(const map_region &a, double alpha, map_region &c) {
     double tanx, tany;
     double eps = 0.01;
 
@@ -369,14 +369,15 @@ class RecMap{
     // by the metaheuristic
     for (double beta = 0.0; beta <=  PI && C[region_id].placed == 0;
       beta += PI/180) {
-      // iterate over all already placed connected rectangles
+      // iterate over all already placed adjacent rectangles
       for (const int &adj_region_id : M[region_id].connected) {
         if (C[adj_region_id].placed > 0) {
+	  // orginial bearing of two map regions in the input map
           alpha0 = get_angle(M[adj_region_id], M[region_id]);
           alpha = alpha0 + (beta_sign * beta);
           beta_sign *= -1;
 
-          place_rectanle(C[adj_region_id], alpha, C[region_id]);
+          place_rectangle(C[adj_region_id], alpha, C[region_id]);
 
           // for linear MBB check use
           // if (!map_region_intersect(C, C[region_id])) {
