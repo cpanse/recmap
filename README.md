@@ -9,7 +9,7 @@ This package contains an implementation of the [RecMap](http://dx.doi.org/10.110
 ## Installation
 
 
-### Install from CRAN
+### Install from [CRAN](https://CRAN.R-project.org/package=recmap)
 
 `recmap` requires R 3.3 or later.
 
@@ -60,8 +60,7 @@ be expected from the cartogram drawing algorithm.
 
 ## Author
 
-Christian Panse, 2016
-
+Christian Panse, 2017
 
 ## License
 
