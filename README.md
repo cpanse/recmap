@@ -21,7 +21,7 @@ and can be installed using the R shell via
 install.package('recmap')
 ```
 
-### Install from github
+### Install from [github](https://github.com/cpanse/recmap)
 
 ```{r}
 install.packages('devtools')
