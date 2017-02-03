@@ -17,16 +17,23 @@ Released and tested versions of `recmap` are available via the
 [CRAN](https://CRAN.R-project.org/package=recmap) network, 
 and can be installed using the R shell via
 
-```
+```{r}
 install.package('recmap')
 ```
 
+### Install from github
+
+```{r}
+install.packages('devtools')
+library(devtools)
+install_git('https://github.com/fgcz/ISCB2017', build_vignettes = TRUE, quiet = FALSE)
+```
 
 ### Use the docker public | automated build [recmap image](https://hub.docker.com/r/cpanse/recmap/) 
 
 this image contains the latest build.
 
-```
+```{bash}
 docker pull cpanse/recmap \
 && docker run -d -p 8791:8787 cpanse/recmap
 ```
