@@ -20,3 +20,4 @@ Suggests: knitr, testthat, doParallel, maps
 LinkingTo: Rcpp (>= 0.12.4)
 VignetteBuilder: knitr
 NeedsCompilation: yes
+BugReports: https://github.com/cpanse/recmap/issues
