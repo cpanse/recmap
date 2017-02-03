@@ -26,7 +26,7 @@ install.package('recmap')
 ```{r}
 install.packages('devtools')
 library(devtools)
-install_git('https://github.com/fgcz/ISCB2017', build_vignettes = TRUE, quiet = FALSE)
+install_git('https://github.com/cpanse/recmap', build_vignettes = TRUE, quiet = FALSE)
 ```
 
 ### Use the docker public | automated build [recmap image](https://hub.docker.com/r/cpanse/recmap/) 
