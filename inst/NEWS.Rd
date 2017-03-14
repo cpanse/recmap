@@ -1,6 +1,14 @@
 \name{NEWS}
 \title{News for Package 'recmap'}
 
+\section{Changes until version 0.5.17 (2017-03-14)}{
+  \itemize{
+   \item added shiny example including
+   \href{https://shiny.rstudio.com/reference/shiny/latest/hoverOpts.html}{hoverOpts}
+   using \code{state.x77} data executable through
+   \code{recmapAppDir <- system.file("shiny-examples", "state.x77", package = "recmap")}
+  }
+}
 \section{Changes until version 0.5.16 (2017-01-15)}{
 improvements concerning \href{https://www.jstatsoft.org}{JSS} reviewer comments
   \itemize{

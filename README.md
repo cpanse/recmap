@@ -59,9 +59,15 @@ The [recmap gallery](http://cartodraw.science/recmap/gallery/) gives an impressi
 be expected from the cartogram drawing algorithm.
 
 
+```{r}
+library(shiny)
+recmapAppDir <- system.file("shiny-examples", "state.x77", package = "recmap")
+shiny::runApp(recmapAppDir, display.mode = "normal")
+```
+
 ## Author
 
-Christian Panse, 2017
+Christian Panse, 2016,2017
 
 ## License
 

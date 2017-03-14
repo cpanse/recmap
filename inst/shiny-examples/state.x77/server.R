@@ -17,7 +17,7 @@ library(doParallel)
 shinyServer(function(input, output) {
   
   output$plot_hoverinfo <- renderText({
-    cat("Hover (throttled):\n")
+    # cat("Hover (throttled):\n")
     res <- cartogram()$cartogram
     x <- input$plot_hover$x
     y <- input$plot_hover$y
