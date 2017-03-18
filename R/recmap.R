@@ -128,12 +128,12 @@
   h4 <- sqrt((x - cos30 * h)^2 + (y - sin30 * h)^2)
   stopifnot (abs(h3 - h4) < 0.01)
   
-  t[[2]] <- Polygons(list(Polygon(cbind(c( l/2, x, l/2 - (x-l/2)), c(h, y, y)))), 2)
-  t[[3]] <- Polygons(list(Polygon(cbind(c(l/2, l, x), c(-h3,0,y)))), 3)
-  t[[4]] <- Polygons(list(Polygon(cbind(c(l/2,  l/2 - (x-l/2), 0), c(-h3, y, 0)))), 4)
-  t[[5]] <- Polygons(list(Polygon(cbind(c(0, l/2 - (x-l/2), l/2), c(0, y, h)))), 5)
-  t[[6]] <- Polygons(list(Polygon(cbind(c(l, x, l/2), c(0, y, h)))), 6)
-  t[[7]] <- Polygons(list(Polygon(cbind(c( 0.0, l, l/2), c(0, 0, -h3)))), 7)
+  t[[2]] <- Polygons(list(Polygon(cbind(c( l / 2, x, l/2 - (x-l / 2)), c(h, y, y)))), 2)
+  t[[3]] <- Polygons(list(Polygon(cbind(c(l / 2, l, x), c(-h3,0,y)))), 3)
+  t[[4]] <- Polygons(list(Polygon(cbind(c(l / 2,  l / 2 - (x-l / 2), 0), c(-h3, y, 0)))), 4)
+  t[[5]] <- Polygons(list(Polygon(cbind(c(0, l / 2 - (x-l / 2), l / 2), c(0, y, h)))), 5)
+  t[[6]] <- Polygons(list(Polygon(cbind(c(l, x, l / 2), c(0, y, h)))), 6)
+  t[[7]] <- Polygons(list(Polygon(cbind(c( 0.0, l, l / 2), c(0, 0, -h3)))), 7)
   
   triangle.map <- SpatialPolygons(t)
 
