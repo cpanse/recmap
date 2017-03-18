@@ -3,6 +3,20 @@ note <- sprintf("R package version %s", meta$Version)
 
 citHeader("To cite 'recmap' in publications use:")
 
+bibentry(bibtype = "Article",
+        author = person("Christian", "Panse"),
+	title = "{Rectangular Statistical Cartograms in R: The recmap Package}",
+	year = "2016",
+	journal = "Submitted to the Journal of Statistical Software",
+        url = "https://arxiv.org/abs/1606.00464",
+	note = "{Submitted to the Journal of Statistical Software}",
+        textVersion = paste("Chritian Panse (2016).",
+          "Rectangular Statistical Cartograms in R: The recmap Package.",
+          "Submitted to the Journal of Statistical Software.",
+	  "Pre-print available through https://arxiv.org/abs/1606.00464.")
+)
+
+
 bibentry(bibtype = "Inproceedings",
          title = "{RecMap: Rectangular Map Approximations}",
          author = c(person("Roland", "Heilmann"),
@@ -21,3 +35,4 @@ bibentry(bibtype = "Inproceedings",
         "10th IEEE Symposium on Information Visualization (InfoVis 2004), 10-12 October 2004, Austin, TX, USA, pp33-40.",
         "URL http://dx.doi.org/10.1109/INFVIS.2004.57")
         )
+

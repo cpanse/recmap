@@ -10,7 +10,7 @@
   }
 }
 \section{Changes until version 0.5.16 (2017-01-15)}{
-improvements concerning \href{https://www.jstatsoft.org}{JSS} reviewer comments
+improvements concerning \href{https://www.jstatsoft.org}{JSS} reviewer comments:
   \itemize{
   
   \item added a \code{sp2recmap} method inlcuding a testthat method.

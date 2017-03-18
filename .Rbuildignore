@@ -2,3 +2,4 @@
 ^\.Rproj\.user$
 ^.*id_rsa.*$
 ^.*Dockerfile$
+^.*_config.yml$
