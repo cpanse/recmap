@@ -13,20 +13,48 @@ library(GA)
 library(parallel)
 library(doParallel)
 
+library("maps")
+library("noncensus")
+data("counties")
+
+get_county_mbb <- function(state='colorado', scaleX = 0.5, scaleY = 0.5){
+  MBB <- lapply(map('county', state, plot = FALSE)$names,
+                function(x){
+                  r <- map('county', x, plot = FALSE)
+                  dx <- scaleX * (r$range[2] - r$range[1])
+                  dy <- scaleY * (r$range[4] - r$range[3])
+                  x <- r$range[1] + dx
+                  y <- r$range[3] + dy
+                  data.frame(polyname=r$name, x=x, y=y, dx=dx, dy=dy)
+                }
+  )
+  MBB <- do.call('rbind', MBB)
+  MBB <- merge(MBB, county.fips, by='polyname')
+  MBB$fips <- as.integer(MBB$fips)
+  
+  P <- data.frame(fips = paste(counties$state_fips,
+                               counties$county_fips, sep=''),
+                  z = counties$population,      
+                  name = counties$county_name)
+  P$fips <- as.integer(levels(P$fips))[P$fips]
+  
+  M <- merge(MBB, P, by='fips')
+  class(M) <- c('recmap', 'data.frame')
+  M
+}
+
 
 shinyServer(function(input, output) {
   
   output$plot_hoverinfo <- renderText({
-    # cat("Hover (throttled):\n")
-    res <- cartogram()$cartogram
+    cat("Hover (throttled):\n")
+    res <- Cartogram()
     x <- input$plot_hover$x
     y <- input$plot_hover$y
+    cat(x)
+    cat(res$name)
     query <- ((res$x - res$dx) < x) & (x < (res$x + res$dx)) & ((res$y - res$dy) < y) & (y < (res$y + res$dy))
-    
-    
-    # init
     rv <- "no object identified."
-    
     if (sum(query)==1){
       rv <- paste(res$name[query])
     }
@@ -34,54 +62,30 @@ shinyServer(function(input, output) {
     paste("state name:", rv)
   })
   
-  
-  cartogram <- reactive({
-    
-    usa <- data.frame(x = state.center$x, 
-                      y = state.center$y, 
-                      # make the rectangles overlapping by correcting lines of longitude distance
-                      dx = sqrt(state.area) / 2 / (0.8 * 60 * cos(state.center$y*pi/180)), 
-                      dy = sqrt(state.area) / 2 / (0.8 * 60), 
-                      z = sqrt(state.area),
-                      name = state.name)
-    
-    usa$z <- state.x77[, input$area]
-    
-    M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]
-    
-    recmapFitness <- function(idxOrder, Map, ...){
-      Cartogram <- recmap(Map[idxOrder, ])
-      #1 / sum(Cartogram$z / (sqrt(sum(Cartogram$z^2))) * Cartogram$relpos.error)
-      1 / sum(Cartogram$relpos.error)
-    }
-    
-    set.seed(1)
-    
-    recmapGA <- ga(type = "permutation", 
-                   min = 1, max = nrow(M),
-                   fitness = recmapFitness, 
-                   Map = M,
-                   popSize = input$GApopulation * nrow(M), 
-                   maxiter = input$GAmaxiter,
-                   pmutation = input$GApmutation,
-                   parallel=TRUE,
-                   run = input$GArun)
-    
-    C <- recmap(M[recmapGA@solution[1, ], ])
-    #C$z2 <- S[recmapGA@solution[1, ]]
-    list(cartogram=C, solution=recmapGA@solution[1, ])
+  Map <-  reactive({
+    get_county_mbb(state=input$state, scaleX = input$scaleX, scaleY = input$scaleY)
   })
   
-  output$distPlot <- renderPlot({
-    res <- cartogram()
-    
-    cm <- heat.colors(100)
-    
-    S <- state.x77[which(rownames(state.x77) %in% res$cartogram$name), input$color]
-    S <- S[res$solution]
-    S <- round((length(cm) - 1) * (S - min(S)) / (max(S)  - min(S))) + 1
-    plot.recmap(res$cartogram, col=cm[S], col.text = 'black')
-    legend("topleft", c(input$area, input$color))
+  Cartogram <- reactive({
+    M <- Map()
+    set.seed(1)
+    res<-recmapGA(M, 
+                  maxiter=input$GAmaxiter, 
+                  popSize = input$GApopulation, 
+                  pmutation = input$GApmutation, 
+                  run = input$GArun)
+    res$Cartogram
+  })
+  
+  output$mapPlot <- renderPlot({
+    op<-par(mfrow=c(1, 1), mar=c(0,0,0,0))
+    plot(Map(), col.text='darkred')
+  })
+  
+  output$cartogramPlot <- renderPlot({
+    res <- Cartogram()
+    op<-par(mfrow=c(1, 1), mar=c(0,0,0,0))
+    plot(res, col.text='darkred')
   })
 
 })

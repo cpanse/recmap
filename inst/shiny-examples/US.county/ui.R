@@ -10,13 +10,17 @@ library(shiny)
 shinyUI(fluidPage(
 
   # Application title
-  titlePanel(paste("state.x77 data using recmap version", packageVersion('recmap'))),
+  titlePanel(paste("US county population data using recmap version", packageVersion('recmap'))),
 
   # Sidebar with a slider input for number of bins
   sidebarLayout(
     sidebarPanel(
-      selectInput('area', 'area', colnames(state.x77)),
-      selectInput('color', 'color', colnames(state.x77)),
+      
+      selectInput('state', 'state', row.names(state.x77)),
+      sliderInput("scaleX", "scaleX", 0, 1, 0.5),
+      sliderInput("scaleY", "scaleY", 0, 1, 0.5),
+     # selectInput('area', 'area', colnames(state.x77)),
+    #  selectInput('color', 'color', colnames(state.x77)),
       p('Metaheuristic (GA):'),
       sliderInput("GApopulation", "GApopulation", 1, 10, 1),
       numericInput("GAmaxiter", "GAmaxiter", 10),
@@ -27,7 +31,8 @@ shinyUI(fluidPage(
     mainPanel(
      
       p('please wait some seconds until the cartogram is computed.'),
-      plotOutput("distPlot", hover = hoverOpts(id = "plot_hover", delayType = "throttle")),
+      plotOutput("mapPlot"),
+      plotOutput("cartogramPlot", hover = hoverOpts(id = "plot_hover", delayType = "throttle")),
       #h4("Mouse over Information"),
       tableOutput("plot_hoverinfo"),
       p('compute your own cartogram with', a('recmap.', 
