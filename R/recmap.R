@@ -196,7 +196,7 @@ checkerboard <- function(n = 8, ratio = 4){
     stop('z values have to be greater equal than 0.')
   
   if (nrow(df) < 2) 
-    stop('reqires at least two map regions.')
+    stop('requires at least two map regions.')
   
   
   return (TRUE)

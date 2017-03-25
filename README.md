@@ -10,7 +10,7 @@ This package contains an implementation of the [RecMap](http://dx.doi.org/10.110
 ## Installation
 
 
-### Install from [CRAN](https://CRAN.R-project.org/package=recmap)
+### from [CRAN](https://CRAN.R-project.org/package=recmap)
 
 `recmap` requires R 3.3 or later.
 
@@ -22,7 +22,7 @@ and can be installed using the R shell via
 install.package('recmap')
 ```
 
-### Install from [github](https://github.com/cpanse/recmap)
+### from [github](https://github.com/cpanse/recmap)
 
 ```{r}
 install.packages('devtools')
@@ -52,18 +52,19 @@ and a reference manual (just type `?recmap` on the R shell).
 
 Both documents are also available on the package's [CRAN](https://CRAN.R-project.org/package=recmap) page.
 
-
-## Examples
+## Demonstration
 
 The [recmap gallery](http://cartodraw.science/recmap/gallery/) gives an impression what can
 be expected from the cartogram drawing algorithm.
 
-
-## Demonstration
 ```{r}
 library(shiny)
-recmapAppDir <- system.file("shiny-examples", "state.x77", package = "recmap")
-shiny::runApp(recmapAppDir, display.mode = "normal")
+
+recmap_state.x77 <- system.file("shiny-examples", "state.x77", package = "recmap")
+shiny::runApp(recmap_state.x77, display.mode = "normal")
+
+recmap_US.county <- system.file("shiny-examples", "US.county", package = "recmap")
+shiny::runApp(recmap_US.county, display.mode = "normal")
 ```
 
 ## Author

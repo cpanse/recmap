@@ -1,7 +1,7 @@
-//  Copyright 2016 <Christian.Panse@gmail.com>
+// Copyright 2016 <Christian.Panse@gmail.com>
 //
 // This file is part of the recmap package on CRAN.
-// https://cran.r-project.org/web/packages/recmap/index.html
+// https://CRAN.R-project.org/package=recmap
 //
 // recmap is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with recmap.  If not, see <http://www.gnu.org/licenses/>.
+// along with recmap. If not, see <http://www.gnu.org/licenses/>.
 
 
 //  Author:  Christian Panse <Christian.Panse@gmail.com>

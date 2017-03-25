@@ -14,9 +14,19 @@ Description: Provides an interface and a C++ implementation of the RecMap MP2
   provided by a vignette included in this package.
 License: GPL-3
 LazyData: TRUE
-Depends: R (>= 3.3), Rcpp (>= 0.12.4), GA (>= 3.0.0), sp
+Depends: R (>= 3.3),
+	GA (>= 3.0.0),
+	Rcpp (>= 0.12.4),
+	sp
+Suggests:
+	colorspace,
+	doParallel,
+	knitr,
+	maps,
+	noncensus,
+	shiny,
+	testthat
 SystemRequirements: C++11
-Suggests: knitr, testthat, doParallel, maps
 LinkingTo: Rcpp (>= 0.12.4)
 VignetteBuilder: knitr
 NeedsCompilation: yes
