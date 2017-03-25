@@ -58,6 +58,9 @@ The [recmap gallery](http://cartodraw.science/recmap/gallery/) gives an impressi
 be expected from the cartogram drawing algorithm.
 
 ```{r}
+# Requires to install suggested  packages
+# install.packages(c('colorspace', 'maps', 'noncensus', 'shiny'))
+
 library(shiny)
 
 recmap_state.x77 <- system.file("shiny-examples", "state.x77", package = "recmap")
