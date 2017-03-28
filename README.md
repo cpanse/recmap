@@ -66,7 +66,8 @@ be expected from the cartogram drawing algorithm.
 ```{r}
 # Requires to install suggested  packages
 # install.packages(c('colorspace', 'maps', 'noncensus', 'shiny'))
-pkgs <- c("recmap", "parallel", "doParallel", "maps", "noncensus")
+pkgs <- c("recmap", "colorspace", "shiny", "parallel", "doParallel", "maps", "noncensus")
+
 rv_pkgs <- lapply(pkgs, function(x){
 	if (!requireNamespace(x, quietly = TRUE)) {
 		stop("Package:", x, "needed for this function to work. Please install it.",
