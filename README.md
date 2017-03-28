@@ -4,7 +4,7 @@
 
 # recmap - Compute the Rectangular Statistical Cartogram
 
-This package contains an implementation of the [RecMap](http://dx.doi.org/10.1109/INFVIS.2004.57) construction algorithm (MP2).
+This package contains an implementation of the [RecMap construction algorithm (MP2)](http://dx.doi.org/10.1109/INFVIS.2004.57).
 
 
 ## Installation
