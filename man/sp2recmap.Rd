@@ -40,4 +40,31 @@ Applied spatial data analysis with R, Second edition. Springer, NY.
   spplot(SpDf)
 
   summary(sp2recmap(SpDf))
+
+
+
+  # taken from https://github.com/sjewo/cartogram
+	
+	\dontrun{
+     if (requireNamespace("maptools", quietly = TRUE)) {
+        data(wrld_simpl)
+	afr <- sp2recmap(wrld_simpl[wrld_simpl$REGION==2, ])
+
+	afr$z <- afr$POP2005 
+	afr <- afr[afr$z > 0, ]
+
+	# make map overlap to generate a connected pseudo dual
+	afr$dx <- 2.0 * afr$dx
+	afr$dy <- 2.0 * afr$dy
+
+
+	# overview
+	plot(recmap(afr))
+
+	# use the GA
+	set.seed(1)
+	plot(recmapGA(afr))
+
+     }
+	}
 }

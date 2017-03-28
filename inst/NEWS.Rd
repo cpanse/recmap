@@ -1,8 +1,9 @@
 \name{NEWS}
 \title{News for Package 'recmap'}
 
-\section{Changes until version 0.5.17 (2017-03-24)}{
+\section{Changes until version 0.5.17 (2017-03-26)}{
   \itemize{
+   \item fixed register native routine issue by using \code{tools::package_native_routine_registration_skeleton(".")}
    \item added shiny example including
    \href{https://shiny.rstudio.com/reference/shiny/latest/hoverOpts.html}{hoverOpts}
    using \code{state.x77} data executable through

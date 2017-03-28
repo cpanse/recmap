@@ -1,4 +1,4 @@
-useDynLib(recmap)
+useDynLib(recmap, .registration = TRUE)
 
 import(Rcpp)
 

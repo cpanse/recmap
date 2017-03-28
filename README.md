@@ -24,10 +24,13 @@ install.package('recmap')
 
 ### from [github](https://github.com/cpanse/recmap)
 
+install the latest development version
+
 ```{r}
 install.packages('devtools')
 library(devtools)
 install_git('https://github.com/cpanse/recmap', build_vignettes = TRUE, quiet = FALSE)
+library(recmap)
 ```
 
 ### Use the docker public | automated build [recmap image](https://hub.docker.com/r/cpanse/recmap/) 
@@ -52,6 +55,9 @@ and a reference manual (just type `?recmap` on the R shell).
 
 Both documents are also available on the package's [CRAN](https://CRAN.R-project.org/package=recmap) page.
 
+A white paper containing more technical information and examples is
+available through [arXiv:1606.00464](https://arxiv.org/abs/1606.00464).
+
 ## Demonstration
 
 The [recmap gallery](http://cartodraw.science/recmap/gallery/) gives an impression what can
@@ -70,10 +76,8 @@ recmap_US.county <- system.file("shiny-examples", "US.county", package = "recmap
 shiny::runApp(recmap_US.county, display.mode = "normal")
 ```
 
-## Author
+# Related approaches
 
-Christian Panse
-
-## License
-
-[GPL 3](http://www.gnu.org/licenses/gpl-3.0.en.html)
+* [cartogram](https://CRAN.R-project.org/package=cartogram)
+* [Rcartogram](https://github.com/omegahat/Rcartogram)
+* see also [CRAN Task View: Analysis of Spatial Data](https://cran.r-project.org/web/views/Spatial.html)

@@ -4,15 +4,16 @@
 # https://CRAN.R-project.org/package=recmap
 
 
+pkgs <- c("recmap", "parallel", "doParallel", "maps", "noncensus")
+rv_pkgs <- lapply(pkgs, function(x){
+	if (!requireNamespace(x, quietly = TRUE)) {
+		stop("Package:", x, "needed for this function to work. Please install it.",
+	      	call. = FALSE)
+	}
+	packageVersion(x)
+})
 
-library(shiny)
-library(recmap)
-library(GA)
-library(parallel)
-library(doParallel)
 
-library("maps")
-library("noncensus")
 data("counties")
 
 get_county_mbb <- function(state='colorado', scaleX = 0.5, scaleY = 0.5){

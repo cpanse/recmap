@@ -2,7 +2,10 @@ Package: recmap
 Type: Package
 Title: Compute the Rectangular Statistical Cartogram
 Version: 0.5.17
-Author: Christian Panse
+Authors@R: person("Christian", "Panse", 
+		email = "Christian.Panse@gmail.com", 
+		role = c("aut", "cre"))
+Author: Christian Panse [aut, cre]
 Maintainer: Christian Panse <Christian.Panse@gmail.com>
 Description: Provides an interface and a C++ implementation of the RecMap MP2
   construction heuristic (see 'citation("recmap")' for details). This algorithm
