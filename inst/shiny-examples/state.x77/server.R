@@ -3,11 +3,13 @@
 # https://CRAN.R-project.org/package=recmap
 
 pkgs <- c("recmap", "colorspace", "shiny", "parallel", "doParallel", "maps", "noncensus")
-rv_pkgs <- lapply(pkgs, function(x){
-        if (!requireNamespace(x, quietly = TRUE)) {
+rv_pkgs <- lapply(pkgs, function(pkg){
+        if (!requireNamespace(pkg, quietly = TRUE)) {
                 stop("Package:", x, "needed for this function to work. Please install it.",
                 call. = FALSE)
-        }
+        }else{
+               require(pkg)
+                }
         packageVersion(x)
 })
 
