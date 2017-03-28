@@ -66,8 +66,14 @@ be expected from the cartogram drawing algorithm.
 ```{r}
 # Requires to install suggested  packages
 # install.packages(c('colorspace', 'maps', 'noncensus', 'shiny'))
-
-library(shiny)
+pkgs <- c("recmap", "parallel", "doParallel", "maps", "noncensus")
+rv_pkgs <- lapply(pkgs, function(x){
+	if (!requireNamespace(x, quietly = TRUE)) {
+		stop("Package:", x, "needed for this function to work. Please install it.",
+	      	call. = FALSE)
+	}
+	packageVersion(x)
+})
 
 recmap_state.x77 <- system.file("shiny-examples", "state.x77", package = "recmap")
 shiny::runApp(recmap_state.x77, display.mode = "normal")
