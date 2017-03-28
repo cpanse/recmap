@@ -4,7 +4,6 @@
 # https://CRAN.R-project.org/package=recmap
 
 
-library(shiny)
 
 shinyUI(fluidPage(
 

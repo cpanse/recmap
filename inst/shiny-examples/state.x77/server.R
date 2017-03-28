@@ -2,20 +2,6 @@
 #
 # https://CRAN.R-project.org/package=recmap
 
-pkgs <- c("recmap", "colorspace", "shiny", "parallel", "doParallel", "maps", "noncensus")
-
-rv_pkgs <- lapply(pkgs, function(x){
-        message(x)
-        if (!requireNamespace(x, quietly = TRUE)) {
-                stop("Package:", x, "needed for this function to work. Please install it.",
-                call. = FALSE)
-        }else{
-              # require(x)
-                }
-        packageVersion(x)
-})
-
-
 # source: vignette of https://CRAN.R-project.org/package=colorspace 
 pal <- function(col, border = "light gray", ...) {
       n <- length(col)
