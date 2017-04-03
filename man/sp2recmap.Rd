@@ -47,6 +47,7 @@ Applied spatial data analysis with R, Second edition. Springer, NY.
 	
 	\dontrun{
      if (requireNamespace("maptools", quietly = TRUE)) {
+	library(maptools)
         data(wrld_simpl)
 	afr <- sp2recmap(wrld_simpl[wrld_simpl$REGION==2, ])
 
