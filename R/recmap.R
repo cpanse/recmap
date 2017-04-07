@@ -101,6 +101,18 @@
 #' @export
 #'
 #' @examples
+#' triangle.map <- recmap:::.get_7triangles()
+#' z <- c(rep(4, 4), rep(1, 3))
+#' cols <- c(rep('white', 4), rep('grey',3))
+#' 
+#' op <- par(mfrow=c(1,2), mar=c(0, 0, 0, 0))
+#' plot(triangle.map, col=cols)
+#' 
+#'  # requires libfft.so installed in linux 
+#' if (require(getcartr) & require(Rcartogram)){
+#'   cartogram <- quick.carto(triangle.map, z, res=64)
+#'   plot(cartogram, col=cols)
+#' }
 .get_7triangles <- function(A=1){
   t<-list()
   
@@ -202,10 +214,11 @@ checkerboard <- function(n = 8, ratio = 4){
   return (TRUE)
 }
 
-recmap <- function(df) {
 
-  if (.check_column_names(df)){
-    res <- recmap_(df)
+recmap <- function(V, E = data.frame(u=integer(), v=integer())) {
+
+  if (.check_column_names(V)){
+    res <- recmap_(V, E)
   
     class(res) = c('recmap', class(res))
     res

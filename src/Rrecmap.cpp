@@ -51,7 +51,7 @@ DataFrame place_rectangle(double x0, double y0, double dx0, double dy0,
 }
 
 // [[Rcpp::export]]
-DataFrame recmap_(DataFrame df) {
+DataFrame recmap_(DataFrame df, DataFrame pd) {
   // access the columns
   NumericVector x = df["x"];
   NumericVector y = df["y"];
@@ -61,6 +61,9 @@ DataFrame recmap_(DataFrame df) {
 
   NumericVector z = df["z"];
   CharacterVector name = df["name"];
+  
+  IntegerVector u = pd("u");
+  IntegerVector v = pd("v");
 
   NumericVector cartogram_x(x.size());
   NumericVector cartogram_y(x.size());
@@ -78,10 +81,20 @@ DataFrame recmap_(DataFrame df) {
   //    think about operating on the R allocated memory and avoid copying.
   for (int i = 0; i < x.size(); i++) {
     std::string sname = Rcpp::as<std::string>(name[i]);
-    X.push(x[i], y[i], dx[i], dy[i], z[i],  sname);
+    X.push_region(x[i], y[i], dx[i], dy[i], z[i],  sname);
   }
 
-  X.run();
+  if (u.size() > 0 && v.size() >0){
+    for (int i = 0; i < u.size(); i++) {
+      X.push_pd_edge(u[i] - 1, v[i] - 1);
+      X.push_pd_edge(v[i] - 1, u[i] - 1);
+    }
+    X.run(false);
+  }else{
+    X.run(true);
+  }
+  
+  
   // Rcpp::Rcout << "Number of mbb intersection test calls =  "
   // << X.get_intersect_count() << "\n";
   for (int i = 0; i < x.size(); i++) {

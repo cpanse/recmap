@@ -60,13 +60,16 @@ input given statistical value z.
 }
 
 \usage{
-recmap(df)
+  recmap(V, E = data.frame(u=integer(), v=integer()))
 }
 
 \arguments{
 
-  \item{df}{is the input formatted as \code{\link{data.frame}} having the
+  \item{V}{is the input formatted as \code{\link{data.frame}} having the
   columns (x, y, dx, dy, z, name) as described above.}
+  
+  \item{E}{defines the pseudo dual graph of the map regions. If no argument is 
+  provided a the pseudo dual graph is composed by overlapping map regions.}
 
 }
 

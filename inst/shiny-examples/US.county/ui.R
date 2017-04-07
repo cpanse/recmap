@@ -33,9 +33,10 @@ shinyUI(fluidPage(
    
     mainPanel(
      
-      p('please wait some seconds until the cartogram is computed.'),
+      p('overlapping rectangles define the topology of the pseudo dual graph.'),
       plotOutput("mapPlot"),
       tableOutput("plot_hoverinfo"),
+      p('please wait some seconds until the cartogram is computed.'),
       plotOutput("cartogramPlot", hover = hoverOpts(id = "plot_hover", delayType = "throttle", delay = 500)),
       
       plotOutput("gaPlot"),

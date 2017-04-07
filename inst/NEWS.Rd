@@ -1,8 +1,9 @@
 \name{NEWS}
 \title{News for Package 'recmap'}
 
-\section{Changes until version 0.5.17 (2017-03-26)}{
+\section{Changes until version 0.5.19 (2017-04-07)}{
   \itemize{
+   \item added argument for the defintion of the pseudo dual graph in \code{recmap}.
    \item fixed register native routine issue by using \code{tools::package_native_routine_registration_skeleton(".")}
    \item added shiny example including
    \href{https://shiny.rstudio.com/reference/shiny/latest/hoverOpts.html}{hoverOpts}
