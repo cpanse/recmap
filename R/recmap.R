@@ -166,9 +166,9 @@ checkerboard <- function(n = 8, ratio = 4){
   
   res <- data.frame(x = xy[, 1], 
                     y = xy[,2], 
-                    dx=0.5, 
-                    dy=0.5, 
-                    z=z, 
+                    dx = 0.5, 
+                    dy = 0.5, 
+                    z = z, 
                     name=paste(letters[1:n][xy[,1]], xy[,2], sep=''))
   
 

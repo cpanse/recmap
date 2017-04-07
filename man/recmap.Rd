@@ -65,11 +65,14 @@ input given statistical value z.
 
 \arguments{
 
-  \item{V}{is the input formatted as \code{\link{data.frame}} having the
-  columns (x, y, dx, dy, z, name) as described above.}
+  \item{V}{defines the input map regions formatted as \code{\link{data.frame}}
+  having the columns (x, y, dx, dy, z, name) as described above. V could also be
+  considered as the nodes of the pseudo dual.}
   
-  \item{E}{defines the pseudo dual graph of the map regions. If no argument is 
-  provided a the pseudo dual graph is composed by overlapping map regions.}
+  \item{E}{defines the map regions edges of the pseudo dual graph. 
+  If no argument is provided (default) a the pseudo dual graph is composed by 
+  overlapping map regions. If used, E should be a \code{\link{data.frame}} 
+  containing two columns named u and v.}
 
 }
 
