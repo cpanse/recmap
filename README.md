@@ -77,7 +77,7 @@ recmap_US.county <- system.file("shiny-examples", "US.county", package = "recmap
 shiny::runApp(recmap_US.county, display.mode = "normal")
 ```
 
-# Related approaches
+## Related approaches
 
 * [cartogram](https://CRAN.R-project.org/package=cartogram)
 * [Rcartogram](https://github.com/omegahat/Rcartogram)
