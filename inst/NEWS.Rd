@@ -1,7 +1,7 @@
 \name{NEWS}
 \title{News for Package 'recmap'}
 
-\section{Changes until version 0.5.19 (2017-04-07)}{
+\section{Changes until version 0.5.20 (2017-04-10)}{
   \itemize{
    \item added argument for the defintion of the pseudo dual graph in \code{recmap}.
    \item fixed register native routine issue by using \code{tools::package_native_routine_registration_skeleton(".")}

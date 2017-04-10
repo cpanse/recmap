@@ -60,9 +60,6 @@ available through [arXiv:1606.00464](https://arxiv.org/abs/1606.00464).
 
 ## Demonstration
 
-The [recmap gallery](http://cartodraw.science/recmap/gallery/) gives an impression what can
-be expected from the cartogram drawing algorithm.
-
 ```{r}
 # Requires to install suggested  packages
 # install.packages(c('colorspace', 'maps', 'noncensus', 'shiny'))
@@ -84,4 +81,4 @@ shiny::runApp(recmap_US.county, display.mode = "normal")
 
 * [cartogram](https://CRAN.R-project.org/package=cartogram)
 * [Rcartogram](https://github.com/omegahat/Rcartogram)
-* see also [CRAN Task View: Analysis of Spatial Data](https://cran.r-project.org/web/views/Spatial.html)
+* see also [CRAN Task View: Analysis of Spatial Data](https://CRAN.R-project.org/view=Spatial)
