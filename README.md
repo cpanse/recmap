@@ -19,7 +19,7 @@ Released and tested versions of `recmap` are available via the
 and can be installed using the R shell via
 
 ```{r}
-install.package('recmap')
+install.packages('recmap')
 ```
 
 ### from [github](https://github.com/cpanse/recmap)
