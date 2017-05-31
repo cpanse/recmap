@@ -9,7 +9,7 @@
 
 \description{
     The method generates a SpatialPolygons object of a as input given
-    recmap object. Both \code{data.frame}s are mergerd by the index order.
+    \code{\link{recmap}} object. Both \code{data.frame}s are mergerd by the index order.
 }
 
 \usage{
@@ -40,7 +40,7 @@ Applied spatial data analysis with R, Second edition. Springer, NY.
 	}
 }
 
-\note{This S3method replaced the \code{recmap2sp} function in version 0.5.22.}
+\note{This S3method has replaced the \code{recmap2sp} function since package version 0.5.22.}
 
 \examples{
   SpDf <- as.SpatialPolygonsDataFrame(recmap(checkerboard(8)))
