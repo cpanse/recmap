@@ -1,6 +1,12 @@
 \name{NEWS}
 \title{News for Package 'recmap'}
 
+\section{Changes until version 0.5.22 (2017-XX-XX)}{
+  \itemize{
+	  \item added \code{is.recmap} fucntion.
+  }
+}
+
 \section{Changes until version 0.5.20 (2017-04-10)}{
   \itemize{
    \item added argument for the defintion of the pseudo dual graph in \code{recmap}.

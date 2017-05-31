@@ -179,36 +179,56 @@ checkerboard <- function(n = 8, ratio = 4){
   res
 }
 
-.check_column_names <- function(df){
-  if(sum(c("x", "y", "dx", "dy", "z") %in% names(df)) != 5) 
-    stop("column names 'x', 'y', 'dx', 'dy', and 'z' are reqired")
+is.recmap <- function(object){
+  if(sum(c("x", "y", "dx", "dy", "z") %in% names(object)) != 5) {
+    message("column names 'x', 'y', 'dx', 'dy', and 'z' are reqired")
+    return (FALSE)
+  }
   
-  if (!is.numeric(df$x))
-    stop("x is not numeric.")
+  if (!is.numeric(object$x)){
+    message("x is not numeric.")
+    return(FALSE)
+  }
   
-  if (!is.numeric(df$y))
-    stop("y is not numeric.")
+  if (!is.numeric(object$y)) {
+    message("y is not numeric.")
+    return(FALSE)
+  }
   
-  if (!is.numeric(df$dx))
-    stop("dx is not numeric.")
+  if (!is.numeric(object$dx)){
+    message("dx is not numeric.")
+    return(FALSE)
+  }
   
-  if (!is.numeric(df$dy))
-    stop("dy is not numeric.")
+  if (!is.numeric(object$dy)){
+    message("dy is not numeric.")
+    return(FALSE)
+  }
   
-  if (!is.numeric(df$z))
-    stop("z is not numeric.")
+  if (!is.numeric(object$z)){
+    message("z is not numeric.")
+    return(FALSE)
+  }
   
-  if (sum(df$dx < 0) != 0)
-    stop('dx values have to be greater than 0.')
+  if (sum(object$dx < 0) != 0) {
+    message('dx values have to be greater than 0.')
+    return(FALSE)
+  }
   
-  if (sum(df$dy < 0) != 0)
-    stop('dy values have to be greater than 0.')
+  if (sum(object$dy < 0) != 0){
+    message('dy values have to be greater than 0.')
+    return(FALSE)
+  }
   
-  if (sum(df$z <= 0) != 0)
-    stop('z values have to be greater equal than 0.')
+  if (sum(object$z <= 0) != 0){
+    message('z values have to be greater equal than 0.')
+    return(FALSE)
+  }
   
-  if (nrow(df) < 2) 
-    stop('requires at least two map regions.')
+  if (nrow(object) < 2) {
+    message('requires at least two map regions.')
+    return(FALSE)
+  }
   
   
   return (TRUE)
@@ -217,7 +237,7 @@ checkerboard <- function(n = 8, ratio = 4){
 
 recmap <- function(V, E = data.frame(u=integer(), v=integer())) {
 
-  if (.check_column_names(V)){
+  if (is.recmap(V)){
     res <- recmap_(V, E)
   
     class(res) = c('recmap', class(res))
@@ -227,7 +247,7 @@ recmap <- function(V, E = data.frame(u=integer(), v=integer())) {
 
 # requires https://CRAN.R-project.org/package=sp 
 recmap2sp <- function(rm, df=NULL){
-  
+  if (is.recmap(rm)){
   SpP <- SpatialPolygons(lapply(1:nrow(rm), function(i){
     r <- rm[i, ]
     Sr <- Polygon(cbind(c(r$x - r$dx, 
@@ -247,7 +267,12 @@ recmap2sp <- function(rm, df=NULL){
                                     data.frame(z = rm$z, 
                                                row.names = rm$name)))}
   
-  SpatialPolygonsDataFrame(SpP, df)
+  return(SpatialPolygonsDataFrame(SpP, df))
+}
+
+message("recmap2sp failed.")
+
+NULL
 }
 
 
@@ -277,11 +302,15 @@ sp2recmap <- function(X){
     
    df <- cbind(df, X@data) 
    class(df) <- c('recmap', class(df))
-  return(df)
+   if(is.recmap(df)){
+  	return(df)
+   }
+   message('sp2recmap failed.')
+
   }else{
-    message('requires a "SpatialPolygonsDataFrame" class as argument')
-    return (NULL)
+    message('requires a "SpatialPolygonsDataFrame" class as argument.')
   }
+    return (NULL)
 
 }
 
@@ -299,7 +328,7 @@ sp2recmap <- function(X){
 
 .compute_topology_error <- function(x){
   
-  if (sum(x$topology.error == 100)>0)
+  if (sum(x$topology.error == 100) > 0)
     return(Inf)
   
   sum(x$topology.error) 
@@ -311,8 +340,12 @@ sp2recmap <- function(X){
 }
 
 summary.recmap <- function(object, ...) {
+
   x <- object
-  if (.check_column_names(x)){
+
+  if (!is.recmap(x)){ return (NULL) }
+
+  if (is.recmap(x)){
     
     nRegions <- nrow(x)
     errorArea <- round(.compute_area_error(x), 2)
@@ -348,18 +381,17 @@ summary.recmap <- function(object, ...) {
 }
 
 plot.recmap <- function(x, col='#00000011', col.text = 'grey', border = 'darkgreen', ...){
-#  col <- '#00000011'
-#  col.text <- 'grey'
+
+  if (!is.recmap(x)){ return (NULL) }
+
   label.text <- TRUE
   S <- x
-  try (if(sum(c("x", "y", "dx", "dy") %in% names(S)) != 4) 
-    stop("column names 'x', 'y', 'dx', 'dy', and 'z' are reqired"))
   
   plot(S$x, S$y, 
        xlim = c(min(S$x - S$dx), max(S$x + S$dx)), 
        ylim = c(min(S$y - S$dy), max(S$y + S$dy)), 
        type = 'n', 
-       asp=1,
+       asp = 1,
        xlab = '',
        ylab = '',
        axes = FALSE, ...)
@@ -499,7 +531,6 @@ plot.recmapGRASP <- function(x, ...){
 
 summary.recmapGA <- function(object, ...){
   cat("summary of class recmapGA:\n")
-	
   cat("summary of the GA:\n")
   print(summary.ga(object$GA))
   

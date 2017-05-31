@@ -2,6 +2,7 @@
 \alias{recmap}
 \alias{RecMap}
 \alias{cartogram}
+\alias{is.recmap}
 
 \title{
 
