@@ -1,6 +1,7 @@
 \name{as.SpatialPolygonsDataFrame.recmap}
 \alias{as.SpatialPolygonsDataFrame.recmap}
 \alias{as.SpatialPolygonsDataFrame}
+\alias{recmap2sp}
 
 \title{
     Export recmap Object to SpatialPolygonsDataFrame Object
@@ -33,10 +34,12 @@ Applied spatial data analysis with R, Second edition. Springer, NY.
 }
 
 \seealso{
-\itemize{
-\item{\code{\link[sp]{sp}}}
+	\itemize{
+		\item{\code{\link[sp]{sp}}}
+	}
 }
-}
+
+\note{This S3method replaced the \code{recmap2sp} function in version 0.5.22.}
 
 \examples{
   SpDf <- as.SpatialPolygonsDataFrame(recmap(checkerboard(8)))
