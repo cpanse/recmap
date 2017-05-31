@@ -1,5 +1,6 @@
-\name{recmap2sp}
-\alias{recmap2sp}
+\name{as.SpatialPolygonsDataFrame.recmap}
+\alias{as.SpatialPolygonsDataFrame.recmap}
+\alias{as.SpatialPolygonsDataFrame}
 
 \title{
     Export recmap Object to SpatialPolygonsDataFrame Object
@@ -10,12 +11,13 @@
     recmap object. Both tables are mergerd by the index order.
 }
 \usage{
-recmap2sp(rm, df = NULL)
+	\method{as.SpatialPolygonsDataFrame}{recmap}(x, df = NULL, \dots)
 }
 
 \arguments{
-  \item{rm}{ a \code{\link{recmap}} object.  }
+  \item{x}{ a \code{\link{recmap}} object.  }
   \item{df}{ a \code{data.frame} object. default is NULL.  }
+  \item{\dots}{ ... }
 }
 
 \value{ returns a \code{\link[sp]{SpatialPolygonsDataFrame}} }
@@ -37,7 +39,7 @@ Applied spatial data analysis with R, Second edition. Springer, NY.
 }
 
 \examples{
-  SpDf<- recmap2sp(recmap(checkerboard(8)))
+  SpDf <- as.SpatialPolygonsDataFrame(recmap(checkerboard(8)))
   summary(SpDf)
   spplot(SpDf)
 }

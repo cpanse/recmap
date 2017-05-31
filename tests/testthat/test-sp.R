@@ -6,7 +6,7 @@ test_that("recmap2sp and sp2recmap", {
   
   
   X <- checkerboard(8)
-  XX <- sp2recmap(recmap2sp(X))
+  XX <- sp2recmap(as.SpatialPolygonsDataFrame(X))
 
   expect_true(sum(X$x == XX$x) == 64)
   expect_true(sum(X$y == XX$y) == 64)

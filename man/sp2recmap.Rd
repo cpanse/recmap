@@ -35,7 +35,7 @@ Applied spatial data analysis with R, Second edition. Springer, NY.
 }
 
 \examples{
-  SpDf <- recmap2sp(recmap(checkerboard(8)))
+  SpDf <- as.SpatialPolygonsDataFrame(recmap(checkerboard(8)))
   summary(SpDf)
   spplot(SpDf)
 

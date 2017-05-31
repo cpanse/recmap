@@ -245,11 +245,16 @@ recmap <- function(V, E = data.frame(u=integer(), v=integer())) {
   }
 }
 
+
+as.SpatialPolygonsDataFrame <- function (x, ...) {
+	    UseMethod("as.SpatialPolygonsDataFrame", x)
+}
+
 # requires https://CRAN.R-project.org/package=sp 
-recmap2sp <- function(rm, df=NULL){
-  if (is.recmap(rm)){
-  SpP <- SpatialPolygons(lapply(1:nrow(rm), function(i){
-    r <- rm[i, ]
+as.SpatialPolygonsDataFrame.recmap <- function(x, df = NULL, ...){
+  if (is.recmap(x)){
+  SpP <- SpatialPolygons(lapply(1:nrow(x), function(i){
+    r <- x[i, ]
     Sr <- Polygon(cbind(c(r$x - r$dx, 
                           r$x - r$dx, 
                           r$x + r$dx, 
@@ -264,8 +269,8 @@ recmap2sp <- function(rm, df=NULL){
   
   if (is.null(df)){
     return(SpatialPolygonsDataFrame(SpP, 
-                                    data.frame(z = rm$z, 
-                                               row.names = rm$name)))}
+                                    data.frame(z = x$z, 
+                                               row.names = x$name)))}
   
   return(SpatialPolygonsDataFrame(SpP, df))
 }
