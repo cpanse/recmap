@@ -4,13 +4,14 @@
 \alias{recmap2sp}
 
 \title{
-    Export recmap Object to SpatialPolygonsDataFrame Object
+    Convert a recmap Object to SpatialPolygonsDataFrame Object
 }
 
 \description{
-    The method generates a SpatialPolygons object out of the a as input given
-    recmap object. Both tables are mergerd by the index order.
+    The method generates a SpatialPolygons object of a as input given
+    recmap object. Both \code{data.frame}s are mergerd by the index order.
 }
+
 \usage{
 	\method{as.SpatialPolygonsDataFrame}{recmap}(x, df = NULL, \dots)
 }

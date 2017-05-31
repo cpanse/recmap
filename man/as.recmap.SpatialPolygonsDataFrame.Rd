@@ -4,7 +4,7 @@
 \alias{sp2recmap}
 
 \title{
-    Export SpatialPolygonsDataFrame Object to recmap Object
+    Convert a SpatialPolygonsDataFrame Object to recmap Object
 }
 
 \description{
