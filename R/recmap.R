@@ -281,7 +281,11 @@ NULL
 }
 
 
-sp2recmap <- function(X){
+as.recmap <- function(X){
+	UseMethod("as.recmap", X)
+}
+
+as.recmap.SpatialPolygonsDataFrame <- function(X){
   
   if (class(X) == "SpatialPolygonsDataFrame"){
     n <- length(X@polygons)

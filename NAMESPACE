@@ -16,7 +16,6 @@ export("recmap")
 export("is.recmap")
 export("recmapGA")
 export("recmapGRASP")
-export("sp2recmap")
 export("checkerboard")
 
 export("plot.recmap")
@@ -34,3 +33,6 @@ S3method(summary, recmapGA)
 
 export("as.SpatialPolygonsDataFrame")
 S3method(as.SpatialPolygonsDataFrame, recmap)
+
+export("as.recmap")
+S3method(as.recmap, SpatialPolygonsDataFrame)

@@ -4,6 +4,7 @@
 \section{Changes until version 0.5.22 (2017-XX-XX)}{
   \itemize{
 	  \item added \code{is.recmap} fucntion.
+	  \item replaced \code{recmap2sp} and \code{sp2recmap} functions by S3methods \code{as.SpatialPolygonsDataFrame} and \code{as.recmap}.
   }
 }
 
