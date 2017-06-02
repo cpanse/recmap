@@ -6,13 +6,13 @@ citHeader("To cite 'recmap' in publications use:")
 bibentry(bibtype = "Article",
         author = person("Christian", "Panse"),
 	title = "{Rectangular Statistical Cartograms in R: The recmap Package}",
-	year = "2016",
-	journal = "Submitted to the Journal of Statistical Software",
+	year = "",
+	journal = "Journal of Statistical Software",
         url = "https://arxiv.org/abs/1606.00464",
-	note = "{Submitted to the Journal of Statistical Software}",
+	note = "{Accepted for publication in the Journal of Statistical Software}",
         textVersion = paste("Chritian Panse (2016).",
           "Rectangular Statistical Cartograms in R: The recmap Package.",
-          "Submitted to the Journal of Statistical Software.",
+          "Accepted for publication in the Journal of Statistical Software.",
 	  "Pre-print available through https://arxiv.org/abs/1606.00464.")
 )
 

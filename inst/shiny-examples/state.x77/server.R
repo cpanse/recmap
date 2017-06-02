@@ -2,6 +2,10 @@
 #
 # https://CRAN.R-project.org/package=recmap
 
+library(colorspace)
+library(shiny)
+library(recmap)
+
 # source: vignette of https://CRAN.R-project.org/package=colorspace 
 pal <- function(col, border = "light gray", ...) {
       n <- length(col)

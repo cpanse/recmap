@@ -64,11 +64,7 @@ available through [arXiv:1606.00464](https://arxiv.org/abs/1606.00464).
 # Requires to install suggested  packages
 # install.packages(c('colorspace', 'maps', 'noncensus', 'shiny'))
 
-library(colorspace)
-library(maps)
 library(shiny)
-library(recmap)
-library(noncensus)
 
 recmap_state.x77 <- system.file("shiny-examples", "state.x77", package = "recmap")
 shiny::runApp(recmap_state.x77, display.mode = "normal")

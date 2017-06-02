@@ -3,6 +3,12 @@
 #
 # https://CRAN.R-project.org/package=recmap
 
+library(colorspace)
+library(maps)
+library(shiny)
+library(recmap)
+library(noncensus)
+
 data(counties)
 
 get_county_mbb <- function(state='colorado', scaleX = 0.5, scaleY = 0.5){
