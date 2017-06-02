@@ -61,7 +61,9 @@ input given statistical value z.
 }
 
 \usage{
+
   recmap(V, E = data.frame(u=integer(), v=integer()))
+
 }
 
 \arguments{
