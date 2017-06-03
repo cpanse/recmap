@@ -1,4 +1,4 @@
-# This is the server logic for a Shiny web application using state.x77 data
+  # This is the server logic for a Shiny web application using state.x77 data
 #
 # https://CRAN.R-project.org/package=recmap
 

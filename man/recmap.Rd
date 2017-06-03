@@ -37,7 +37,7 @@ The output is a rectangular cartogram where the map regions are:
 
   \item{connected,}
 
-  \item{ratio and area of each rectangle corresponds to the desired areas,}
+  \item{ratio and area of each rectangle correspond to the desired areas,}
 
   \item{rectangles are placed parallel to the axes.}
 }
@@ -82,7 +82,7 @@ input given statistical value z.
 
 \details{
 
-Basic idea of the current recmap \emph{implementation}:
+The basic idea of the current recmap \emph{implementation}:
 
 \enumerate{
 
@@ -95,7 +95,7 @@ Basic idea of the current recmap \emph{implementation}:
 
 }
 
-Note: if a rectangle can not be placed, accept a non \emph{feasible solution}
+Note: if a rectangle can not be placed, accept a non-\emph{feasible solution}
 (avoid solutions having a topology error higher than 100)
 Solving this constellation can be compute expensive and due to the assumably 
 bad fitness value the candidate cartogram  will be anyway 
@@ -104,7 +104,7 @@ rejected by the metaheuristic.
 \emph{Time Complexity:}
 The time complexity is \eqn{O(n^2)}, where n is the number of regions.
 DFS is visiting each map region only once and therefore has 
-time complexity \eqn{O(n)}. For each placement a constant number of
+time complexity \eqn{O(n)}. For each placement, a constant number of
 MBB intersection are called (max 360). MBB check is implemented using
 \code{std::set}, \code{insert}, \code{upper_bound}, \code{upper_bound} 
 costs are \eqn{O(log(n))}. 

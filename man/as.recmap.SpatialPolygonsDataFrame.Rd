@@ -54,9 +54,13 @@ Applied spatial data analysis with R, Second edition. Springer, NY.
      if (requireNamespace("maptools", quietly = TRUE)) {
 	library(maptools)
         data(wrld_simpl)
+
 	afr <- as.recmap(wrld_simpl[wrld_simpl$REGION==2, ])
+	is.recmap(afr)
 
 	afr$z <- afr$POP2005 
+
+	is.recmap(afr)
 	afr <- afr[afr$z > 0, ]
 
 	# make map overlap to generate a connected pseudo dual

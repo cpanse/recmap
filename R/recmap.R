@@ -181,7 +181,7 @@ checkerboard <- function(n = 8, ratio = 4){
 
 is.recmap <- function(object){
   if(sum(c("x", "y", "dx", "dy", "z") %in% names(object)) != 5) {
-    message("column names 'x', 'y', 'dx', 'dy', and 'z' are reqired")
+    message("column names 'x', 'y', 'dx', 'dy', and 'z' are required.")
     return (FALSE)
   }
   
@@ -304,17 +304,20 @@ as.recmap.SpatialPolygonsDataFrame <- function(X){
         dx <- 0.5 * (x.max - x.min)
         dy <- 0.5 * (y.max - y.min)
         
-        data.frame(x=x.min + dx, y = y.min + dy, dx=dx, dy=dy, name=p@ID)
+        data.frame(x = x.min + dx, y = y.min + dy, dx = dx, dy = dy, name=p@ID)
       }))
       
     }))
     
    df <- cbind(df, X@data) 
-   class(df) <- c('recmap', class(df))
-   if(is.recmap(df)){
-  	return(df)
+
+   if (is.recmap(df)){
+  	class(df) <- c('recmap', class(df))
+   	return(df)
+   } else if (!'z' %in% names(df)){
+	   warning("Can not find 'z' column name in data.frame. Define 'z' and continue." )
    }
-   message('sp2recmap failed.')
+   return(df)
 
   }else{
     message('requires a "SpatialPolygonsDataFrame" class as argument.')
