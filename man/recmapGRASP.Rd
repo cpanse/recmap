@@ -14,11 +14,13 @@ recmapGRASP(Map, fitness = .recmap.fitness, n.samples = nrow(Map) * 2,
 
 \arguments{
   \item{Map}{
-is the input formatted as \code{\link{data.frame}} having the
-  columns (x, y, dx, dy, z, name)
+defines the input map regions formatted as \code{\link{data.frame}}
+  having the column names \code{c('x', 'y', 'dx', 'dy', 'z', 'name')} 
+  as described above.
 }
   \item{fitness}{
-a fitness \code{function(idxOrder, Map, ...)} which as to be maximized.
+a fitness function \code{function(idxOrder, Map, ...)} returning a number 
+which as to be maximized.
 }
 
   \item{n.samples}{

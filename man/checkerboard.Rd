@@ -16,7 +16,7 @@ checkerboard(n = 8, ratio = 4)
   \item{n}{defines the size of the map. default is 8 which will generate a map 
   having 64 regions.}
   
-  \item{ratio}{defines the ratio of the statistical value. As default the 
+  \item{ratio}{defines the ratio of the statistical value. As default, the 
   black regions have a value which is four times higher.}
 }
 

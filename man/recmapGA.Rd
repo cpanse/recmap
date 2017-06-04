@@ -9,40 +9,46 @@ high-level function for \code{\link{recmap}} using a Genetic Algorithm as
 metaheuristic.
 }
 \usage{
-recmapGA(Map, fitness = .recmap.fitness, pmutation = 0.25, 
-popSize = 10 * nrow(Map), maxiter = 10, run = maxiter, 
-monitor = if (interactive()) { gaMonitor2} else FALSE, parallel =
-                 FALSE, ...)
+recmapGA(Map, 
+  fitness = .recmap.fitness, 
+  pmutation = 0.25, 
+  popSize = 10 * nrow(Map), 
+  maxiter = 10, 
+  run = maxiter, 
+  monitor = if (interactive()) { gaMonitor2} else FALSE, 
+  parallel = FALSE, 
+  \dots)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
 The following arguments are passed through \code{\link[GA]{ga}}.
-  \item{Map}{
-
+  \item{Map}{defines the input map regions formatted as \code{\link{data.frame}}
+  having the column names \code{c('x', 'y', 'dx', 'dy', 'z', 'name')} 
+  as described above.
 }
   \item{fitness}{
-%%     ~~Describe \code{fitness} here~~
+a fitness function \code{function(idxOrder, Map, ...)} returning a number 
+which as to be maximized.
 }
 
   \item{pmutation}{
-%%     ~~Describe \code{pmutation} here~~
+see docu of \code{\link[GA]{ga}}.
 }
   \item{popSize}{
-%%     ~~Describe \code{popSize} here~~
-}
+    see docu of \code{\link[GA]{ga}}.}
   \item{maxiter}{
-%%     ~~Describe \code{maxiter} here~~
+see docu of \code{\link[GA]{ga}}.
 }
   \item{run}{
-%%     ~~Describe \code{run} here~~
+see docu of \code{\link[GA]{ga}}.
 }
 \item{monitor}{
-%%     ~~Describe \code{pmutation} here~~
+see docu of \code{\link[GA]{ga}}.
 }
   \item{parallel}{
-%%     ~~Describe \code{parallel} here~~
+see docu of \code{\link[GA]{ga}}.
 }
-  \item{...}{
+  \item{\dots}{
 passed through the \code{\link{ga}} method.
 }
 }

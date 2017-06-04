@@ -9,7 +9,7 @@
 
 \description{
     The method generates a SpatialPolygons object of a as input given
-    \code{\link{recmap}} object. Both \code{data.frame}s are mergerd by the index order.
+    \code{\link{recmap}} object. Both \code{data.frame}s are merged by the index order.
 }
 
 \usage{
