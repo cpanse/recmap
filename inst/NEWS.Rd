@@ -1,8 +1,9 @@
 \name{NEWS}
 \title{News for Package 'recmap'}
 
-\section{Changes until version 0.5.22 (2017-XX-XX)}{
+\section{Changes until version 0.5.23 (2017-06-26)}{
   \itemize{
+	  \item added a progress window in the shiny apps
 	  \item added \code{is.recmap} fucntion.
 	  \item replaced \code{recmap2sp} and \code{sp2recmap} functions by S3methods \code{as.SpatialPolygonsDataFrame} and \code{as.recmap}.
   }
@@ -10,7 +11,7 @@
 
 \section{Changes until version 0.5.20 (2017-04-10)}{
   \itemize{
-   \item added argument for the defintion of the pseudo dual graph in \code{recmap}.
+   \item added argument for the definition of the pseudo dual graph in \code{recmap}.
    \item fixed register native routine issue by using \code{tools::package_native_routine_registration_skeleton(".")}
    \item added shiny example including
    \href{https://shiny.rstudio.com/reference/shiny/latest/hoverOpts.html}{hoverOpts}
@@ -24,11 +25,11 @@
 improvements concerning \href{https://www.jstatsoft.org}{JSS} reviewer comments:
   \itemize{
   
-  \item added a \code{sp2recmap} method inlcuding a testthat method.
+  \item added a \code{sp2recmap} method including a testthat method.
   \item added 'meta' plot methods \code{plot.recmapGA} and 
   \code{plot.recmapGRAP}.
 
-    \item added a \code{border} attribute in the \code{plot.recmap} method.
+    \item added a \code{border} attribute to the \code{plot.recmap} method.
     \item \code{plot.recmap} labels are now scaled by using \code{S$dx / strwidth(S$name)}.
   }
   }
@@ -77,7 +78,7 @@ improvements concerning \href{https://www.jstatsoft.org}{JSS} reviewer comments:
     
     \item \emph{bugfix} - topology error; if a region can not be placed
     return topology error 100. 
-    this has a major impact to the return value of the fitness function.
+    this has a major impact on the return value of the fitness function.
     
     \code{# accept only feasible solutions!}
     

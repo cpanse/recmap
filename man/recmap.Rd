@@ -26,14 +26,14 @@ The algorithm requires as input for each map region:
 
 The (x, y) coordinates represent the center of the minimal bounding boxes 
 (MBB), The coordinates of the MBB are derived by adding or subtracting the 
-(dx, dy)/2 tuple accordingly. The tuple (dx, dy) defines also the ratio of the 
+(dx, dy) / 2 tuple accordingly. The tuple (dx, dy) defines also the ratio of the 
 map region. The statistical values define the desired area of each map region.
 
 The output is a rectangular cartogram where the map regions are:
 
 \itemize{
 
-  \item{non overlapping,}
+  \item{Non-overlapping,}
 
   \item{connected,}
 
@@ -73,8 +73,8 @@ input given statistical value z.
   as described above. V could also be considered as the nodes of the pseudo dual.}
   
   \item{E}{defines the edges of the map region's pseudo dual graph. 
-  If \code{E} is not provided, this is the default, the pseudo dual graph is
-  composed by overlapping rectangles. If used, E must be a
+  If \code{E} is not provided, this is the default; the pseudo dual graph is
+  composed of overlapping rectangles. If used, E must be a
   \code{\link{data.frame}} containing two columns named \code{c('u', 'v')}
   of type integer referencing the row number of \code{V}.}
 
@@ -97,8 +97,9 @@ The basic idea of the current recmap \emph{implementation}:
 
 Note: if a rectangle can not be placed, accept a non-\emph{feasible solution}
 (avoid solutions having a topology error higher than 100)
-Solving this constellation can be compute expensive and due to the assumably 
-bad fitness value the candidate cartogram  will be rejected by the metaheuristic.
+Solving this constellation can be intensive in the computation and due to the
+assumably low fitness value the candidate cartogram
+will be likely rejected by the metaheuristic.
 
 \emph{Time Complexity:}
 The time complexity is \eqn{O(n^2)}, where n is the number of regions.
@@ -124,8 +125,7 @@ geodetic datum, e.g., WGS84 or Swissgrid.
 }
 
 \value{
-
-returns a \code{recmap} S3 object of the transformed map with new coordinates 
+Returns a \code{recmap} S3 object of the transformed map with new coordinates 
 (x, y, dx, dy) plus additional columns containing information for topology 
 error, relative position error, and the DFS number.
 The error values are thought to be used for fitness function of the
