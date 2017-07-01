@@ -19,7 +19,7 @@ vignette: >
 This package contains a C++ implementation of the RecMap algorithm 
 [[@recmap]](http://dx.doi.org/10.1109/INFVIS.2004.57) to draw maps according to 
 given statistical values. These so-called cartograms or value-by-area-maps may 
-be used to visualize any geospatial-related data, e.g. political, economical or 
+be used to visualize any geospatial-related data, e.g. political, economic or 
 public health data.
 The input consists of a map represented by overlapping rectangles.
 This map is defined by the following parameters for each map region:
@@ -30,12 +30,12 @@ This map is defined by the following parameters for each map region:
 
 The (x, y) coordinates represent the center of the minimal bounding boxes (MBB),
 The coordinates of the MBB are derived by adding or subtracting the (dx, dy) 
-tuple accordingly. The tuple (dx, dy) defines also the ratio of the map region.
+tuple accordingly. The tuple (dx, dy) also defines the ratio of the map region.
 The statistical values define the desired area of each map region. 
 
 The output is a rectangular cartogram where the map regions are:
 
-- non overlapping, 
+- Non-overlapping, 
 - connected, 
 - ratio and area of each rectangle correspond to the desired areas,
 - rectangles are placed parallel to the axes.
@@ -53,7 +53,7 @@ the as input given statistical value z.
 
 An example of a rectangular cartogram drawing is shown below.
 
-```{r fig.width=7, fig.retina=2, fig.align='left', fig.cap="Rectangular Cartogram of the U.S. election 2004; The area corresponds to the number of electors (color indicates the party red: democrats / blue: republican; the color intensity ~ outcome of the vote.). The graphic was computed by using the original implementation of the construction heuristic RecMap MP2 introduced in [@recmap].", echo=FALSE, warning=FALSE, comment="ccc", error=FALSE, message=FALSE}
+```{r fig.width=7, fig.retina=2, fig.align='left', fig.cap="Rectangular Cartogram of the U.S. election 2004; The area corresponds to the number of electors (color indicates the party red: democrats / blue: Republican; the color intensity ~ outcome of the vote.). The graphic was computed by using the original implementation of the construction heuristic RecMap MP2 introduced in [@recmap].", echo=FALSE, warning=FALSE, comment="ccc", error=FALSE, message=FALSE}
 
 library(recmap)
 op<-par(mar=c(0,0,0,0), bg='black')
@@ -91,13 +91,10 @@ plot.recmap(M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ],
             col.text = 'black', lwd=2)
 ```
 
-
-
-
 ## Metaheuristic
 
 The index order of the input map
-has an impact to the resulting cartogram. This is caused due do 
+has an impact to the resulting cartogram. This algorithmic property is caused due do 
 the computation of the dual graph. In [@recmap] a genetic algorithm was applied 
 as metaheuristic. Due do the limited compute resources on the CRAN package 
 build process no metaheuristic will be executed to build this vignette file.
@@ -187,7 +184,14 @@ plot(Cartogram.Income <- recmap(M[order(M$x),]),
 ```
 
 More examples using `state.x77` data and `shiny` application are 
-available through <https://recmap.shinyapps.io/state_x77/>.
+available through <https://recmap.shinyapps.io/state_x77/> or by running the following code snipped.
+
+
+```{r eval=FALSE}
+library(shiny)
+recmap_state.x77 <- system.file("shiny-examples", "state.x77", package = "recmap")
+shiny::runApp(recmap_state.x77, display.mode = "normal")
+```
 
 ## Synthetic checkerboard
 
@@ -237,7 +241,7 @@ to the price of not having all features implemented (simplified local placement;
 no empty space error; no MP1 variant yet).
 Recent research publication on rectangular cartograms drawing include
 [@Speckmann2004], [@Speckmann2007], [@Speckmann2012], [@Buchin:2016].
-However, according to to recent publication [@TheStateoftheArtInCartograms]
+However, according to recent publication [@TheStateoftheArtInCartograms],
 `recmap` remains the only rectangular cartogram algorithm that 'maintain zero 
 cartographic error'. 
 

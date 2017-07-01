@@ -21,11 +21,11 @@
   a vector of colors.
 }
 \item{border}{
-  this parameter is passed to the rect function.
+  This parameter is passed to the \code{\link{rect}} function.
   color for rectangle border(s). The default means par("fg"). 
   Use border = NA to omit borders. If there are shading lines, border = TRUE 
   means use the same colour for the border as for the shading lines.
-  default is 'darkgreen'.
+  The default value is set to \code{'darkgreen'}.
 }
   \item{col.text}{
   a vector of colors.

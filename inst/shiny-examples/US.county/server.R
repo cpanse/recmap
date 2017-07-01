@@ -96,7 +96,11 @@ shinyServer(function(input, output, session) {
     on.exit(progress$close())
     options(warn = -1)
     M <- Map()
+    
     set.seed(1)
+    
+    time.elapsed <- rep(proc.time()[3], input$GAmaxiter)
+    
     res <- recmapGA(
       M,
       maxiter = input$GAmaxiter,
@@ -109,13 +113,15 @@ shinyServer(function(input, output, session) {
         fitness <- na.exclude(object@fitness)
         sumryStat <- c(mean(fitness), max(fitness))
         
+        time.elapsed[object@iter] <- ( proc.time()[3] - time.elapsed[object@iter] ) / object@iter
         progress$set(
           message = "GA",
           detail = paste(
             "iteration",
             object@iter, "/", input$GAmaxiter,
             "fittest = ",
-            round(sumryStat[2], 5)
+            round(sumryStat[2], 5),
+            "\n elapsed time / generation", round(time.elapsed[object@iter], 2), "in secs"
           ),
           value = object@iter / input$GAmaxiter
         )
