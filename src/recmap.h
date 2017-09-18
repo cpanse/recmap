@@ -201,7 +201,7 @@ class RecMap{
       intersect_count = 0;
       }
 
-  // TODO(cp): Think about  a destructor?
+  // TODO(cp): Think about a destructor?
   void push_region(double x, double y, double dx, double dy, double z,
             std::string name) {
     map_region R, R1;
@@ -378,7 +378,7 @@ class RecMap{
       // iterate over all already placed adjacent rectangles
       for (const int &adj_region_id : M[region_id].connected) {
         if (C[adj_region_id].placed > 0) {
-	  // orginial bearing of two map regions in the input map
+	  // orginal bearing of two map regions in the input map
           alpha0 = get_angle(M[adj_region_id], M[region_id]);
           alpha = alpha0 + (beta_sign * beta);
           beta_sign *= -1;

@@ -40,6 +40,7 @@ The output is a rectangular cartogram where the map regions are:
   \item{ratio and area of each rectangle correspond to the desired areas,}
 
   \item{rectangles are placed parallel to the axes.}
+
 }
 
 The construction heuristic places each rectangle in a way that important spatial 
@@ -107,7 +108,7 @@ DFS is visiting each map region only once and therefore has
 time complexity \eqn{O(n)}. For each placement, a constant number of
 MBB intersection are called (max 360). MBB check is implemented using
 \code{std::set}, \code{insert}, \code{upper_bound}, \code{upper_bound} 
-costs are \eqn{O(log(n))}. 
+costs are \eqn{O(\log(n))}{O(log(n))}.
 However, worst case for a range query is \eqn{O(n)}, if and only if dx or dy
 cover the whole x or y range. Q.E.D.
 
