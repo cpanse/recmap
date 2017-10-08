@@ -78,3 +78,4 @@ shiny::runApp(recmap_US.county, display.mode = "normal")
 * [cartogram](https://CRAN.R-project.org/package=cartogram)
 * [Rcartogram](https://github.com/omegahat/Rcartogram)
 * see also [CRAN Task View: Analysis of Spatial Data](https://CRAN.R-project.org/view=Spatial)
+
