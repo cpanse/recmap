@@ -4,9 +4,10 @@
 #
 # https://CRAN.R-project.org/package=recmap
 
-library(shiny)
+library(shinythemes)
 
 shinyUI(fluidPage(# Application title
+  theme = shinytheme("darkly"),
   titlePanel(
     paste(
       "U.S. county population data using recmap version",
