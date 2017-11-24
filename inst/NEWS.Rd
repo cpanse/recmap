@@ -1,8 +1,9 @@
 \name{NEWS}
 \title{News for Package 'recmap'}
 
-\section{Changes until version 0.5.23 (2017-06-26)}{
+\section{Changes until version 0.5.24 (2017-09-16)}{
   \itemize{
+	  \item spell check cosmetics
 	  \item added a progress window in the shiny apps
 	  \item added \code{is.recmap} fucntion.
 	  \item replaced \code{recmap2sp} and \code{sp2recmap} functions by S3methods \code{as.SpatialPolygonsDataFrame} and \code{as.recmap}.
