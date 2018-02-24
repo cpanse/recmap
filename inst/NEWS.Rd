@@ -5,7 +5,7 @@
   \itemize{
 	  \item spell check cosmetics
 	  \item added a progress window in the shiny apps
-	  \item added \code{is.recmap} fucntion.
+	  \item added \code{is.recmap} function.
 	  \item replaced \code{recmap2sp} and \code{sp2recmap} functions by S3methods \code{as.SpatialPolygonsDataFrame} and \code{as.recmap}.
   }
 }
