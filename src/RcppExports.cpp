@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // get_angle
 double get_angle(double x0, double y0, double x1, double y1);
-RcppExport SEXP recmap_get_angle(SEXP x0SEXP, SEXP y0SEXP, SEXP x1SEXP, SEXP y1SEXP) {
+RcppExport SEXP _recmap_get_angle(SEXP x0SEXP, SEXP y0SEXP, SEXP x1SEXP, SEXP y1SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -21,7 +21,7 @@ END_RCPP
 }
 // place_rectangle
 DataFrame place_rectangle(double x0, double y0, double dx0, double dy0, double dx1, double dy1, double alpha);
-RcppExport SEXP recmap_place_rectangle(SEXP x0SEXP, SEXP y0SEXP, SEXP dx0SEXP, SEXP dy0SEXP, SEXP dx1SEXP, SEXP dy1SEXP, SEXP alphaSEXP) {
+RcppExport SEXP _recmap_place_rectangle(SEXP x0SEXP, SEXP y0SEXP, SEXP dx0SEXP, SEXP dy0SEXP, SEXP dx1SEXP, SEXP dy1SEXP, SEXP alphaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -38,7 +38,7 @@ END_RCPP
 }
 // recmap_
 DataFrame recmap_(DataFrame df, DataFrame pd);
-RcppExport SEXP recmap_recmap_(SEXP dfSEXP, SEXP pdSEXP) {
+RcppExport SEXP _recmap_recmap_(SEXP dfSEXP, SEXP pdSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
