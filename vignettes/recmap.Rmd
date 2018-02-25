@@ -19,7 +19,7 @@ vignette: >
 This package contains a C++ implementation of the RecMap algorithm 
 [[@recmap]](http://dx.doi.org/10.1109/INFVIS.2004.57) to draw maps according to 
 given statistical values. These so-called cartograms or value-by-area-maps may 
-be used to visualize any geospatial-related data, e.g. political, economic or 
+be used to visualize any geospatial-related data, e.g., political, economic or 
 public health data.
 The input consists of a map represented by overlapping rectangles.
 This map is defined by the following parameters for each map region:
@@ -48,7 +48,7 @@ spatial constraints, in particular
 
 are tried to be preserved.
 
-The ratios are preserved and the area of each region corresponds to 
+The ratios are preserved, and the area of each region corresponds to 
 the as input given statistical value z.
 
 An example of a rectangular cartogram drawing is shown below.
@@ -85,7 +85,7 @@ The rectangles have to  overlap to compute the dual graph. This enables to
 generate valid input having only the (x, y) coordinates of the map region.
 
 ```{r fig.width=7, fig.height=3}
-op<-par(mfrow=c(1,1), mar=c(0,0,0,0))
+op <- par(mfrow=c(1,1), mar=c(0,0,0,0))
 library(recmap)
 plot.recmap(M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ],  
             col.text = 'black', lwd=2)
@@ -94,9 +94,9 @@ plot.recmap(M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ],
 ## Metaheuristic
 
 The index order of the input map
-has an impact to the resulting cartogram. This algorithmic property is caused due do 
+has an impact to the resulting cartogram. This algorithmic property is caused due to 
 the computation of the dual graph. In [@recmap] a genetic algorithm was applied 
-as metaheuristic. Due do the limited compute resources on the CRAN package 
+as metaheuristic. Due to the limited compute resources on the CRAN package 
 build process no metaheuristic will be executed to build this vignette file.
 
 Study the examples of the reference manual `?recmapGA` on 
@@ -145,7 +145,7 @@ summary(Cartogram.Population)
 
 ```{r fig.width=8, fig.height=4, fig.align='left', fig.cap="Area ~ population estimate as of July 1, 1975;", warning=FALSE}
 
-op<-par(mfrow=c(1,1), mar=c(0,0,0,0))
+op <- par(mfrow=c(1,1), mar=c(0,0,0,0))
 usa$z <- state.x77[, 'Population']
 M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]
 plot(Cartogram.Population <- recmap(M[order(M$x),]), 
@@ -155,32 +155,30 @@ plot(Cartogram.Population <- recmap(M[order(M$x),]),
 
 
 ```{r fig.width=8, fig.height=4, fig.align='left', fig.cap="Area ~ population estimate as of July 1, 1975; a better index order has been chosen to minimize the relative position error."}
-op<-par(mfrow=c(1,1), mar=c(0,0,0,0))
+op <- par(mfrow=c(1,1), mar=c(0,0,0,0))
 # index order
 
 smp <- c(20,47,4,40,9,6,32,33,3,10,34,22,2,28,15,12,39,7,42,45,19,13,43,30,24,
          25,11,17,37,41,26,29,21,35,8,36,14,16,31,48,46,38,23,18,1,5,44,27)
 
-plot(Cartogram.Population <- recmap(M[smp,]), col.text = 'black', lwd=2)
+plot(Cartogram.Population <- recmap(M[smp,]), col.text = 'black', lwd = 2)
 ```
 
 ## `state.x77[, 'Income']`
 
 ```{r fig.width=8, fig.height=4, fig.align='left', fig.cap="Area ~ capita income (1974);"}
-op<-par(mfrow=c(1,1), mar=c(0,0,0,0))
 usa$z <- state.x77[, 'Income']
 M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]
-plot(Cartogram.Income <- recmap(M[order(M$x),]), col.text = 'black', lwd=2)
+plot(Cartogram.Income <- recmap(M[order(M$x),]), col.text = 'black', lwd = 2)
 ```
 
 ## `state.x77[, 'Frost']`
 
 ```{r fig.width=8, fig.height=4, fig.align='left', fig.cap="Area ~ mean number of days with minimum temperature below freezing (1931–1960) in capital or large city;" }
-op<-par(mfrow=c(1,1), mar=c(0,0,0,0))
 usa$z <- state.x77[, 'Frost'] 
 M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]
 plot(Cartogram.Income <- recmap(M[order(M$x),]), 
-            col.text = 'black', lwd=2)
+            col.text = 'black', lwd = 2)
 ```
 
 More examples using `state.x77` data and `shiny` application are 
@@ -195,7 +193,7 @@ shiny::runApp(recmap_state.x77, display.mode = "normal")
 
 ## Synthetic checkerboard
 
-Checker boards provide examples of sets of map regions which 
+Checkerboards provide examples of sets of map regions which 
 do not have ideal cartogram solutions according to Definition 1 [@cartodraw].
 
 
@@ -213,7 +211,7 @@ index.greedy <- c(8, 56, 18, 5, 13, 57, 3, 37, 62, 58, 7, 16, 40, 59, 17, 34,
                   23)
 
 plot(Cartogram.checkerboard8x8.greedy <- recmap(checkerboard8x8[index.greedy,]),
-            col=c('white','white','white','black')[Cartogram.checkerboard8x8.greedy$z])
+            col = c('white','white','white','black')[Cartogram.checkerboard8x8.greedy$z])
 
 # found by a genetic algorithm
 index.ga <- c(52, 10, 27, 63, 7, 20, 32, 18, 47, 28, 6, 55, 11, 61, 38, 50, 5,
@@ -222,7 +220,7 @@ index.ga <- c(52, 10, 27, 63, 7, 20, 32, 18, 47, 28, 6, 55, 11, 61, 38, 50, 5,
               30, 15, 39, 12, 60, 48, 16, 23, 46, 42, 13, 54, 14, 9)
 
 plot(Cartogram.checkerboard8x8.ga <- recmap(checkerboard8x8[index.ga,]),
-            col=c('white','white','white','black')[Cartogram.checkerboard8x8.ga$z])
+            col = c('white','white','white','black')[Cartogram.checkerboard8x8.ga$z])
 
 ```
 
@@ -235,8 +233,8 @@ The purpose of the first implementation [@recmap] was a feasibility
 check on how computer-generated rectangular cartograms with zero area error
 could look like.
 The `recmap` R package on CRAN provides a rectangular cartogram algorithm to be used by any
-R user. Now, it is easy to generate input (e.g, no complex polygon mesh),
-the code is maintainable(<500 lines of `C++` code), and the algorithm is made robust
+R user. Now, it is easy to generate input (e.g., no complex polygon mesh),
+the code is maintainable (less than 500 lines of `C++-11` code), and the algorithm is made robust
 to the price of not having all features implemented (simplified local placement; 
 no empty space error; no MP1 variant yet).
 Recent research publication on rectangular cartograms drawing include
