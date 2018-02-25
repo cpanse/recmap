@@ -78,7 +78,8 @@ shiny::runApp(recmap_US.county, display.mode = "normal")
 
 ## Related approaches
 
-* [cartogram](https://CRAN.R-project.org/package=cartogram)
+* https://CRAN.R-project.org/package=cartogram
 * [Rcartogram](https://github.com/omegahat/Rcartogram)
+* [High-performance software to produce flow-based cartograms.](https://github.com/Flow-Based-Cartograms/go_cart) 
 * see also [CRAN Task View: Analysis of Spatial Data](https://CRAN.R-project.org/view=Spatial)
 
