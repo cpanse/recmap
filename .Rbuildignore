@@ -3,3 +3,4 @@
 ^.*id_rsa.*$
 ^.*Dockerfile$
 ^.*_config.yml$
+^.*.travis.yml$
