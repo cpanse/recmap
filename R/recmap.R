@@ -273,9 +273,9 @@ as.SpatialPolygonsDataFrame.recmap <- function(x, df = NULL, ...){
                                                row.names = x$name)))}
   
   return(SpatialPolygonsDataFrame(SpP, df))
-}
+  }
 
-message("recmap2sp failed.")
+message("as.SpatialPolygonsDataFrame.recmap failed.")
 
 NULL
 }

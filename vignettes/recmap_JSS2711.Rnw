@@ -1,0 +1,1540 @@
+%\VignetteIndexEntry{Rectangular Statistical Cartograms R (JSS submission #2711)}
+\documentclass[nojss]{jss}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{rotating}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% almost as usual
+\author{Christian Panse\\Swiss Federal Institute of Technology in Zurich }
+
+\title{Rectangular Statistical Cartograms in \proglang{R}: The \pkg{recmap} Package}
+
+%% for pretty printing and a nice hypersummary also set:
+\Plainauthor{Christian Panse} %% comma-separated
+\Plaintitle{Compute the Rectangular Statistical Cartogram} %% without formatting
+\Shorttitle{\pkg{recmap}: Compute the Rectangular Statistical Cartogram} %% a short title (if necessary)
+
+%% an abstract and keywords
+\Abstract{
+Cartogram drawing is a technique for showing geography-related 
+statistical information, such as demographic and epidemiological data. 
+The idea is to distort a map by resizing its regions according to a 
+statistical parameter by keeping the map recognizable. 
+This article describes an R package implementing an algorithm called 
+RecMap which approximates every map region by a rectangle  
+where the area corresponds to the given statistical value (maintain zero 
+cartographic error).
+The package implements the computationally intensive tasks in 
+\proglang{C++}.
+This paper's contribution is that it demonstrates on real and synthetic 
+maps how \pkg{recmap} 
+can be used, how it is implemented and used with other statistical packages.
+}
+\Keywords{cartogram, spatial data analysis, geovisualization, demographics, R}
+\Plainkeywords{cartogram, spatial data analysis, geovisualization, demographics, R} %% without formatting
+%% at least one keyword must be supplied
+
+%% publication information
+%% NOTE: Typically, this can be left commented and will be filled out by the technical editor
+%% \Volume{50}
+%% \Issue{9}
+%% \Month{June}
+%% \Year{2012}
+\Submitdate{2016-06-01}
+%% \Acceptdate{2012-06-04}
+
+%% The address of (at least) one author should be given
+%% in the following format:
+\Address{
+  Christian Panse\\
+  ETH Z{\"u}rich\\
+  Functional Genomics Center Zurich\\
+  Winterthurerstr. 190\\
+  CH-8057, Z{\"u}rich, Switzerland\\
+  Telephone: +41/44/63-53912
+  E-mail: \email{cp@fgcz.ethz.ch}\\
+  URL: \url{http://www.fgcz.ch/the-center/people/panse.html}
+}
+
+
+\begin{document}
+
+
+\SweaveOpts{prefix.string = graphics/recmap, eval = TRUE}
+
+
+\newcommand{\abs}[1]{\vert#1\vert}
+
+<<echo = FALSE, eval = TRUE>>=
+options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE, warn = -1)
+
+RECMAP_ENABLE_PARALLEL <- FALSE
+
+dir.create("graphics")
+message("This manuscript requires the R packages: recmap (>=0.5.27), maps, noncensus.")
+message(paste("recmap version", packageVersion('recmap'), "is used."))
+
+
+stopifnot(packageVersion('recmap') >= '0.5.27')
+stopifnot(packageVersion('noncensus') >= '0.1')
+stopifnot(packageVersion('maps') >= '2.0')
+
+library("recmap")
+library("maps")
+library("noncensus")
+library("colorspace")
+
+load(file.path(path.package(package = "recmap"),
+                 file.path("extdata", "recmap_JSS2711.RData")))
+
+set.seed(1)
+@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+The idea to generate a cartogram is to distort a map by
+resizing its regions according to a given statistical
+parameter, but in a way that keeps the map recognizable.
+These so-called cartograms or {\em value-by-area maps}
+may be used to visualize any geo-spatial related data,
+e.g., political, economical, or public health data. There
+exists several algorithms to compute 
+so-called contiguous
+cartograms. An overview on historic, hand-drawn, and
+computer generated cartograms
+can be found in \citet{Waldo, TheStateoftheArtInCartograms}.
+
+For using {\em contiguous cartograms}, the diffusion-based method
+of \citet{pmid15136719} is available through
+the R packages \pkg{Rcartogram} and \pkg{getcartr}
+\citet{Rcartogram,getcartr}.
+
+An alternative approach to {\em contiguous cartograms} is to entirely relax the
+map topology by approximating each map region by basic geometric objects like
+rectangles or circles \citep{circle}.
+Such rectangular cartograms can be generated from geolocation and statistical data. Hence, they provide a useful alternative, even if there are no boundaries available or some statistical values are missing.
+First rectangular cartograms were drawn by hand following a system of construction
+\citep{ErwinRaisz}. Recent research publication on rectangular cartogram drawing include
+\cite{Speckmann2004,Speckmann2007,Speckmann2012,Buchin:2016}.
+However, according to a recent publication, both variants of
+\pkg{recmap} are the only rectangular cartogram algorithms that 'maintain zero
+cartographic error' \citep[section 5.4]{TheStateoftheArtInCartograms}.
+
+The \pkg{recmap} package discussed in this article
+contains an implementation of the RecMap (Map Partition
+variant 2) algorithm \cite{recmap} to draw maps
+according to given statistical parameter. A typical usage
+of a cartogram based visualization is demonstrated in
+Figure~\ref{figure:USelection}.
+
+<<label=us_election2004, keep.source = FALSE, fig = TRUE, width=10, height=4, echo = FALSE, include = FALSE>>=
+op <- par(mar = c(0, 0, 0, 0))
+recmap:::.draw_recmap_us_state_ev()
+par(op)
+@
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth,keepaspectratio]{graphics/recmap-us_election2004}
+\caption{A rectangular statistical cartogram of the U.S. election in 2004 is
+drawn. The area corresponds to the number of electors. Color is indicating
+the outcome of the vote.
+Democrats are represented by the color blue and republicans are
+represented through red coloring.
+Regions with low saturation, e.g., Ohio, Pennsylvania, and Florida,  mark states
+with a tight outcome of the vote (also known as swing states).
+The election cartogram was computed by
+using the original implementation of the construction heuristic
+RecMap MP2 introduced by \citet{recmap}.
+map source: U.S. Census Bureau;
+election data source: \url{http://www.electoral-vote.com/}, November 2004.}
+\label{figure:USelection}
+\end{figure}
+
+The article is organized as follows: The next section
+defines the input and output of the \code{recmap} algorithm and
+the objective functions. In Section~\ref{section:usage},
+the usage of the \pkg{recmap} package using the R shell is
+demonstrated. Section \ref{section:implementation}
+discusses major implementation details and provides some
+benchmark and performance studies. Section~\ref{section:metaheuristic} describes how two
+metaheuristics can be used to find an optimized cartogram
+drawing. In Section~\ref{section:application}, a number
+of applications are presented.
+Section~\ref{section:summary} summarizes and discuss the approach.
+
+\newpage
+\section{Problem definition and objective functions}
+\label{section:obj}
+
+\paragraph{The input} consists of a map represented by overlapping
+rectangles $\mathcal{R} = (r_1, \ldots, r_n)$.
+Each map region $r_j$ contains:
+
+\begin{itemize}
+
+\item a tuple of $(x, y)$ values corresponding to the
+(longitude, latitude) position,
+
+\item a tuple of $(dx, dy)$ of expansion along
+(longitude, latitude),
+
+\item and a statistical value $z$.
+
+\end{itemize}
+
+The $(x, y)$ coordinates represent the center of the
+minimal bounding boxes (MBB).
+The coordinates of the MBB
+are derived by adding or subtracting the $(dx, dy)$ tuple
+accordingly. A tuple $(dx, dy)$ defines also the ratio
+of the corresponding map region. The statistical values 
+$(z_1, \hdots, z_n)$ define the
+desired area of each map region.
+
+The ordering $\Pi$ is an index vector taken from the permutation set $Perm(n)$.
+
+\paragraph{The output} is a rectangular cartogram
+$\mathcal{\overline{R}}$ where the map regions are:
+
+\begin{itemize}
+
+\item non overlapping,
+
+\item connected,
+
+\item rectangles are placed parallel to the axes.
+
+\end{itemize}
+
+Furthermore, for each map region
+the following criteria have to be satisfied:
+
+\begin{itemize}
+
+\item the area is equal to the desired area derived from the
+as input given statistical value $z$,
+
+\item the ratio, $dy/dx$, is preserved.
+
+\end{itemize}
+
+The \code{recmap} construction heuristic is a function
+\begin{eqnarray}
+\label{eqn:f}
+f:\mathbb{R}^{n \times 2} \times \mathbb{R}_{>0}^{n \times 3} \times Perm(n)	&\rightarrow&	\mathbb{R}^{n \times 2} \times \mathbb{R}_{>0}^{n \times 2}
+\end{eqnarray}
+which transforms the set of input rectangles $\mathcal{R}$
+and a permutation $\Pi$
+into a rectangular cartogram
+\begin{eqnarray}
+\label{eqn:Rout}
+\overline{\mathcal{R}}&=&f(\mathcal{R}, \Pi)
+\end{eqnarray}
+so that important spatial constraints,
+in particular
+
+\begin{itemize}
+\item the topology of the dual graph $G(\mathcal{R}, E)$,
+defined by the overlapping input rectangles,
+\item the relative position of map region centers,
+\end{itemize}
+are tried to be preserved.
+
+If the output satifies these criteria, the rectangular
+cartogram is denoted as {\em feasible solution}.
+
+The following equation were introduced by
+\citet[Definition 1]{cartodraw}. The desired area
+$\tilde{A_j}$ of a map region $r_j$ is defined as
+
+\begin{eqnarray} 
+\label{eqn:Adesired}
+\tilde{A_j}&=& z_j \cdot \frac{\sum_{i=1}^{n}A(r_i)} {\sum_{i=1}^{n} z_{i}}
+%&=& z_j \cdot \frac{4 \cdot \sum_{i=1}^{n} dx_i \cdot dy_i} {\sum_{i=1}^{n} z_{i}}
+\end{eqnarray}
+
+where the area of the rectangle $r$ is defined by
+\begin{eqnarray}
+\label{eqn:area}
+A(r) &=& 4 \cdot dx \cdot dy
+\end{eqnarray}
+The objective functions for area $d_A$, shape $d_S$ (ratios of the MBBs),
+relative positon $d_R$, and map topology
+$d_T$, are as defined and described by \citet[equations 2--4]{recmap}:
+
+\begin{eqnarray}
+\label{eqn:obj0}
+d_A&=&d_A(\mathcal{R,\overline{R}})\\
+&=&\sum_{j=1}^{n} \abs{A_j - \tilde{A_j}} \\
+%&=&\frac{1}{\sum_{j=1}^n z_j}\sum_{j=1}^{n} z_j \cdot \frac{\abs{A_j - \tilde{A_j}}}{A_j + \tilde{A_j}} \\
+d_S&=&d_S(\mathcal{\mathcal{R},\overline{R}})\\
+\label{eqn:dS}
+&=&\sum_{j=1}^{n} \abs{ (dy_j/dx_j) - (\overline{dy_j}/\overline{dx_j}) }\\
+d_T&=&d_T(\mathcal{\mathcal{R},\overline{R}})\\
+\label{eqn:dT}
+&=&\frac{|\overline{E}_a\backslash E_a|+ |E_a\backslash\overline{E}_a|}{|\overline{E}_a\cup E_a|},\label{form_topology}\\
+d_R&=&d_R(\mathcal{R},\mathcal{\overline{R}})\\
+\label{eqn:dR}
+\label{eqn:objn}
+&=&\frac{2}{n\cdot\left(n-1\right)}\cdot\sum\limits_{i=1}^{n-1}\sum\limits_{j=i+1}^{n} \abs{\measuredangle (\underbrace{r_i, r_j}_{\in \mathcal{R}}) - \measuredangle(\underbrace{\tilde{r_i}, \tilde{r_j}}_{\in \mathcal{\overline{R}}})}
+\end{eqnarray}
+
+Note, if $\forall j \in \{1, \hdots, n\}: A_j = \tilde{A_j} \Rightarrow d_A = 0$
+and if $\forall j \in \{1, \hdots, n\}: dy_j/dx_j = \overline{dy_j}/\overline{dx_j} \Rightarrow d_S=0$.
+$n=\abs{\mathcal{R}}$ and $E$ denotes the edges of the dual graph.
+$dT$ determines the differences in the pseudo dual graphs. $dR$ measures the angle differences between all pairs of rectangle centers of the input map and output cartogram by using  $\measuredangle (x, y)$ defined as follows\footnote{Implemented using the \proglang{C++} method \code{std::atan2} -- ''Computes the arc tangent of y/x using the signs of arguments to determine the correct quadrant.'' \url{http://en.cppreference.com/w/cpp/numeric/math/atan2}, access: 2017-01-01.}:
+\begin{eqnarray}
+\label{eqn:atan2}
+\measuredangle (x, y) &=& \arctan_2(x, y)
+\end{eqnarray}
+
+To find an optimal rectangular statistical cartogram out of all feasible solutions,
+as it will be intended in this manuscript using \pkg{recmap},
+the optimization problem can be expressed as follows:
+\begin{eqnarray}
+& \underset{\Pi \in Perm(n)}{\text{minimize}}  &  a \cdot d_R + b \cdot d_T \text{~with~} a, b \in \mathbb{R}_{\geq 0} \\
+& \text{subject to}  & d_A = 0, d_S = 0.
+\end{eqnarray}
+
+To find a sufficiently good solution for the optimization problem
+a metaheuristic, as described in section \ref{section:metaheuristic},
+will be applied.
+
+%\input{glossary}
+
+\begin{table}
+\centering
+\begin{tabular}{llr}
+\hline
+\hline
+Term  & Description & Equation\\
+\hline
+$\mathcal{R} = (r_1, \ldots, r_n)$  & overlapping input rectangles  & \\
+$(x, y)$  & coordinates represent the center of a rectangle  & \\
+$(dx, dy)$  & expansion along x and y axes  & \\
+$z$ & statistical value of a rectangle  & \\
+$G(\mathcal{R}, E)$ & dual graph of $\mathcal{R}$ & \\
+$\Pi$ & permutation & \\
+$A(r)$  & area of a rectangle  & \label{eqn:area}\\ 
+$\tilde{A_j}$ & desired area of a map region $j$ & \ref{eqn:Adesired}\\
+\hline
+$d_A$ & area error  & \ref{eqn:obj0}\\
+$d_S$ & shape error & \ref{eqn:dS}\\
+$d_T$ & topology error & \ref{eqn:dT}\\
+$d_R$ & relative position error & \ref{eqn:dR}\\
+$\measuredangle (x, y)$ & angle between two points $x$ and $y$ in $\mathbb{R}^2$  & \ref{eqn:atan2}\\
+%$d_E$ & empty space error & \ref{eqn:dE}\\
+\hline
+$f$ & construction heuristic  & \ref{eqn:f}\\
+$\overline{\mathcal{R}}$  & output / cartogram  & \ref{eqn:Rout}\\
+\hline
+\hline
+\end{tabular}
+\caption{
+The table provides a glossary of the used algebraic terms.
+\label{table:glossary}
+}
+\end{table}
+%\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The package usage}
+\label{section:usage}
+\subsection{The input}
+
+The U.S. map on state level is often used to compare
+cartogram algorithms. To generate a useful dual graph,
+which is a requirement of the algorithm, the
+input map regions have to overlap. 
+For the \code{state.x77} data used in this section
+this can be done by
+correcting lines of longitude derived by the square roots
+of the area values (see Figure~\ref{figure:usage} left).
+
+<<eval = TRUE>>=
+US.map <- data.frame(x=state.center$x,
+    y = state.center$y,
+    dx = sqrt(state.area) / 2 / (0.7 * 60 * cos(state.center$y * pi / 180)),
+    dy = sqrt(state.area) / 2 / (0.7 * 60) ,
+    z = sqrt(state.area),
+    name = state.name)
+head(US.map)
+@
+
+Please note, in general \code{recmap} is not transforming the
+geodetic datum, e.g., WGS84 or Swissgrid.
+Furthermore, geospatial positions have to be mapped from the
+earth surface to the plane.
+This has to be done prior the the cartogram generation.
+An overview of map
+projection can be found in \citet{snyder1997flattening}.
+Map projections aim to optimize towards different objectives, e.g., 
+conformal mapping (preservation of local angles) or area mapping (preservation of area).
+%Map projections try to serve for different objectives,
+%e.g., conformal mapping or area preservation.
+In cartogram publications the map projection aspect is
+often neglected and conformal errors are accepted.
+However, studying U.S. cartograms,
+a cylindrical projection seems to be the projection of choice.
+The \proglang{R} user can find support for a wide variety
+of adequate map projections due to using the \pkg{mapproj}
+package by \cite{mapproj}.
+
+\subsection{Run}
+
+The algorithm takes a \code{data.frame} object having the column 
+names \code{c('x', 'y', 'dx', 'dy', 'z', 'name')}, here the \code{US.map}
+object, as input. Additional control is given by the index order
+and the (dx, dy) values. The index order $\Pi$ defines in which
+order the dual graph is explored and the (dx, dy) values
+define which map region are adjacent.
+
+<<eval = TRUE>>=
+library("recmap")
+# Generate the rectangular statistical cartogram.
+US.cartogram <- recmap(US.map)
+@
+
+\subsection{The output}
+
+The \code{recmap} method returns an S3 class object \code{c('recmap', 'data.frame')} of the
+transformed map. Additional columns in the result contain
+information for topology and relative position error defined in Equations 
+\ref{eqn:dT} and \ref{eqn:dR}.
+The column \code{dfn.num} indicates in which order the dual graph has been 
+explored.
+
+<<eval = TRUE>>=
+head(US.cartogram)
+@
+
+Input and output of the \code{recmap} function can be
+visualized using the S3 method \code{plot.recmap}. The output of the R
+code snippet can be seen in Figure~\ref{figure:usage}.
+Please note: while the input \code{US.map} is not classified as a \code{recmap} class, 
+the \code{plot.recmap} function can not be dispatched by the S3 class system
+and has to be explicitly called.
+
+<<label=usage, eval = TRUE, fig = TRUE, width=12, height=4, echo=TRUE, include=FALSE>>=
+op <- par(mfrow = c(1, 2), mar = c(0, 0, 0, 0))
+plot.recmap(US.map, col.text = 'darkred')
+plot(US.cartogram, col.text = 'darkred')
+@
+
+A summary method implements the calculation of some meta data including the objective functions.
+<<eval = TRUE>>=
+summary(US.cartogram)
+@
+
+\begin{figure}[htbp]
+\centering
+\resizebox{1.0\textwidth}{!}{
+	\includegraphics{graphics/recmap-usage}
+}
+\caption{The \lq usage\rq example, generated from the \lq US State Facts and Figures\rq
+\code{datasets} package, was used for drawing a rectangular
+map approximation.
+The input set of overlapping rectangles is shown left.
+A feasible solution thereof generated with
+\code{recmap} is on the right side.\label{figure:usage}
+The state area, original size of the map region, is used as statistical value.}
+\end{figure}
+
+
+\section{Implementation}
+\label{section:implementation}
+<<label=placement, fig = TRUE, width=9, height=9, echo=FALSE, include=FALSE, eval=TRUE>>=
+place_rectangle <- function(alpha=0.0, a.x=0, a.y=0, a.dx = 1, 
+                                     a.dy = 1, b.dx=2, b.dy=2, text='', ...){
+   
+   rect(a.x - a.dx - b.dx, a.y - a.dy - b.dy, 
+        a.x + a.dx + b.dx, a.y + a.dy + b.dy, 
+        lwd=3, border='grey')
+  
+   rect(a.x - a.dx, a.y - a.dy, 
+        a.x + a.dx, a.y + a.dy)
+   
+  c <- recmap:::place_rectangle(a.x, a.y, a.dx, a.dy, b.dx, b.dy, alpha)
+
+   rect(c$x - c$dx, c$y - c$dy, c$x + c$dx, c$y + c$dy, ...)
+
+   text(c$x, c$y -c$dy , text, pos=3)
+}
+
+op<-par(mfrow=c(3,3), mar=c(0,0,3,0))
+beta <- seq(0, 0.35 * pi, length=9) * rep(c(1,-1),5)[0:9]
+
+rv<-lapply(1:length(beta), function(id){
+  beta0 <- beta[id]
+  
+ 
+  #rr <- lapply(beta[1:id], function(bb){place_rectangle(alpha=(pi/4) + bb, col='#44444444', b.dx=0.1, b,dy=0.1)})
+  
+  plot(0,0, xlim=c(-5,5), ylim=c(-5,5), axes=FALSE, type='n',
+  	main=substitute(paste(beta, '=', b), list(b=round(beta0, 2))),
+  	xlab='', ylab='')
+
+  place_rectangle(alpha=0, col='#44444444')
+  text(0,0,'A')
+
+  if (round(beta0,1) != 1.1){
+	  cc <- '#AA444444'
+  }else{
+	  cc <- '#44AA4444'
+  }
+  place_rectangle(alpha=(pi/4 + beta0), col=cc, text="B")
+  })
+
+@
+
+<<label=bearing, fig = TRUE, width=6, height=6, echo=FALSE, include=FALSE>>=
+op <- par(mar=c(4, 4, 1.5, 0.25))
+plot(0,0, type='n',
+     xlim=c(-7,7), ylim=c(-7,7), 
+     main=expression(f[pl]: bold(R)^6 %*%  group("[",list(-pi, pi),"]") %->% bold(R)^2),
+     asp=1, xlab='x return value', ylab='y return value', axes=FALSE); 
+     #   abline(v=0,h=0)
+
+n <- 90
+
+cm <- rainbow_hcl(n, alpha = 0.5)
+alpha <- seq(-pi, pi, length = n)
+r <- lapply(1:n,
+            function(idx){
+    place_rectangle(alpha[idx], 
+                             col=cm[idx], 
+                             border='#88888877')
+              })
+  
+legend("bottomleft", 
+       as.character(round(seq(-pi,pi, length=9),2)), 
+       #pch=22, 
+       bty='n',
+       fill=rainbow_hcl(9, alpha=0.5),
+       border='white',
+       col='white',
+       title=expression(paste(alpha, " argument", sep=" ")),
+       cex=0.66, horiz = FALSE, bg='white')
+
+  text(0,0,'A')
+
+par(op)
+@
+\begin{figure}[htbp]
+  \centering
+\includegraphics[width=0.49\textwidth]{graphics/recmap-bearing}
+\includegraphics[width=0.49\textwidth]{graphics/recmap-placement}
+\caption{The rainbow colored rectangles graph the feasable positions of 
+a local placement function $f_{pl}$ to place a rectangle $B$ 
+around a given rectangle $A$
+of any angle $\alpha$ between $[-\pi,\pi]$ (left figure).
+There are special cases for quadrant I, II, III, and IV indicated by different
+colors in the graphic.
+On the right figure, B should be placed around A starting with an angle of
+$\frac{\pi}{4}$ (this is the initial relative position in the input map). 
+Since the rectangle 
+can not be placed without overlap (indicated by red) an angle $\beta$ is added.
+\label{figure:bearing}}
+\end{figure}
+
+
+\pkg{recmap} is implemented in \proglang{C++} using features provided by
+the \proglang{C++-11} standard. The input and output data transfer between R and
+the \proglang{C++} \code{recmap} class is handled by using the \pkg{Rcpp} \citep{Rcpp} mechanism.
+The \proglang{C++} \code{recmap} class itself consists of a \code{std::vector} of
+\code{map\_region}. A \code{map\_region} contains all the $(x, y, dx, dy, z)$
+values, a \code{std::vector} of type \code{int} to it neighbor map regions,
+and some additional help variables to ease the error computation. In general
+the construction algorithm follows the map partition 2 (MP2) procedure
+described in \cite{recmap}. 
+%A slightly different heuristic has been chosen for the local placement.
+The local placement function can place any rectangle next to another rectangle 
+as it is demonstrated in Figure \ref{figure:bearing}.
+The current implementation starts with the original bearing $\alpha$ of the two map
+region centers (see Figure \ref{figure:bearing} where $\beta=0$). 
+If the placement does not lead to a feasible solution,
+the angle $\beta$ is added to $\alpha$.
+$\beta$ is iterating between $[0, \pi]$ with step size of $\frac{\pi}{180}$ and a
+changing sign until a placement without overlap has been found. 
+If no placement can be found, the algorithm considers all
+adjacent placed map regions.
+If also in a later step during the DFS a map region can not be placed,
+a non feasible
+solution is accepted. This situation is often caused because the construction
+algorithm is hampered by the input
+configuration of the map regions. Solving this can be very compute expensive
+and often the procedure leads to a solution which will be rejected by the
+metaheuristic due to the bad fitness value.
+
+Furthermore, no genetic algorithm (metaheuristic) has been implemented.
+Here \pkg{recmap} will use the \pkg{GA} package available on CRAN
+as demonstrated in section \ref{section:metaheuristic}. The most computationally
+expensive part is the computation of MBB intersections which has to be
+performed to achieve feasible solutions, multiple times, for each placement
+step. In the package version 0.2.1 these tests were performed by iterating
+over each map region. All later versions use a \code{std::multiset} data
+structure and a \code{std::lower\_bound} algorithm 
+of the \proglang{C++} Standard Template Library (STL)
+to reduce the search
+space.
+
+The time complexity for one \code{recmap} run is $\mathcal{O}(n^2)$, where $n$ is the number of
+regions. A depth first search (DFS) run is visiting each map region only
+once and therefore it has time complexity $\mathcal{O}(n)$. For each
+\code{map\_region} placement a constant number of MBB intersection are
+called (max 360). MBB check is implemented using \code{std::multiset}
+container, and the functions \code{std::insert}, \code{std::upper\_bound},
+and \code{std::upper\_bound}. The time complexity for all of these functions
+are reported on \url{http://www.cplusplus.com/reference/stl} as
+$\mathcal{O}(\log(n))$. However, the worst case scenario for a range query is
+$\mathcal{O}(n)$, iff dx or dy cover the whole x or y range. The boxplots in
+Figure~\ref{figure:benchmark} (left plot) show that the number of MBB
+intersection test calls could be reduced by using a \code{std::multiset} data
+structure. For this benchmark, synthetic
+checkerboards with a number of map regions in the interval of $\left[2^2, \ldots,
+20^2\right]$ were generated using the R function
+\code{checkerboard}. For each checkerboard size \code{recmap}
+was called 100 times using different index orderings of the checkerboard
+input. The index order of the input records have a direct impact how the
+DFS is traversing the map. This characteristic will later be used for the
+metaheuristic.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+For a performance study the checkerboard bench described above was repeated
+using the \pkg{rbenchmark} package by \cite{rbenchmark} to measure the \code{proc.time}. The
+study was performed on two systems (using one core only). An Intel(R) Core(TM)
+i5-2500 CPU @ 3.30GHz running a Debian 8 using a 3.16.0-4-amd64 Kernel and a
+3 GHz Intel Core i7 (Apple MacBook Pro) running OS X 10.11.4 (15E65) using a
+Darwin 15.4.0 Kernel. The middle graphic in Figure~\ref{figure:benchmark}
+displays the resulting mean aggregated measured data of the two (hardware /
+OS) systems using the two different implementations of the MBB intersection
+test. Beside the fact that the Linux system can not benefit from the more
+efficient implementation of the MBB intersection test,
+the graphic (middle) shows even for an input
+size of $20^2=400$ map regions, a rectangular cartogram can be computed in
+less than a second.
+
+<<label=benchmark, fig = TRUE, width=12, height=4, echo=FALSE, include=FALSE, eval=TRUE>>=
+op <- par(mar=c(4, 4, 1, 1), mfrow = c(1, 3))
+
+boxplot(number ~ size, data = mbb_check, subset = algorithm == "linear",
+	col = "red", at=2:20-0.2, boxwex = 0.25, log='y', axes = FALSE)
+
+boxplot(number ~ size, data = mbb_check, subset = algorithm == "multiset",
+	at = 2:20 + 0.2, boxwex = 0.25, add = TRUE, axes = FALSE,
+	xlab = 'number of map regions',
+	ylab = 'number of MBB intersection calls');
+
+legend("bottomright", c("recmap > 0.2.1", "recmap <= 0.2.1"),
+	col=c('black', 'red'), pch = 22, cex = 1.5)
+
+axis(1, c(5, 10, 15, 20), c("5x5", "10x10", "15x15", "20x20"))
+axis(2)
+box()
+################################################################################
+x <- c(2:20)
+maci7_2.5 <- c(0.189, 0.184, 0.194, 0.237, 0.295, 0.423, 0.65, 0.973, 1.405,
+	2.318, 3.648, 6.05, 7.661, 9.076, 14.27, 18.264, 23.075, 27.5, 36.388) / 100
+
+maci7_2.1 <- c(0.175, 0.184, 0.208, 0.337, 0.465, 0.746, 1.291, 1.925, 2.901,
+	4.71, 7.466, 11.496, 15.215, 20.157, 26.262, 33.669, 50.556, 55.932, 67.337) / 100
+
+linuxi5_2.1 <- c(0.176, 0.26, 0.372, 0.632, 0.904, 1.416, 2.176, 3.016, 4.08, 6.14,
+	8.604, 11.996, 15.384, 19.192, 25.448, 32.74, 39.54, 46.392, 60.116) / 100
+
+linuxi5_2.5 <- c(0.192, 0.28, 0.38, 0.64, 0.892, 1.372, 2.136, 3.008, 4.1, 6.3,
+	8.892, 12.5, 16.768, 21.092, 28.112, 36.772, 43.816, 52.036, 69.66) / 100
+
+plot(x, linuxi5_2.5,
+    xlab = 'number of map regions',
+    ylim = range(c(maci7_2.5, maci7_2.1, linuxi5_2.5 , linuxi5_2.1)),
+    ylab = 'mean $user.self [in seconds]', type='b',
+    pch = "L",
+    axes = FALSE,
+    log = '',
+    lwd = 2)
+abline(a = 0, b = 1, col = 'lightgrey')
+lines(x, linuxi5_2.1, col = 'red', pch = "L", type = 'b', lwd = 2)
+
+lines(x, maci7_2.5, col = 'black', pch = "A", type = 'b',lwd = 1)
+lines(x, maci7_2.1, col = 'red', pch = "A", type = 'b',lwd = 1)
+legend("topleft", c("recmap 0.3.0 MacOSX i7", "recmap 0.3.0 Debian i5",
+	"recmap 0.2.1 MacOSX i7", "recmap 0.2.1 Debian i5"),
+	col=c('black', 'black', 'red', 'red'), pch=c('A', 'L', 'A', 'L'), cex = 1.5)
+axis(1, c(5, 10, 15, 20), c("5x5", "10x10", "15x15", "20x20"))
+axis(2)
+box()
+
+################################################################################
+plot(x, round(1 / maci7_2.5),
+	xlab = 'number of map regions',
+	ylab = 'number of rectangular cartograms generated per second',
+	axes = FALSE,
+	type = 'n',
+	log = 'y')
+
+abline(v = sqrt(50), col = 'lightgray', lwd = 3)
+
+points(x, round(1 / maci7_2.5),
+	pch = 22)
+
+legend("topright", c("recmap 0.3.0 MacOSX i7"), pch = 22, cex = 1.5)
+axis(1, c(5, sqrt(50), 10, 15, 20), c("5x5", "US", "10x10", "15x15", "20x20"))
+axis(2)
+box()
+@
+\begin{figure}[htbp]
+  \centering
+\includegraphics[width=1.0\textwidth]{graphics/recmap-benchmark}
+\caption{The boxplot (left) graphs the number of MBB intersection test calls for a
+given checkerboard size. The graph in the middle displays the mean aggregated
+measured computation time.
+The scatterplot (right) displays how many rectangular cartograms can be generated
+within one second depending on the board size.
+\label{figure:benchmark}}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The right plot in Figure~\ref{figure:benchmark} was derived from the
+performance study (plot in the middle). It shows the number of rectangular
+cartograms which can be generated within one second depending on the number
+of map regions. The grey vertical line indicates the number of the U.S. map
+regions. The ability to generate a high number of cartogram candidates in a
+short time period is an important requirement for any metaheuristic as it is
+demonstrated in the next section.
+
+\section{Choose a metaheuristic}
+\label{section:metaheuristic}
+
+The design of the \pkg{recmap} algorithm is as follows: First, compute a set
+of feasible solutions. In a second evaluation step choose the best solution.
+In the current implementation, variations can be introduced
+by changing the index order $\Pi$ of the input data.
+This has a direct impact to the DFS traversal
+and leads to different cartogram layouts.
+The objective functions, equations \ref{eqn:obj0} to \ref{eqn:objn},
+can be used to evaluate the result and to define a
+fitness function which has to be maximized.
+The following R code defines the
+fitness function which will be used as default.
+
+<<eval = TRUE, echo = TRUE>>=
+recmap:::.recmap.fitness
+@
+
+Other variants of fitness functions will lead to different results as it is shown
+in \cite[Figure 4]{recmap}.
+
+Since it is not possible to compute and evaluate all permutations,
+which is $n!$,
+random experiments are conducted.
+In the following section it is demonstrated how two metaheuristic,
+GRASP and GA, can be used
+to find a optimal layout for the rectangular statistical cartogram.
+
+For a visual evaluation, of the in this section proposed metaheuristics,
+an 8x8 checkerboard will be used as input map.
+The map is generated using the \code{checkerboard} method
+<<eval=TRUE>>=
+Checkerboard <- checkerboard(8)
+summary(Checkerboard)
+@
+and can be seen in Figure~\ref{figure:cmp_GA_GRASP} (left).
+If the assumption is made, that for each vertex,
+the cyclic order of edges in the contiguous cartogram 
+remains the same as as in the input map,
+checkerboards provide examples
+of sets of map regions which do not have ideal cartogram
+solutions \citep[Definition 2, Lemma 1, Fig. 3.]{cartodraw}.
+
+\subsection{Greedy Randomized Adaptive Search Procedures}
+
+One group of optimizer is \lq trivial to efficiently
+implement\rq~\citep{GRASP} and
+can directly benefit from a parallel environment is called {\em greedy
+randomized adaptive search procedures} (GRASP). 
+The R method \code{recmapGRASP} defines a generic GRASP implementation as described in~\cite[Fig.~1]{GRASP}.
+The \code{recmapGRASP} function generates a set of rectangular
+cartograms which have different layouts caused by the
+random sampling. Each cartogram is evaluated. The best
+candidate is saved. The following command will generate cartogram solution
+based on a GRASP metaheuristic.
+
+<<eval=FALSE>>=
+set.seed(1)
+res.GRASP <- recmapGRASP(Checkerboard)
+plot(res.GRASP$Cartogram,
+  col = c('white', 'white', 'white', 'black')[res.GRASP$Cartogram$z])
+@
+
+A drawing of the cartogram can be found in Figure~\ref{figure:cmp_GA_GRASP}
+(middle).
+
+For some types of input maps, GRASP can generate amazing results in a short time.
+As it can be seen in Figure~\ref{figure:cmp_GA_GRASP}, for the checkerboard map,
+GRASP is outperformed by the genetic algorithm, introduced in the next section.
+The plot in Figure~\ref{figure:cmp_GA_GRASP2} (right) shows that the solution
+process runs too fast into a saturation.
+
+\subsection{Lessons learnt from biological evolution}
+
+In this paragraph a constraint-based genetic algorithm
+(GA) as discussed in \cite{recmap} is used as
+metaheuristic. Here the construction heuristic benefits
+from the existence of the \pkg{GA} package by \cite{GA}.
+The GA configuration used for \code{recmap} was directly
+derived from the {\em traveling salesperson problem} (TSP) example
+\cite[section 4.8]{GA} using the {\em permutation} type of the \code{ga} method.
+As genotype the index order $\Pi$ of the input map is used. The
+following command generates an almost perfect rectangular
+cartogram for the checkerboard map having 64 map regions
+on the author's laptop\footnote{Mac Book Pro from 2015, please find the hardware 
+specification in Table \ref{table:overview}.} 
+within 60 seconds.
+
+<<eval=FALSE>>=
+recmap.GA <- ga(type = "permutation",
+    fitness = recmap:::.recmap.fitness,
+    Map = Checkerboard,
+    min = 1, max = nrow(Checkerboard),
+    popSize = 64,
+    maxiter = 1000,
+    maxFitness = 1.7,
+    parallel = TRUE,
+    pmutation = 0.25)
+@
+
+The metaheuristic stops when a maximum number of
+iteration has been performed or the fitness value is
+higher than 1.7. Having reached a fitness value of 1.7
+using the \code{recmap.fitness} function the result
+in Figure~\ref{figure:cmp_GA_GRASP} (right)
+looks like an almost \lq optimal\rq solution.
+
+The \code{recmapGA} function is a higher level wrapper function to glue
+the \code{recmap} construction heuristic with the metaheuristic \code{ga}.
+
+<<eval=FALSE>>=
+res.GA <- recmapGA(Checkerboard)
+summary(res.GA)
+plot(res.GA$Cartogram, 
+  col=c('white', 'white', 'white', 'black')[res.GA$Cartogram$z])
+@
+
+The \code{recmapGA} function returns a list of the input \code{Map},
+The solution of the GA, and a \code{recmap} object containing the cartogram.
+The resulting cartograms using a GA can be seen in
+Figure~\ref{figure:cmp_GA_GRASP} (right).
+The red line in Figure~\ref{figure:cmp_GA_GRASP2} (left)
+indicates in which order the rectangles
+were placed using the DFS numbering. The red $\bullet$ symbol marks the first
+placed rectangle and the $\diamond$ the last one.
+
+<<label=CB8_GRASP_GA, fig = TRUE, width=6, height=2, echo=FALSE, include=FALSE, eval = TRUE>>=
+op <- par(mar=c(0, 0, 0, 0), mfrow=c(1, 3), bg = 'azure')
+
+plot(checkerboard8x8 <- checkerboard(8),
+	    border='black',
+            col=c('white', 'white', 'white', 'black')[checkerboard8x8$z])
+
+# found by a greedy randomized search
+index.greedy <- c(8, 56, 18, 5, 13, 57, 3, 37, 62, 58, 7, 16, 40, 59, 17, 34,
+                  29, 41, 46, 27, 54, 43, 2, 21, 38, 52, 31, 20, 28, 48, 1, 22,
+                  55, 11, 25, 19, 50, 10, 24, 53, 47, 30, 45, 44, 32, 35, 51,
+                  15, 64, 12, 14, 39, 26, 6, 42, 33, 4, 36, 63, 49, 60, 61, 9,
+                  23)
+
+plot(Cartogram.checkerboard8x8.greedy <- recmap(checkerboard8x8[index.greedy, ]),
+	    border='black',
+            col = c('white', 'white', 'white', 'black')[Cartogram.checkerboard8x8.greedy$z])
+
+# found by a genetic algorithm
+index.ga <- c(52, 10, 27, 63, 7, 20, 32, 18, 47, 28, 6, 55, 11, 61, 38, 50, 5,
+              21, 36, 34, 2, 22, 3, 1, 29, 57, 43, 4, 51, 58, 31, 49, 44, 25,
+              59, 33, 17, 40, 8, 41, 26, 37, 19, 56, 45, 35, 62, 53, 24, 64,
+              30, 15, 39, 12, 60, 48, 16, 23, 46, 42, 13, 54, 14, 9)
+
+plot(Cartogram.checkerboard8x8.ga <- recmap(checkerboard8x8[index.ga,]),
+  col = c('white', 'white', 'white', 'black')[Cartogram.checkerboard8x8.ga$z])
+@           
+           
+<<label=CB8, fig = TRUE, width=4, height=4, echo=FALSE, include=FALSE, eval = TRUE>>=
+op <- par(mar = c(0, 0, 0, 0), mfrow=c(1, 1), bg = 'azure')
+Checkerboard <- checkerboard(8)
+#plot(Checkerboard <- checkerboard(8),
+#            col=c('white','white','white','black')[Checkerboard$z])
+
+# found by the GA
+smp <- c(52, 10, 27, 63, 7, 20, 32, 18, 47, 28, 6, 55, 11, 61, 38,
+50, 5, 21, 36, 34, 2, 22, 3, 1, 29, 57, 43, 4, 51, 58, 31, 49, 44,
+25, 59, 33, 17, 40, 8, 41, 26, 37, 19, 56, 45, 35, 62, 53, 24, 64,
+30, 15, 39, 12, 60, 48, 16, 23, 46, 42, 13, 54, 14, 9)
+
+Cartogram.Checkerboard <- recmap(Checkerboard[smp, ])
+idx <- order(Cartogram.Checkerboard$dfs.num)
+
+plot(Cartogram.Checkerboard,
+	    border='black',
+            col=c('white', 'white', 'white', 'black')[Cartogram.Checkerboard$z])
+
+# draw placement order
+lines(Cartogram.Checkerboard$x[idx], Cartogram.Checkerboard$y[idx], col = 'red', lwd = 2)
+points(Cartogram.Checkerboard$x[idx[1]], Cartogram.Checkerboard$y[idx[1]], lwd = 5, col = 'red')
+points(Cartogram.Checkerboard$x[idx[length(idx)]], Cartogram.Checkerboard$y[idx[length(idx)]],
+  cex = 1.25, lwd = 2, col = 'red', pch = 5)
+@
+
+<<label=cmp_GA_GRASP, fig = TRUE, width=4, height=4, echo=FALSE, include=FALSE>>=
+op <- par(mar = c(4, 4, 0.5, 0.5), mfrow = c(1, 1), bg = 'white')
+
+plot(cmp_GA_GRASP$GA[, 1], cmp_GA_GRASP$GA[, 2], type = 'b',
+     xlab = 'elapsed time [in seconds]',
+     ylab = 'recmap.fitness', pch = 22, lwd = 2)
+
+lines(cmp_GA_GRASP$GRASP[, 1], cmp_GA_GRASP$GRASP[, 2], col = 'red', type = 'b', pch = 23)
+legend("bottomright", c("GA", "GRASP"), col = c('black', 'red'),
+    pch=c(22, 23), cex=1.5)
+@
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=1.0\textwidth,keepaspectratio]{graphics/recmap-CB8_GRASP_GA}
+\caption{A comparison of the input map, GRASP, and GA is
+displayed. As input map a 8x8 checkerboard (left) has been generated.
+The area of a black box needs to be four times as large as the area of a white
+box. The cartogram in the middle proposes a solutions generated by a GRASP
+metaheuristic. The right cartogram graphs a solution computed by a genetic
+algorithm within one minute.}
+\label{figure:cmp_GA_GRASP}
+\end{figure}
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[height=0.49\textwidth,keepaspectratio]{graphics/recmap-CB8}
+\includegraphics[height=0.49\textwidth,keepaspectratio]{graphics/recmap-cmp_GA_GRASP}
+\caption{The left map graphs the order of the placement during the cartogram
+generation. The right plot displays the \code{recmap.fitness} values versus
+elapsed time of the two metaheuristics (right).\label{figure:cmp_GA_GRASP2}}
+\end{figure}
+
+Figure \ref{figure:GAseed} illustrates the variability in solutions,
+dependent on the initial seed value. The experiment was repeated twice to
+demonstrate the effect that the same seed values lead to the same
+permutation order $\Pi$ and finally to the same cartogram construction.
+<<label=GAseed, fig = TRUE, width=16, height=8, echo=FALSE, include=FALSE, eval = TRUE>>=
+library(recmap)
+res <- lapply(c(1,1,2,2,3,3), function(seed){
+  set.seed(seed); 
+  res <- recmapGA(Map = checkerboard(4), pmutation = 0.25)
+  res$seed <- seed
+  res})
+ 
+op <- par(mfcol=c(2,4), bg='azure', mar=c(5, 0.5, 0.5, 0.5))
+
+x <- recmap(checkerboard(4))
+p <- paste(' = (', paste(1:length(x$z), collapse=", "), ')', sep='')
+plot(x, 
+      sub=substitute(paste(Pi['forward'], p), list(p=p)), 
+      col = c('white', 'white', 'white', 'black')[x$z])
+
+x <- recmap(checkerboard(4)[rev(1:16),])
+p <- paste(' = (', paste(rev(1:length(x$z)), collapse=", "), ')', sep='')
+plot(x, 
+      sub=substitute(paste(Pi[reverse], p), list(p=p)), 
+      col = c('white', 'white', 'white', 'black')[x$z])
+
+
+rv <- lapply(res, function(x){
+  p <- paste(' = (', paste(x$GA@solution[1,], collapse=", "), ')', sep='')
+  plot(x$Cartogram, 
+       col = c('white', 'white', 'white', 'black')[x$Cartogram$z],
+       sub=substitute(paste(Pi[seed], perm), list(perm=p, seed=x$seed)))
+  }) 
+@
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth,keepaspectratio]{graphics/recmap-GAseed}
+\caption{This graphical example illustrates the variability in
+solutions, dependent on the initial seed value in $\Pi_{\texttt{seed}}$.
+The left column displays forward and reverse index orders. All other columns
+show the results from duplicate seeds $\{1,2,3\}$ to demonstrate that the same 
+seed will lead to the same index order and to the identical layout of the cartogram.
+\label{figure:GAseed}}
+\end{figure}
+
+
+<<eval = TRUE>>=
+fitness.weighted <- function (idxOrder, Map, ...) 
+{
+    Cartogram <- recmap(Map[idxOrder, ])
+    if (sum(Cartogram$topology.error == 100) > 0) {
+        return(0)
+    }
+    
+    S <- summary(Cartogram)
+    dT <- max(Cartogram$topology.error)
+    dR <- S["relative position error",]
+    dE <- (100 - S["screen filling [in %]",]) / 100
+    
+    # weighting the objectives
+    1 / (c(0.2, 0.6, 0.2) %*% c(dT, dR, dE))
+}
+@
+
+<<echo = TRUE, eval = TRUE>>=
+set.seed(2)
+US.map.best <- recmapGA(Map = US.map,
+         fitness = fitness.weighted, 
+         maxiter = 100,
+         maxFitness = 100,
+         popSize = 50,
+         keepBest = TRUE, 
+         pmutation = 0.35, 
+         parallel = RECMAP_ENABLE_PARALLEL)
+@
+
+<<label=bestSolutionFitness, fig = TRUE, width=8, height=4, echo=FALSE, include=FALSE>>=
+fitness <- unlist(lapply(US.map.best$GA@bestSol, 
+                         function(x){fitness.weighted(idxOrder = x[1,], Map=US.map)}))
+
+op <- par(mfrow = c(1, 2))
+plot(US.map.best$GA)
+#rr.index <- which(fitness[2:length(fitness)] > (fitness[1:length(fitness) - 1] + 0.003))
+GA.generation <- c(1, 6, 12, 25, 50, 100)
+abline(v = GA.generation, col='darkred')
+
+image(t(sapply(US.map.best$GA@bestSol, function(x){x[1,]})), 
+      col=grey.colors(50), las = 2, axes = FALSE, xlab = 'Generation', ylab = 'Index order');
+axis(1, c(0.2,0.4,0.6,0.8,1), seq(20, 100, by = 20)); 
+axis(2, c(0.2,0.4,0.6,0.8,1), seq(10, 50, by = 10))
+abline(v = GA.generation / 100, col='darkred')
+@
+
+<<label=bestSolution, fig = TRUE, width=8, height=8, echo=FALSE, include=FALSE>>=
+par(mfrow=c(3,2), mar=c(0,0,0,0))
+
+rv <- lapply(GA.generation, function(idx){
+      p <- US.map.best$GA@bestSol[[idx]][1,]; 
+      fitness <- fitness.weighted(idxOrder = p, Map = US.map)
+      C <- recmap(US.map[p,])
+  
+  plot(C, col.text='darkred') 
+  S <- summary(C)
+  legend("bottomright", title=paste("Generation", idx),
+                       c(paste("dT =", max(C$topology.error)),
+                       paste("dR =", round(S[4,],2)),
+                       paste("dE =", round(S[5,]))))
+})
+@
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth,keepaspectratio]{graphics/recmap-bestSolutionFitness}
+\includegraphics[width=0.85\textwidth,keepaspectratio]{graphics/recmap-bestSolution}
+\caption{The plot on the top left displays the fitness value during the 
+increasing generation of the genetic algorithm. 
+The image plot on the top right visualizes the genotype ($\Pi$) change from one
+generation to the other
+using a grey colormap for encoding the index order.
+The six phenotypes visualize the improvement of the solution with an increasing 
+number of generations.\label{figure:bestSolution}}
+\end{figure}
+The regtangular map approximations in Figure~\ref{figure:bestSolution}
+demonstrate the continuous improvement of the feasible solutions
+with an increasing number of generations using the GA as metaheuristic for the
+data used in Section~\ref{section:usage}.
+
+Note that the metaheuristic of the space filling {\em Quad Tree} \citep{Finkel1974} based 
+RecMap MP1 variant could also be realized 
+by using the \pkg{GA} package.
+Here, instead of a permutation, a binary representation of decision variables has to be chosen.
+This can be done by setting the \code{type} attribute of the \code{ga} function to \code{'binary'}.
+The genotyp, given as a binary vector, is defining the split type of the
+{\em Quad Tree} data structure. A '1' is applying a vertical split while a '0' 
+triggers a horizontal split. 
+%A potential next step could be the implementation of the
+%space filling RecMap MP1 variant, following the
+%construction steps described by Erwin Raisz.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Application}
+\label{section:application}
+
+This section applies \pkg{recmap} to some real world maps
+having numbers of map regions of different magnitudes
+and different
+kind of topology. Beside Figures~\ref{figure:USelection}
+and \ref{figure:x77} the examples focus more on the
+demonstration of the drawing characteristics of the
+\code{recmap} method itself and less on the information
+visualization scopes.
+Figure~\ref{fig:brexit} demonstrates how \pkg{recmap}
+objects can be transformed to \code{SpatialPolygonsDataFrame}
+objects.
+
+\paragraph{US State Facts and Figures based cartograms}
+are displayed in Figure~\ref{figure:x77}. The data are
+available from the data frame \code{state.x77}. On the
+cartograms two statistical data are displayed using the
+area and the color of a map region.
+The colormap was generated by using the \code{heat\_hcl}
+function of the \pkg{colorspace} package by \cite{colorspace} (red is low; white is high).
+% The colors are the %default R \code{heat.colors}
+The code below is a wrapper function for the
+\code{recmap} and the \code{ga} functions. A tuple of
+\code{state.x77} column names is given as input.
+
+<<eval = TRUE>>=
+
+recmap_state_x77 <- 
+function(input, Map = US.map, DF = state.x77,
+  cm = heat_hcl(10)){
+  # join
+  Map <- cbind(Map, DF, match(Map$name, row.names(DF)))
+
+  # filter 
+  Map <- Map[!Map$name %in% c("Hawaii", "Alaska"), ]
+
+  # set attribute for desired area
+  Map$z <- Map[, input$area]
+
+  ptm <- proc.time()
+  res <- recmapGA(Map = Map,
+    popSize = 300, maxiter = 30, run = 10,
+    parallel = RECMAP_ENABLE_PARALLEL)
+
+  # set attribute for the coloring 
+  S <- Map[res$GA@solution[1, ], input$color]
+  col.idx <- round((length(cm) - 1)  * (S - min(S)) / (max(S)  - min(S))) + 1
+		    
+  # have fun
+  plot(res$Cartogram, col = cm[col.idx], col.text='black')
+  legend("bottomleft", c(paste("area:", input$area), 
+                         paste("color:", input$color)), cex=1.5)
+
+  res$time.elapsed = (proc.time() - ptm)[3]
+  res
+}
+@
+
+As input map the \code{US.map} defined in Section~\ref{section:usage} is used.
+An interactive \pkg{shiny}~\citep{shiny} web application,
+using this method, provides more combination of
+attributes and is available through
+\url{https://recmap.shinyapps.io/state_x77/}.
+
+<<label=x77, fig = TRUE, width=8, height=16, echo=TRUE, keep.source = FALSE, include=FALSE>>=
+op <- par(mfrow = c(4, 1), mar = rep(0.25, 4), bg = 'white')
+set.seed(1)
+cartogram.x77 <- lapply(list(list(color="Area", area="Population"),
+  list(color="HS Grad", area="Murder"),
+  list(color="HS Grad", area="Income"),
+  list(color="Life Exp", area="Illiteracy")),
+  recmap_state_x77)
+par(op)
+@
+
+<<label=x77GA, fig = TRUE, width=3, height=12, echo=TRUE, keep.source = FALSE, include=FALSE>>=
+op <- par(mar = c(5, 5, 3, 3), mfrow = c(4, 1))
+res <- lapply(cartogram.x77, function(x){plot(x$GA)})
+par(op)
+@
+    
+\begin{figure}[htbp]
+\centering
+\includegraphics[height=0.9\textheight,keepaspectratio]{graphics/recmap-x77}
+\includegraphics[height=0.9\textheight,keepaspectratio]{graphics/recmap-x77GA}
+\caption{Rectangular Statistical Cartograms using the 'US State Facts
+and Figures' dataset are drawn (see also
+\url{https://recmap.shinyapps.io/state_x77/}).
+The fitness values versus the generations are displayed in the plots on the right.
+The plots on the right column display the fitness values versus the generation of 
+the genetic algorithm during the optimization process.
+}
+\label{figure:x77}
+\end{figure}
+
+
+<<label=us_counties, fig = TRUE, width=8, height=16, echo=FALSE, include=FALSE>>=
+# install.packages(c('maps', 'noncensus'))
+data("counties")
+get_county_mbb <- function(state='colorado'){
+  MBB <- lapply(map('county', state, plot = FALSE)$names,
+                function(x){
+                  r <- map('county', x, plot = FALSE)
+                  dx <- 0.5 * (r$range[2] - r$range[1])
+                  dy <- 0.5 * (r$range[4] - r$range[3])
+                  x <- r$range[1] + dx
+                  y <- r$range[3] + dy
+                  data.frame(polyname=r$name, x=x, y=y, dx=dx, dy=dy)
+                  }
+                )
+  MBB <- do.call('rbind', MBB)
+  MBB <- merge(MBB, county.fips, by='polyname')
+  MBB$fips <- as.integer(MBB$fips)
+ 
+  P <- data.frame(fips = paste(counties$state_fips,
+                  counties$county_fips, sep=''),
+                  z = counties$population,      
+                  name = counties$county_name)
+  P$fips <- as.integer(levels(P$fips))[P$fips]
+ 
+  M <- merge(MBB, P, by='fips')
+  class(M) <- c('recmap', 'data.frame')
+  M
+}
+
+recmap_ga_county <- function(state='colorado'){
+  M <- get_county_mbb(state)
+  plot(M, col.text = 'darkred')
+  M$dx = 1.25 * M$dx
+
+# Start the clock!
+ptm <- proc.time()
+ 
+  recmapGA <- ga(type = "permutation",
+    fitness = function(idxOrder, Map, ...){
+      Cartogram <- recmap(Map[idxOrder, ])
+      if (sum(Cartogram$topology.error == 100) > 0){return (0)}
+      1 / sum(Cartogram$relpos.error)
+    },
+    Map = M,
+    #monitor = gaMonitor2,
+    min = 1, max = nrow(M),
+    popSize = nrow(M)*5,
+    maxiter = 200,
+    run = 20,
+    parallel=RECMAP_ENABLE_PARALLEL,
+    pmutation = 0.25)
+  
+    plot(Cartogram <- recmap(M[recmapGA@solution[1, ], ]), col.text = 'darkred')
+    summary(Cartogram)
+    
+    list(GA = recmapGA, 
+    	Map = M, 
+	Cartogram = Cartogram, 
+	state = state, 
+	time.elapsed = (proc.time() - ptm)[3])
+}
+
+set.seed(1)
+op <- par(mfrow = c(5, 2), mar = c(0, 0, 0, 0), bg = 'white')
+res.us_county <- lapply(c('california',
+    'colorado',
+    'florida',
+    'new jersey',
+    'new york'),
+    recmap_ga_county)
+@
+
+<<label=us_countiesGA, fig = TRUE, width=3.75, height=15, echo=FALSE, keep.source = FALSE, include=FALSE>>=
+op <- par(mar = c(5, 5, 3, 3), mfrow = c(5, 1))
+res <- lapply(res.us_county, function(x){plot(x$GA)})
+par(op)
+@
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[height=0.8\textheight, keepaspectratio]{graphics/recmap-us_counties}
+\includegraphics[height=0.8\textheight, keepaspectratio]{graphics/recmap-us_countiesGA}
+\caption{U.S. input maps (left) of California, Colorado, Florida,
+New~Jersey, and New~York on county level were used as input to compute
+2010 census population cartograms (middle; top to bottom).
+}
+\label{figure:us_census}
+\end{figure}
+
+\paragraph{US population cartograms on county level} 
+showing cartograms of
+California, Colorado, Florida, New~Jersey, and New~York
+are displayed in Figure~\ref{figure:us_census}. The map
+material was extracted from the \pkg{maps}
+package by \cite{maps}
+and the population data were retrieved from the
+\pkg{noncensus} package by \cite{noncensus}. The map
+regions were joined over the fips (Federal Information
+Processing Standard) county codes using the
+\code{counties} data frame.
+The cartograms were generated by using the genetic algorithm as metaheuristic.
+
+\paragraph{A population cartogram of Switzerland} on
+community (Gemeinde) level is drawn in
+Figure~\ref{figure:Switzerland:population}. The
+rectangles of the original map were extracted from an
+ESRI shape file of the map data Landschaftsmodelle: GG25
+from the Federal Office of Topography (swisstopo) using
+\pkg{shapefiles} by~\cite{shapefiles}. The following
+attributes were extracted for each map region:
+\code{box}, \code{Gemeindecode}, and \code{Gemeindename}.
+There are 2300 rectangles to place. The statistical
+values (population 2013, published in 2015) were
+downloaded from Swiss Statistics (Regionalportr{\"a}ts:
+Kennzahlen aller Gemeinden (je-d-21.03.01) Bundesamt
+f{\"u}r Statistik BFS
+\url{http://www.bfs.admin.ch/bfs/portal/de/index/regionen/02/daten.html})
+and joined by the \code{Gemeindecode} attribute with the
+swisstopo map. On the web application, available through
+\url{https://recmap.shinyapps.io/CH-Gemeinden/}, the
+reader can play with the rectangular population cartogram
+of Switzerland and different statisical values provided
+in the previous mentioned data for coloring the cartogram
+regions.
+
+<<label=Switzerland_population, fig = TRUE, width=7, height=8, echo=FALSE, include=FALSE>>=
+par(mar=c(0, 0, 0, 0))
+C <- Switzerland$cartogram
+class(C) <- c('recmap', 'data.frame')
+plot(C)
+idx <- rev(order(C$z))[1:50];
+text(C$x[idx], C$y[idx], iconv(as.character(C$name[idx]), 
+  "latin1", "UTF-8"), col='red', 
+  cex = C$dx[idx]/strwidth(as.character(C$name[idx])))
+@
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=1.0\textwidth, keepaspectratio]{graphics/recmap-Switzerland_population}
+\caption{A rectangular population cartogram of Switzerland is shown.
+map data source: Swiss Federal Office of Topography using
+\href{http://www.toposhop.admin.ch/en/shop/products/landscape/gg25_1}{Landscape Models / Boundaries GG25}, downloaded 2016-05-01;
+statistical data:
+\href{http://www.bfs.admin.ch/bfs/portal/de/index.html}{Bundesamt f{\"u}r Statistik (BFS), Website Statistik Schweiz},
+downloaded file
+\href{http://www.bfs.admin.ch/bfs/portal/de/index/regionen/02/daten.html}{je-d-21.03.01.xls}
+on 2016-05-26.
+\label{figure:Switzerland:population}
+An interactive shiny app is available through \url{https://recmap.shinyapps.io/CH-Gemeinden/}. }
+\end{figure}
+
+\paragraph{A Swiss railway passenger frequency cartogram}
+is graphed on the bottom of Figure~\ref{figure:sbb}.
+The upper visualization shows the overlapping rectanglues
+of all 400 geo-locations which define the pseudo dual of the map.
+The data were retrieved from
+\url{https://data.sbb.ch/explore/}
+and contain already the longitude and latitude coordinates of of the
+railway main station and stops.
+
+<<label=sbb, fig = TRUE, width=8, height=10, echo=FALSE, include=FALSE>>=
+op <- par(mfrow = c(2, 1), mar = c(0, 0, 0, 0))
+SBB.Map <- SBB$Map
+S <- SBB$Map
+S <- S[!is.na(S$x),]
+S$dx <- 0.1; S$dy <- 0.1; S$z <- S$DTV
+S$name <- S$Bahnhof_Haltestelle
+plot.recmap(S)
+idx <- rev(order(S$z))[1:10]
+text(S$x[idx], S$y[idx], S$name[idx], col='red', cex=0.7)
+idx <- rev(order(S$z))[11:30]
+text(S$x[idx], S$y[idx], S$name[idx], col = 'red', cex = 0.5)
+
+Cartogram.SBB <- recmap(S[sol <- SBB$GA@solution[1, ], ])
+plot(Cartogram.SBB)
+
+idx<-rev(order(Cartogram.SBB$z))[1:40]
+text(Cartogram.SBB$x[idx],Cartogram.SBB$y[idx], 
+	Cartogram.SBB$name[idx],
+	col = 'red', 
+	cex = 1.25 * Cartogram.SBB$dx[idx] / strwidth(Cartogram.SBB$name[idx]))
+
+@
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=1.0\textwidth, keepaspectratio]{graphics/recmap-sbb}
+\caption{A Swiss railway passenger frequency cartogram is shown on the
+lower map. The upper graphic displays the overlapping rectangles of the input map. 
+source: \url{sbb.ch}, 2016-05-12.}
+\label{figure:sbb} 
+\end{figure}
+
+
+\paragraph{The UK Brexit EU-referendum} is shown as final example in
+Figure~\ref{fig:brexit}.
+The UK boundary file were downloaded from \url{https://census.edina.ac.uk}
+and joined by the column name \code{geo_code} and \code{Area_Code} with the
+the outcome of the referendum downloaded through
+\url{http://www.electoralcommission.org.uk/} on July 3th.
+This example also demonstrate the usage of the \pkg{sp} package
+by~\cite{sp2013}.
+Through using the function \code{as.SpatialPolygonsDataFrame} 
+the recmap class can be transformed
+into a \code{SpatialPolygonsDataFrame} object. The following code snippets
+show how the \code{summary} and \code{spplot} methods can be used.
+
+<<label=UK_Cartogram, fig = TRUE, width=10, height=12, echo=FALSE, include=FALSE, eval=TRUE>>=
+# construct the cartogram;
+# note that the index order is already optimized.
+
+add_NI <- function(S, DF){
+  # Adesired factor (UK.recmap$dx * UK.recmap$dy) / UK.recmap$z
+  
+  #NI <- c("381","N92000002","Northern Ireland","N92000002","Northern Ireland","1260955","790647","790523","62.69","790523","790149","440707","349442","374","18","148","1","207","55.78","44.22","0.05")
+  NI.Electorate <- 1260955
+  NI.Pct_Leave <- 44.22
+  NI.Pct_Turnout <- 62.69
+  NI.Pct_Rejected <- 0.05
+  
+  NI <- data.frame(x=min(S$x) -3 * max(S$dx), #38451.81, 
+                   y=min(S$y) + 0.7* (max(S$y) - min(S$dy)), #1037747 , 
+                   dx=76524,
+                   dy=76524, 
+                   z=1260955, 
+                   name='Northern\nIreland')
+  
+  rownames(NI) <- nrow(S)+1
+ 
+  rbind(S[, c('x','y','dx','dy','z','name')], NI)
+}
+
+UK.recmap <- recmap(UK$Map)
+
+# plot the cartogram; 50%-50% regions should have a white color!
+op <- par(mar = rep(0,4))
+UK_NI.recmap  <- add_NI(UK.recmap)
+
+stopifnot((UK_NI.recmap[1,'dx'] * UK_NI.recmap[1,'dy'] / UK_NI.recmap[1,'z'] )  -  (UK_NI.recmap[371,'dx'] * UK_NI.recmap[371,'dy'] / UK_NI.recmap[371,'z'] )  < 0.1)
+
+plot(UK_NI.recmap,
+  col = diverge_hcl(100, alpha=1.0)[round(c(UK$Map$Pct_Leave, 44.22))])
+#
+# add region names as label; should be readable by zoom into the pdf
+text(UK_NI.recmap$x, UK_NI.recmap$y,UK_NI.recmap$name, 
+	cex = UK_NI.recmap$dx / strwidth(UK_NI.recmap$name))
+
+# text(UK_NI.recmap$x, UK_NI.recmap$y, paste(round(c(UK$Map$Pct_Leave, 44.22)), "%",sep=''),
+#	cex = 0.5 * (UK_NI.recmap$dx / strwidth(UK_NI.recmap$name)), pos=1)
+
+@
+
+
+<<label=UK_Map, fig = TRUE, width=7, height = 10, echo = FALSE, include = FALSE>>=
+DF <- data.frame(Pct_Leave = UK$Map$Pct_Leave, row.names = UK$Map$name)
+spplot(as.SpatialPolygonsDataFrame(UK$Map, DF), col.regions = diverge_hcl(16, alpha = 0.5),
+       main="Input England/Wales/Scottland")
+@
+
+
+<<label=UK_spplot, fig = TRUE, width=12, height=4, echo=TRUE, include=FALSE, eval=TRUE>>=
+DF <- rbind(data.frame(Pct_Leave = UK$Map$Pct_Leave,
+                 Pct_Turnout = UK$Map$Pct_Turnout,
+                 Pct_Rejected = UK$Map$Pct_Rejected,
+                 row.names = UK$Map$name),
+            data.frame(Pct_Leave =44.22,
+            Pct_Turnout = 62.69,
+            Pct_Rejected = 0.05,
+            row.names = 'Northern\nIreland'))
+
+
+UK.sp <- as.SpatialPolygonsDataFrame(add_NI(UK.recmap) , DF)
+summary(UK.sp)
+
+spplot(UK.sp, col.regions = diverge_hcl(19)[1:16], layout=c(3,1))
+@
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[height=0.25\textwidth, keepaspectratio]{graphics/recmap-UK_Map}
+\includegraphics[height=0.25\textwidth, keepaspectratio]{graphics/recmap-UK_spplot}
+\includegraphics[width=0.8\textwidth, keepaspectratio]{graphics/recmap-UK_Cartogram}
+\caption{The outcome of UK Brexit EU-referendum is displayed.
+Northern Ireland was manually added. The overlapping MBBs of the input map
+are displayed in the top left.
+On all other plots, the region areas represent the
+number of the electorates. The colors are indicating the outcome of the referendum
+(blue: remain / red: leave;
+as lower the color intensity as closer to 50\% : 50\% outcome ).
+Other attributes represented as percentages (Pct) are displayed using the
+\code{spplot} of the \pkg{sp} package (top right).
+\label{fig:brexit}
+Copyright: Contains National Statistics data~\copyright~Crown copyright and database right 2016
+Contains NRS data~\copyright~Crown copyright and database right 2016
+Source: NISRA : Website: \url{www.nisra.gov.uk}
+Contains OS data~\copyright~Crown copyright [and database right] (2016)
+}
+\end{figure}
+
+\begin{sidewaystable}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{ll|rr|lrrr|lr|rl|rr}
+\hline
+\hline
+map	&	statistical value	&	\#regions	&	area err	&	meta&	pop size	&	mutrate	&	\#gen	& compute hardware     	&	cores	&	proc time	&	unit	&	&	Fig\\
+\hline
+US state level &  \#electors 	&	49	&	0.36	&	GA	&	unknown	&	unknown	&	10	&	Intel Xeon CPU @ 1.5 GHz	&	1	&	$\approx$1	&	min	&		&	\ref{figure:USelection}\\
+US state level &  area 	&	50	&	0.17	&	-	&	-&	-&	-	&	-	&	1	&	$\ll$1	&	sec	&		&	\ref{figure:usage}\\
+8x8 checkerborad	&	1:4	&	64	&	0.27	&	GA	&	256	&	0.25	&     533  	&	3 GHz Intel Core i7	&	4	&	$\approx$1	&	min   &		&	\ref{figure:cmp_GA_GRASP}\\
+8x8 checkerborad	&	1:4	&	64	&	0.27	&	GRASP	&	NA	&	NA	&	NA	&	3 GHz Intel Core i7	&	4	&	$\approx$1	&	min	&		&	\ref{figure:cmp_GA_GRASP}\\
+\hline
+US state level	&	population 1977	&	48	&      0.41	&	GA	&	300	&	0.25	&	11	&	3 GHz Intel Core i7	&	4	&	5	&	sec	&		&	\ref{figure:x77}\\
+US state level	&	murder 1977	&	48	&      0.37	& 	GA	&	300	&	0.25	&	20	&	3 GHz Intel Core i7	&	4	&	10	&	sec	&		&	\ref{figure:x77}\\
+US state level	&	income 1977	&	48	&      0.29 	&	GA	&	300	&	0.25	&	30	&	3 GHz Intel Core i7	&	4	&	16	&	sec	&		&	\ref{figure:x77}\\
+US state level	&	illiteracy 1977     &	48	&      0.40 	&	GA	&	300	&	0.25	&	30	&	3 GHz Intel Core i7	&	4	&	16	&	sec	&		&	\ref{figure:x77}\\
+\hline
+US California	&	population 2010	&	48	&	0.62	&	GA	&	240	&	0.25	&	27	&	3 GHz Intel Core i7	&	4	&	10	&	sec	&		&	\ref{figure:us_census}\\
+US Colorado	&	population 2010	&	64	&	0.68	&	GA	&	320	&	0.25	&	102	&	3 GHz Intel Core i7	&	4	&	74	&	sec	&		&	\ref{figure:us_census}\\
+US Florida	&	population 2010	&	68	&	0.44	&	GA	&	240	&	0.25	&	49	&	3 GHz Intel Core i7	&	4	&	39	&	sec	&		&	\ref{figure:us_census}\\
+US New Jersey	&	population 2010	&	21	&	0.38	&	GA	&	105	&	0.25	&	30	&	3 GHz Intel Core i7	&	4	&	4	&	sec	&		&	\ref{figure:us_census}\\
+US New York	&	population 2010	&	62	&	0.62      &	GA	&	310	&	0.25	&	148	&	3 GHz Intel Core i7	&	4	&	106	&	sec	&		&	\ref{figure:us_census}\\
+\hline
+Switzerland	&	population 2010	&	2300	&	0.59	&	GA	&	1280	&	0.35	&	300	& 	Intel Xeon CPU E5-2698 v3 @ 2.30GHz	&	64	&	3	&	days	&		&	\ref{figure:Switzerland:population}\\
+Swiss SBB railway	&	passenger frequency	&	724	&	NA	&      GA	&	 1000	&	0.25	&  1000     	&	Intel Xeon CPU E5-2698 v3 @ 2.30GHz	&	64	&	2	&	days	&		&	\ref{figure:sbb}\\
+UK	&	electorates	&	370	&	0.57	&	GA	&	1200	&	0.25	&	4000	&	Intel Xeon CPU E5-2698 v3 @ 2.30GHz	&	64	&	3	&	days	&		&	\ref{fig:brexit}\\
+\hline
+\hline
+\end{tabular}
+}
+\caption{
+The spreadsheet provides an overview of all statistical rectangular cartograms displayed in this manuscript ordered by appearance. The spreadsheet includes input properties, e.g., number of map regions, as well as process time on the used hardware platforms. The area error was computed using the \code{summary.recmap} method implementing the area error function introduced by \cite{cartodraw}.
+Since the Swiss railway passenger frequency cartogram is derived from a 2D point set, it is not meaningful to compute an area error of the input.
+The rectangular cartograms having more than 300 map regions required more generation of the genetic algorithm and were computed on a compute server due to the higher computing demands.
+}
+\label{table:overview}
+\end{sidewaystable}
+
+\section{Summary}
+\label{section:summary}
+
+This article introduces the CRAN \pkg{recmap} package which
+implements the RecMap MP2 algorithm. This method generates
+rectangular statistical cartograms. Two outstanding
+features of the implemented algorithm are: the areas of the
+map regions represent the exact statistical value without
+any area error and the ratios of the map regions are
+preserved. These constraints are important for the correct
+interpretation of the geography-related statistical data.
+It is evident that using these restrictions the map
+topology can not be preserved. The implementation allows
+the generation of rectangular statistical cartograms having
+less than one hundred map regions within a few seconds with
+support of a metaheuristic. The cartograms generated enable
+an interactive explorative data analysis. All necessary
+steps can be done on the R command line or by using web
+applications on a modern computer. It has been
+demonstrated, how the drawing of the cartogram can be
+optimized according to a fitness function by using a
+metaheuristic and benefiting from today's multi core
+hardware and R's parallel environment. Most promising is
+using a fitness function which is derived from the relative
+position error objective function. It should also be
+highlighted that the method can read a spreadsheet
+containing the geographic location. It does not require any
+complex polygon mesh as input.
+%which saves a huge amount ofworking time for cleaning the polygon mesh prior to the construction. 
+The potential of the method is shown by using
+real world maps covering a maps size of three orders
+magnitude and synthetical data (8x8 checkerboard). 
+Table~\ref{table:overview} provides an overview of the 
+rectangular cartogram specification.
+The \pkg{recmap} package is a powerful tool in the hand of data
+analysts, cartographers, or statisticians using R who want
+to draw their own statistical rectangular cartograms.
+\bibliography{recmap_JSS2711}
+\end{document}
