@@ -4,3 +4,4 @@
 ^.*Dockerfile$
 ^.*_config.yml$
 ^.*.travis.yml$
+^.*vignettes/recmap_JSS2711.Rnw$

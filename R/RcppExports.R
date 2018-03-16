@@ -2,14 +2,14 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 get_angle <- function(x0, y0, x1, y1) {
-    .Call(`_recmap_get_angle`, x0, y0, x1, y1)
+    .Call('recmap_get_angle', PACKAGE = 'recmap', x0, y0, x1, y1)
 }
 
 place_rectangle <- function(x0, y0, dx0, dy0, dx1, dy1, alpha) {
-    .Call(`_recmap_place_rectangle`, x0, y0, dx0, dy0, dx1, dy1, alpha)
+    .Call('recmap_place_rectangle', PACKAGE = 'recmap', x0, y0, dx0, dy0, dx1, dy1, alpha)
 }
 
 recmap_ <- function(df, pd) {
-    .Call(`_recmap_recmap_`, df, pd)
+    .Call('recmap_recmap_', PACKAGE = 'recmap', df, pd)
 }
 
