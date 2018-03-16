@@ -20,7 +20,7 @@ test_that("test recmapGA on a 4x4 checkerboard (jss paper Figure 7)", {
   solutions <- lapply(res, function(x){x$GA@solution[1,]})
   
   expect_true(all.equal(solutions[[1]], solutions[[2]]))
-  expect_true(all.equal(solutions[[3]], solutions[[5]]))
+  expect_true(all.equal(solutions[[3]], solutions[[4]]))
   expect_true(all.equal(solutions[[5]], solutions[[6]]))
   
 })
