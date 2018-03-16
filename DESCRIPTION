@@ -1,11 +1,7 @@
 Package: recmap
 Type: Package
 Title: Compute the Rectangular Statistical Cartogram
-<<<<<<< HEAD
-Version: 0.5.26
-=======
 Version: 0.5.27
->>>>>>> 019253ad7ece4d13c9651f26343be5069859dae8
 Authors@R: person("Christian", "Panse", 
 		email = "Christian.Panse@gmail.com", 
 		role = c("aut", "cre"),
