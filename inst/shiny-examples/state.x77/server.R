@@ -6,9 +6,6 @@ library(colorspace)
 library(shiny)
 library(recmap)
 
-
-
-
 # source: vignette of https://CRAN.R-project.org/package=colorspace 
 pal <- function(col, border = "light gray", ...) {
       n <- length(col)
@@ -64,7 +61,7 @@ shinyServer(function(input, output, session) {
     pal(unlist(colormap()[input$colormapname]))
     })
 
-  
+  #---- cartogram ----
   cartogram <- reactive({
     
     progress <- shiny::Progress$new(session = session, min = 0, max = 1)
@@ -101,6 +98,7 @@ shinyServer(function(input, output, session) {
                    maxiter = input$GAmaxiter,
                    pmutation = input$GApmutation,
                    parallel=TRUE,
+                   seed = input$seed,
                    run = input$GArun, 
                    monitor = function(object, digits = getOption("digits"), ...)
                      {
@@ -128,7 +126,7 @@ shinyServer(function(input, output, session) {
     legend("topleft", c(paste("Area ~", input$area), paste("Color ~", input$color)), box.col = 'white')
   })
   
-  
+  #---- pdfx77 ----
   output$pdfx77 = downloadHandler(
     filename = "recmap_x77.pdf",
     content = function(file) {
@@ -150,5 +148,11 @@ shinyServer(function(input, output, session) {
       dev.off()
     })
   
+  #---- sessionInfo ----
+  
+  output$sessionInfo <- renderPrint({
+    
+    capture.output(sessionInfo())
+  })
 
 })

@@ -15,7 +15,7 @@ recmapGA(Map,
   popSize = 10 * nrow(Map), 
   maxiter = 10, 
   run = maxiter, 
-  monitor = if (interactive()) { gaMonitor2} else FALSE, 
+  monitor = if (interactive()) { gaMonitor } else FALSE, 
   parallel = FALSE, 
   \dots)
 }

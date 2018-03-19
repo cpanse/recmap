@@ -10,7 +10,7 @@ importFrom("sp", "Polygon", "Polygons", "SpatialPolygons",
            "SpatialPolygonsDataFrame", 
            "spplot", "bbox")
 
-importFrom("GA", "ga", "gaMonitor", "gaMonitor2", "plot", 'summary.ga')
+importFrom("GA", "ga", "gaMonitor", "plot", 'summary.ga')
 
 export("recmap")
 export("is.recmap")

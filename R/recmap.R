@@ -507,7 +507,7 @@ recmapGA <- function(Map,
                       maxiter = 10, 
                       run = maxiter,
                       monitor = if(interactive()) 
-                      { gaMonitor2 } 
+                      { gaMonitor } 
                      else FALSE,
                       parallel = FALSE, ...){
   GA <- ga(type = "permutation", 

@@ -19,6 +19,7 @@ shinyUI(fluidPage(
       htmlOutput("colormap"),
       hr(),
       p('Metaheuristic (GA):'),
+      numericInput("seed", "seed", 1),
       sliderInput("GApopulation", "GApopulation", 1, 10, 1),
       numericInput("GAmaxiter", "GAmaxiter", 10),
       numericInput("GArun", "GArun", 10),
@@ -28,16 +29,19 @@ shinyUI(fluidPage(
     ),
     # Show a plot of the generated distribution
     mainPanel(
-     
-      p('please wait some seconds until the cartogram is computed.'),
-      plotOutput("cartogramPlot", hover = hoverOpts(id = "plot_hover", delayType = "throttle")),
-      #h4("Mouse over Information"),
-      tableOutput("plot_hoverinfo"),
-      p('on the colormap below; left is the lowes statistical value; right side is highest.'),
-      plotOutput("colormapPlot", height = 25),
-      hr(),
-      p('compute your own cartogram with', a('https://CRAN.R-project.org/package=recmap', 
-                                             href='https://CRAN.R-project.org/package=recmap'), '.')
-    )
-  )
-))
+      tabsetPanel(
+       tabPanel("recmap",
+                tagList(
+                   helpText('please wait some seconds until the cartogram is computed.'),
+                   plotOutput("cartogramPlot", hover = hoverOpts(id = "plot_hover", delayType = "throttle")),
+                   #h4("Mouse over Information"),
+                   tableOutput("plot_hoverinfo"),
+                   helpText('on the colormap below; left is the lowes statistical value; right side is highest.'),
+                   plotOutput("colormapPlot", height = 25),
+                   hr(),
+                   p('compute your own cartogram with', a('https://CRAN.R-project.org/package=recmap', 
+                                                          href='https://CRAN.R-project.org/package=recmap'), '.')
+                   
+                 )),
+      tabPanel("sessionInfo", verbatimTextOutput("sessionInfo")))))
+  ))

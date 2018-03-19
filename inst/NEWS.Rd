@@ -1,9 +1,10 @@
 \name{NEWS}
 \title{News for Package 'recmap'}
 
-\section{Changes until version 0.5.27 (2018-02-24)}{
+\section{Changes until version 0.5.28 (2018-03-18)}{
   \itemize{
 	  \item added JSS#2711 submission as vignette file.
+	  \item replace gaMonitor2 by gaMonitor (GA3.1).
   }
 }
 

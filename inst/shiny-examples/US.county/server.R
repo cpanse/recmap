@@ -107,6 +107,7 @@ shinyServer(function(input, output, session) {
       popSize = input$GApopulation * nrow(M),
       pmutation = input$GApmutation,
       run = input$GArun,
+      seed = input$seed,
       parallel = input$parallel,
       monitor = function(object, digits = getOption("digits"), ...)
       {

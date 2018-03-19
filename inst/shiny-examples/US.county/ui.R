@@ -19,12 +19,13 @@ shinyUI(fluidPage(# Application title
   sidebarLayout(
     sidebarPanel(
       selectInput('state', 'U.S. state', row.names(state.x77), "Louisiana"),
-      p('overlap to compose pseudo dual:'),
+      helpText('overlap to compose pseudo dual:'),
       sliderInput("scaleX", "scaleX", 0, 1, 0.6),
       sliderInput("scaleY", "scaleY", 0, 1, 0.63),
       
       hr(),
-      p('Settings Genetic Algorithm (GA):'),
+      helpText('Settings Genetic Algorithm (GA):'),
+      numericInput("seed", "seed", 1),
       sliderInput("GApopulation", "GApopulation", 1, 10, 1),
       numericInput("GAmaxiter", "GAmaxiter", 10),
       numericInput("GArun", "GArun", 10),
@@ -37,7 +38,7 @@ shinyUI(fluidPage(# Application title
     ),
     
     mainPanel(
-      p(
+      helpText(
         'overlapping rectangles define the topology of the pseudo dual graph.'
       ),
       plotOutput("mapPlot"),
