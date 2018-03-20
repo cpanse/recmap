@@ -1,5 +1,9 @@
 \name{jss7211}
-\alias{jss7211}
+\alias{SBB}
+\alias{Switzerland}
+\alias{UK}
+\alias{cmp_GA_GRASP}
+\alias{mbb_check}
 \docType{data}
 \title{
 jss 2711 data
