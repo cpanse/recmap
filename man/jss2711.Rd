@@ -1,4 +1,5 @@
-\name{jss7211}
+\name{jss2711}
+\alias{js2711}
 \alias{SBB}
 \alias{Switzerland}
 \alias{UK}
@@ -6,7 +7,7 @@
 \alias{mbb_check}
 \docType{data}
 \title{
-jss 2711 data
+jss2711 data
 }
 \description{
 jss2711 contains the recmap input for the Figures 4, 6, 11, 12, 13.
@@ -25,11 +26,16 @@ jss2711 contains the recmap input for the Figures 4, 6, 11, 12, 13.
 \itemize{
 \item{Figure 11 -- \code{Switzerland}:
 map data source:
-Swiss Federal Office of Topography using Landscape Models / Boundaries GG25, downloaded 2016-05-01; statistical data: Bundesamt für Statistik (BFS), Website Statistik Schweiz, downloaded  file  je-d-21.03.01.xls  on  2016-05-26.}
+Swiss Federal Office of Topography using Landscape Models / Boundaries GG25,
+downloaded 2016-05-01; statistical data: Bundesamt für Statistik (BFS),
+Website Statistik Schweiz, downloaded file \code{je-d-21.03.01.xls} on 2016-05-26.}
 \item{Figure 12 -- \code{sbb}:
 \url{sbb.ch} 2016-05-12}
 \item{Figure 13 -- \code{UK}:
-Contains National Statistics data Crown copyright and database right 2016 Contains NRS data Crown copyright and database right 2016 Source:  NISRA : Website: \url{www.nisra.gov.uk} Contains OS data Crown copyright [and database right] (2016)}
+Contains National Statistics data Crown copyright and database right 2016
+Contains NRS data Crown copyright and database right 2016
+Source:  NISRA : Website: \url{www.nisra.gov.uk} 
+Contains OS data Crown copyright [and database right] (2016)}
 }
 }
 
@@ -40,26 +46,26 @@ Contains National Statistics data Crown copyright and database right 2016 Contai
 
 \examples{
 data(package = "recmap")
-
-data(jss7211)
+data(jss2711)
 
 ## Figure 4 - left
-op <- par(mar=c(4, 4, 2, 2), mfrow = c(1, 1))
+op <- par(mar=c(4, 4, 2, 2), mfrow = c(1, 2))
 
-boxplot(number ~ size, data = mbb_check, subset = algorithm == "linear",
-        col = "red", at=2:20-0.2, boxwex = 0.25, log='y', axes = FALSE)
+boxplot(number ~ size, data = mbb_check,
+    subset = algorithm == "linear",
+    xlab = 'number of map regions',
+    ylab = 'number of MBB intersection calls',
+    col = "red", log='y')
 
-boxplot(number ~ size, data = mbb_check, subset = algorithm == "multiset",
-        at = 2:20 + 0.2, boxwex = 0.25, add = TRUE, axes = FALSE,
+boxplot(number ~ size, data = mbb_check, 
+        subset = algorithm == "multiset",
         xlab = 'number of map regions',
-        ylab = 'number of MBB intersection calls');
+        ylab = 'number of MBB intersection calls',
+        log='y');
 
 legend("bottomright", c("recmap > 0.2.1", "recmap <= 0.2.1"),
         col=c('black', 'red'), pch = 22, cex = 1.5)
 
-axis(1, c(5, 10, 15, 20), c("5x5", "10x10", "15x15", "20x20"))
-axis(2)
-box()
 
 
 ## Figure 6 - right
@@ -75,9 +81,7 @@ legend("bottomright", c("GA", "GRASP"), col = c('black', 'red'),
 
 
 ## Figure 11
-\dontrun{
-plot(recmap(Switzerland$map[Switzerland$solution,]))
-}
+\dontrun{plot(recmap(Switzerland$map[Switzerland$solution,]))}
 plot(Switzerland$cartogram)
 
 ## Figure 12
@@ -105,9 +109,6 @@ text(Cartogram.SBB$x[idx],Cartogram.SBB$y[idx],
 
 
 ## Figure 13
-DF <- data.frame(Pct_Leave = UK$Map$Pct_Leave, row.names = UK$Map$name)
-spplot(as.SpatialPolygonsDataFrame(UK$Map, DF), col.regions = diverge_hcl(16, alpha = 0.5),
-       main="Input England/Wales/Scottland")
 
 plot(recmap(UK$Map))
 
