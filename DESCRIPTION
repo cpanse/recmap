@@ -17,7 +17,6 @@ Description: Provides an interface and a C++ implementation of the RecMap MP2
   as input (maintain zero cartographic error). Documentation about RecMap is
   provided by a vignette included in this package.
 License: GPL-3
-LazyData: TRUE
 Depends: R (>= 3.3),
 	GA (>= 3.0.0),
 	Rcpp (>= 0.12.4),
