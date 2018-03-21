@@ -472,7 +472,12 @@ class RecMap{
       for (const auto & b : M) {
         gammaM = get_angle(M[a.id], M[b.id]);
         gammaC = get_angle(C[a.id], C[b.id]);
-        delta = fabs(gammaC - gammaM) / C.size();
+
+	if ((gammaM < 0 && gammaC > 0) || ( gammaM > 0 && gammaC < 0))
+          delta = fabs(gammaC + gammaM) / C.size();
+	else
+          delta = fabs(gammaC - gammaM) / C.size();
+
         C[a.id].relative_position_error += delta;
       }
 

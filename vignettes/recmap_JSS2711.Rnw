@@ -11,7 +11,7 @@
 %% almost as usual
 \author{Christian Panse\\Swiss Federal Institute of Technology in Zurich }
 
-\title{Rectangular Statistical Cartograms in \proglang{R}: The \pkg{recmap} Package}
+\title{Rectangular Statistical Cartograms in \proglang{R}: The \pkg{recmap} Package\thanks{This vignette is a (slightly) modified version of jss2711, to be published in the Journal of Statistical Software.}}
 
 %% for pretty printing and a nice hypersummary also set:
 \Plainauthor{Christian Panse} %% comma-separated
@@ -75,11 +75,11 @@ options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE, wa
 RECMAP_ENABLE_PARALLEL <- FALSE
 
 dir.create("graphics")
-message("This manuscript requires the R packages: recmap (>=0.5.27), maps, noncensus.")
+message("This manuscript requires the R packages: recmap (>=0.5.29), maps, noncensus.")
 message(paste("recmap version", packageVersion('recmap'), "is used."))
 
 
-stopifnot(packageVersion('recmap') >= '0.5.27')
+stopifnot(packageVersion('recmap') >= '0.5.29')
 stopifnot(packageVersion('noncensus') >= '0.1')
 stopifnot(packageVersion('maps') >= '2.0')
 
@@ -88,8 +88,7 @@ library("maps")
 library("noncensus")
 library("colorspace")
 
-load(file.path(path.package(package = "recmap"),
-                 file.path("extdata", "recmap_JSS2711.RData")))
+data(jss2711)
 
 set.seed(1)
 @
@@ -989,7 +988,7 @@ fitness.weighted <- function (idxOrder, Map, ...)
 @
 
 <<echo = TRUE, eval = TRUE>>=
-set.seed(2)
+set.seed(1)
 US.map.best <- recmapGA(Map = US.map,
          fitness = fitness.weighted, 
          maxiter = 100,
@@ -997,7 +996,7 @@ US.map.best <- recmapGA(Map = US.map,
          popSize = 50,
          keepBest = TRUE, 
          pmutation = 0.35, 
-         parallel = RECMAP_ENABLE_PARALLEL)
+         parallel = FALSE)
 @
 
 <<label=bestSolutionFitness, fig = TRUE, width=8, height=4, echo=FALSE, include=FALSE>>=
