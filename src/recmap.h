@@ -485,7 +485,11 @@ class RecMap{
       for (const auto & idx : a.connected) {
         gammaM = get_angle(M[a.id], M[idx]);
         gammaC = get_angle(C[a.id], C[idx]);
-        delta = fabs(gammaC - gammaM) / a.connected.size();
+	if ((gammaM < 0 && gammaC > 0) || ( gammaM > 0 && gammaC < 0))
+          delta = fabs(gammaC + gammaM) / a.connected.size();
+	else
+          delta = fabs(gammaC - gammaM) / a.connected.size();
+
         C[a.id].relative_position_neighborhood_error += delta;
       }
 
