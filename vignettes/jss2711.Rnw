@@ -1535,5 +1535,5 @@ rectangular cartogram specification.
 The \pkg{recmap} package is a powerful tool in the hand of data
 analysts, cartographers, or statisticians using R who want
 to draw their own statistical rectangular cartograms.
-\bibliography{recmap_JSS2711}
+\bibliography{jss2711}
 \end{document}
