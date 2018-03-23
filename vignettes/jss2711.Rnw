@@ -11,7 +11,7 @@
 %% almost as usual
 \author{Christian Panse\\Swiss Federal Institute of Technology in Zurich }
 
-\title{Rectangular Statistical Cartograms in \proglang{R}: The \pkg{recmap} Package\thanks{This vignette is a (slightly) modified version of jss2711, to be published in the Journal of Statistical Software.}}
+\title{Rectangular Statistical Cartograms in \proglang{R}: The \pkg{recmap} Package\thanks{This vignette is a (slightly) modified version (added Table~\ref{table:overview} and section~\ref{section:session}) of jss2711, to be published in the Journal of Statistical Software.}}
 
 %% for pretty printing and a nice hypersummary also set:
 \Plainauthor{Christian Panse} %% comma-separated
@@ -928,7 +928,7 @@ demonstrate the effect that the same seed values lead to the same
 permutation order $\Pi$ and finally to the same cartogram construction.
 <<label=GAseed, fig = TRUE, width=16, height=8, echo=FALSE, include=FALSE, eval = TRUE>>=
 library(recmap)
-res <- lapply(c(1,1,2,2,3,3), function(seed){
+res <- lapply(c(1, 1, 2, 2, 3, 3), function(seed){
   set.seed(seed); 
   res <- recmapGA(Map = checkerboard(4), pmutation = 0.25)
   res$seed <- seed
@@ -1535,5 +1535,15 @@ rectangular cartogram specification.
 The \pkg{recmap} package is a powerful tool in the hand of data
 analysts, cartographers, or statisticians using R who want
 to draw their own statistical rectangular cartograms.
+
+\section{Session information}
+\label{section:session}
+An overview of the package versions used to produce this document are
+shown below.
+
+<<sessioninfo, results=tex, echo=FALSE>>=
+toLatex(sessionInfo())
+@
+
 \bibliography{jss2711}
 \end{document}
