@@ -79,6 +79,7 @@ legend("bottomright", c("GA", "GRASP"), col = c('black', 'red'),
 
 
 ## Figure 7
+\dontrun{
 
 res <- lapply(c(1, 1, 2, 2, 3, 3), function(seed){
   set.seed(seed); 
@@ -107,6 +108,7 @@ rv <- lapply(res, function(x){
        col = c('white', 'white', 'white', 'black')[x$Cartogram$z],
        sub=substitute(paste(Pi[seed], perm), list(perm=p, seed=x$seed)))
   }) 
+}
 
 # sanity check - reproducibility 
 
@@ -129,11 +131,13 @@ identical.recmap <- function(x, y, plot.diff = FALSE){
   rv 
 }
 
+\dontrun{
 op <- par(mfcol = c(4, 4), mar = c(4, 4, 4, 1)); 
 identical.recmap(res[[1]]$Cartogram, res[[2]]$Cartogram, TRUE) 
 identical.recmap(res[[3]]$Cartogram, res[[4]]$Cartogram, TRUE) 
 identical.recmap(res[[5]]$Cartogram, res[[6]]$Cartogram, TRUE) 
 identical.recmap(res[[1]]$Cartogram, res[[6]]$Cartogram, TRUE) 
+}
 
 ## Figure 11
 \dontrun{plot(recmap(Switzerland$map[Switzerland$solution,]))}
