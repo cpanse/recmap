@@ -6,6 +6,7 @@
 	  \item added jss2711 submission as vignette file.
 	  \item added jss2711 data.
 	  \item replace gaMonitor2 by gaMonitor (GA3.1).
+	  \item added test-recmapGA.R for reproducibility.
   }
 }
 
