@@ -118,12 +118,10 @@ identical.recmap <- function(x, y, plot.diff = FALSE){
   rv <- identical(x$x, y$x) && identical(x$y, y$y) && identical(x$dx, y$dx) && identical(x$dy, y$dy)
   if (plot.diff){
    rvtemp <- lapply(c('x', 'y', 'dx', 'dy'), function(cn){
-        plot(target[, cn], current[, cn],
-          xlab = 'target', ylab='current',
-          #asp = 1,
-          main = paste(cn, "-", rv))
-        
-        abline(a = 0, b = 1, col = 'grey')
+        plot(sort(abs(target[, cn] - current[, cn])),
+          ylab = 'absolute error',
+          main = cn)
+        abline(h = 0, col = 'grey')
       })
   }
   
