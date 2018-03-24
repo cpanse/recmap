@@ -10,17 +10,12 @@
 jss2711 data
 }
 \description{
-jss2711 contains the recmap input for the Figures 4, 6, 11, 12, 13.
+jss2711 contains the recmap input for the Figures 4, 6, 7, 11, 12, 13.
 }
 \format{
   A set of nested list of data frames.
 }
-\details{
-\itemize{
-\item{SBB}
-\item{Swizterland Gemeinde - }
-}
-}
+
 \source{
 \itemize{
 \item{Figure 11 -- \code{Switzerland}:
@@ -38,6 +33,9 @@ Contains OS data Crown copyright [and database right] (2016)}
 }
 }
 
+\author{
+Christian Panse, 2018
+}
 
 \references{
 \url{https://arxiv.org/abs/1606.00464}
@@ -111,16 +109,32 @@ rv <- lapply(res, function(x){
 
 # sanity check - reproducibility 
 
-op <- par(mfrow=c(2,2), mar=c(5,5,5,5)); 
+identical.recmap <- function(x, y, plot.diff = FALSE){
+  target <- x
+  current <- y 
+  
+  stopifnot(is.recmap(target))
+  stopifnot(is.recmap(current))
+  rv <- identical(x$x, y$x) && identical(x$y, y$y) && identical(x$dx, y$dx) && identical(x$dy, y$dy)
+  if (plot.diff){
+   rvtemp <- lapply(c('x', 'y', 'dx', 'dy'), function(cn){
+        plot(target[, cn], current[, cn],
+          xlab = 'target', ylab='current',
+          #asp = 1,
+          main = paste(cn, "-", rv))
+        
+        abline(a = 0, b = 1, col = 'grey')
+      })
+  }
+  
+  rv 
+}
 
-lapply(c(1,3,5), function(x){
-  plot(c(res[[x]]$Cartogram$x, res[[x]]$Cartogram$y), 
-    c(res[[x+1]]$Cartogram$x, res[[x+1]]$Cartogram$y),
-    sub = "reproducibility on the same plattform",
-    main = paste("all.equal =", all.equal(res[[x]]$Cartogram, res[[x+1]]$Cartogram))); 
-  abline(a=0,b=1, col='grey')
-  })
-
+op <- par(mfcol = c(4, 4), mar = c(4, 4, 4, 1)); 
+identical.recmap(res[[1]]$Cartogram, res[[2]]$Cartogram, TRUE) 
+identical.recmap(res[[3]]$Cartogram, res[[4]]$Cartogram, TRUE) 
+identical.recmap(res[[5]]$Cartogram, res[[6]]$Cartogram, TRUE) 
+identical.recmap(res[[1]]$Cartogram, res[[6]]$Cartogram, TRUE) 
 
 ## Figure 11
 \dontrun{plot(recmap(Switzerland$map[Switzerland$solution,]))}
@@ -161,38 +175,29 @@ text(S$x[idx], S$y[idx], S$name[idx], col = 'red', cex = 0.5)
 Cartogram.recomp <- recmap(S[sol <- SBB$GA@solution[1, ], ])
 plot(Cartogram.recomp)
 
-idx<-rev(order(Cartogram.recomp$z))[1:40]
+idx <- rev(order(Cartogram.recomp$z))[1:40]
 text(Cartogram.recomp$x[idx],Cartogram.recomp$y[idx],
 	Cartogram.recomp$name[idx],
 	col = 'red',
 	cex = 1.25 * Cartogram.recomp$dx[idx] / strwidth(Cartogram.recomp$name[idx]))
 
 # sanity check - reproducibility cross plattform
-
-all.equal(Cartogram.recomp$x, SBB$Cartogram$x)
-all.equal(Cartogram.recomp$y, SBB$Cartogram$y)
-
-
-op <- par(mfrow=c(2, 2), mar=c(5, 5, 5, 5))
-
-rv <- lapply(c('x', 'y', 'dx', 'dy'), function(cn){
-  plot(Cartogram.recomp[, cn], SBB$Cartogram[, cn],
-    main = paste("all.equal =", all.equal(Cartogram.recomp[, cn], SBB$Cartogram[, cn]))); 
-  abline(a = 0, b = 1, col = 'grey')
-})
-
-
-idx <- rev(order(Cartogram.recomp$z))[1:40]
-text(Cartogram.recomp$x[idx],Cartogram.recomp$y[idx],
-        Cartogram.recomp$name[idx],
-        col = 'red',
-        cex = 1.25 * Cartogram.recomp$dx[idx] / strwidth(Cartogram.recomp$name[idx]))
-
+op <- par(mfrow=c(2,2), mar=c(5,5,5,5))
+identical.recmap(Cartogram.recomp, SBB$Cartogram, TRUE)
 
 
 ## Figure 13
 
-plot(recmap(UK$Map))
+DF <- data.frame(Pct_Leave = UK$Map$Pct_Leave, row.names = UK$Map$name)
+spplot(as.SpatialPolygonsDataFrame(UK$Map, DF), 
+  main="Input England/Wales/Scottland")
+
+UK.recmap <- recmap(UK$Map)
+spplot(as.SpatialPolygonsDataFrame(UK.recmap , DF))
+
+# sanity check - reproducibility cross plattform
+op <- par(mfrow=c(2,2), mar=c(5,5,5,5))
+identical.recmap(UK.recmap, UK$Cartogram, TRUE)
 
 }
 \keyword{datasets}
