@@ -78,7 +78,8 @@ legend("bottomright", c("GA", "GRASP"), col = c('black', 'red'),
     pch=c(22, 23), cex=1.5)
 
 
-## Figure 6
+## Figure 7
+
 res <- lapply(c(1, 1, 2, 2, 3, 3), function(seed){
   set.seed(seed); 
   res <- recmapGA(Map = checkerboard(4), pmutation = 0.25)
