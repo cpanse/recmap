@@ -229,9 +229,9 @@ class RecMap{
     Cartogram.push_back(R1);
     num_regions++;
 
-    if (num_regions != Map.size()) {
+    //if (num_regions != Map.size()) {
       // TODO(cp): call an exception?
-    }
+    //}
   }
 
   void push_pd_edge(int u, int v){
