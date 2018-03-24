@@ -108,7 +108,7 @@ struct mbb_node {
     double dy = a.dy + c.dy + eps;
     double dx = a.dx + c.dx + eps;
 
-    if (std::sin(alpha) >= 0 & std::cos(alpha) >= 0) {
+    if (std::sin(alpha) >= 0 && std::cos(alpha) >= 0) {
       // Quad I
       tanx = a.x + (dx * std::tan(alpha));
       tany = a.y + (dy * std::tan(PI/2 - alpha));
