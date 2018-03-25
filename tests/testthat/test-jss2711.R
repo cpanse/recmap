@@ -25,7 +25,7 @@ test_that("reproducibility check for recmapGA using a 4x4 checkerboard (Figure 7
   expect_true(identical(solutions[[5]], solutions[[6]]))
 })
 
-test_that("cross platform reproducibility check of Figures 11 (Switzerland))", {
+test_that("cross-platform reproducibility check of Figures 11 (Switzerland))", {
   
   data(jss2711)
   solutions.best <- Switzerland$solution
@@ -38,7 +38,7 @@ test_that("cross platform reproducibility check of Figures 11 (Switzerland))", {
   
 })
 
-test_that("cross platform reproducibility check of Figures 12 (SBB))", {
+test_that("cross-platform reproducibility check of Figures 12 (SBB))", {
   
   data(jss2711)
   solutions.best <- SBB$GA@solution[1, ]
@@ -51,7 +51,7 @@ test_that("cross platform reproducibility check of Figures 12 (SBB))", {
   
 })
 
-test_that("cross platform  reproducibility check of jss2711 Figures 13 (UK))", {
+test_that("cross-platform reproducibility check of Figures 13 (UK))", {
   
   data(jss2711)
 
