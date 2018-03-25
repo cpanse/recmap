@@ -1,6 +1,12 @@
 \name{NEWS}
 \title{News for Package 'recmap'}
 
+\section{Changes until version 0.5.32 (2018-03-24)}{
+  \itemize{
+	  \item added test-jss2711(renamed test-recmapGA.R) checking Figure 7, 11, 12 ,13
+  }
+}
+
 \section{Changes until version 0.5.31 (2018-03-23)}{
   \itemize{
 	  \item added jss2711 submission as vignette file.
