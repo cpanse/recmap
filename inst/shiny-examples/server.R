@@ -48,6 +48,7 @@ data(counties)
     M
   }
 
+# ----- shiny server -------
 shinyServer(function(input, output, session) {
   output$plot_hoverinfo <- renderText({
     res <- Cartogram()$Cartogram
@@ -63,21 +64,84 @@ shinyServer(function(input, output, session) {
       rv <- paste(res$name[query])
     }
     
-    paste("state name:", rv)
+    paste("region name:", rv)
   })
+  
+  # some taken from the vignette of https://CRAN.R-project.org/package=colorspace 
+  colormap <- reactive({
+    list(colorspace_heat_hcl = heat_hcl(12, c = c(80, 30), l = c(30, 90), power = c(1/5, 2)),
+         colorspace_rev_heat_hcl = rev(heat_hcl(12, h = c(0, -100), c = c(40, 80), l = c(75, 40),  power = 1)),
+         colorspace_sequential_hcl_0 = sequential_hcl(12, c = 0, power = 2.2),
+         colorspace_sequential_hcl_1 = sequential_hcl(12, power = 2.2),
+         colorspace_diverge_hcl = diverge_hcl(7),
+         colorspace_rainbow_dynamic4 = rainbow_hcl(4, start = 30, end = 300),
+         colorspace_rainbow_dynamic10 = rainbow_hcl(10, start = 30, end = 300),
+         colorspace_rainbow_warm10 = rainbow_hcl(10, start = 90, end = -30),
+         colorspace_terrain_hcl = terrain_hcl(12, c = c(65, 0), l = c(45, 90), power = c(1/2, 1.5)),
+         heat.colors = heat.colors(12),
+         DanKeim = rev(c('#C6CF32', '#88E53B', '#50E258', '#29C67D', '#19999E', '#2064AF', '#3835AB', '#561493', '#6E086D', '#790D43', '#741F1E', '#5F3307')
+         ),
+         DanKeim_HSV = rev(c('#BECC3D', '#70C337', '#31B93C', '#2BB077', '#269FA7', '#21589E', '#221C94', '#56188B', '#82147F', '#791043', '#6F0E0D', '#66380A')))
+  })
+  
+  output$colormap <- renderUI({
+    selectInput('colormapname', 'colormap name', names(colormap()))
+  })
+  
+  output$colormapPlot <- renderPlot({
+    par(mar=c(0,0,0,0));
+    pal(unlist(colormap()[input$colormapname]))
+  })
+  
+  output$II <- renderUI({
+    if (input$datatype == 'checkerboard'){
+      numericInput("checkerboardSize", "checkerboardSize", 4, min = 2, 
+                   max = 16, step = 1)
+    }else if (input$datatype == 'USstate'){
+      list(
+        selectInput('area', 'area', colnames(state.x77)),
+        selectInput('color', 'color', colnames(state.x77)),
+        htmlOutput("colormap")
+        )
+    }else if (input$datatype == 'UScounty'){
+      list(
+        selectInput('state', 'U.S. state', row.names(state.x77), "Louisiana"),
+        helpText('overlap to compose pseudo dual:'),
+        sliderInput("scaleX", "scaleX", 0, 1, 0.6),
+        sliderInput("scaleY", "scaleY", 0, 1, 0.63))
+    }})
   
   Map <-  reactive({
     progress <- shiny::Progress$new(session = session)
     progress$set(message = "get input map")
     on.exit(progress$close())
-    res <-
-      .get_county_mbb(
-        state = input$state,
-        scaleX = input$scaleX,
-        scaleY = input$scaleY
-      )
-    res$name <- gsub(" ", "\n", res$name)
-    res
+    
+    if (input$datatype == "UScounty"){
+      res <-
+        .get_county_mbb(
+          state = input$state,
+          scaleX = input$scaleX,
+          scaleY = input$scaleY
+        )
+      res$name <- gsub(" ", "\n", res$name)
+      res}else if (input$datatype == "checkerboard"){
+        checkerboard(input$checkerboardSize)
+      }else if (input$datatype == "USstate"){
+        usa <- data.frame(x = state.center$x, 
+                          y = state.center$y, 
+                          # make the rectangles overlapping by correcting lines of longitude distance
+                          dx = sqrt(state.area) / 2 / (0.8 * 60 * cos(state.center$y*pi/180)), 
+                          dy = sqrt(state.area) / 2 / (0.8 * 60), 
+                          z = sqrt(state.area),
+                          name = state.name)
+        
+        usa$z <- state.x77[, input$area]
+        
+        res <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]
+        class(res) <- c('recmap', class(res))
+        return(res)
+        
+      }
   })
   
   wfitness <- function(idxOrder, Map,  ...) {
@@ -96,8 +160,6 @@ shinyServer(function(input, output, session) {
     on.exit(progress$close())
     options(warn = -1)
     M <- Map()
-    
-    set.seed(1)
     
     time.elapsed <- rep(proc.time()[3], input$GAmaxiter)
     
@@ -159,16 +221,34 @@ shinyServer(function(input, output, session) {
   
   
   output$cartogramPlot <- renderPlot({
-    res <- Cartogram()$Cartogram
-    #print(res)
+    res <- Cartogram()
+    
     op <- par(mfrow = c(1, 1), mar = c(0, 0, 0, 0))
-    plot(res, col.text = 'darkred')
-    # legend("topleft", paste("weight", input$objective_weight))
+    
+    if(input$datatype == "USstate"){
+      cm <- unlist(colormap()[input$colormapname])
+      
+      S <- state.x77[which(rownames(state.x77) %in% res$Cartogram$name), input$color]
+      S <- S[res$GA@solution[1,]]
+      S <- round((length(cm) - 1) * (S - min(S)) / (max(S)  - min(S))) + 1
+      plot(res, col=cm[S], col.text = 'black')
+      legend("topleft", c(paste("Area ~", input$area),
+                          paste("Color ~", input$color)), 
+             box.col = 'white')
+      
+    }else{
+      plot(res$Cartogram, col.text = 'darkred')}
+    
   })
   
   output$gaPlot <- renderPlot({
-    plot(Cartogram()$GA)
+      plot(Cartogram()$GA)
   })
+  
+  output$gaSolution <- DT::renderDataTable({
+    t(Cartogram()$GA@solution)
+  })
+ 
   
   output$foo = downloadHandler(
     filename = paste("recmap.pdf", sep = ''),

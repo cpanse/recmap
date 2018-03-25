@@ -9,20 +9,21 @@
 shinyUI(fluidPage(# Application title
 #  theme = shinytheme("darkly"),
   titlePanel(
-    paste(
-      "U.S. county population data using recmap version",
-      packageVersion('recmap')
+    paste("https://CRAN.R-project.org/package=recmap",
+          "version",
+          packageVersion('recmap')
     )
   ),
   
   # Sidebar with a slider input
   sidebarLayout(
     sidebarPanel(
-      selectInput('state', 'U.S. state', row.names(state.x77), "Louisiana"),
-      helpText('overlap to compose pseudo dual:'),
-      sliderInput("scaleX", "scaleX", 0, 1, 0.6),
-      sliderInput("scaleY", "scaleY", 0, 1, 0.63),
-      
+      radioButtons("datatype", "Type of data:",
+                   c("checkerboard" = "checkerboard",
+                     "US county" = "UScounty",
+                     "US state" = "USstate")),
+      br(),
+      htmlOutput("II"),
       hr(),
       helpText('Settings Genetic Algorithm (GA):'),
       numericInput("seed", "seed", 1),
@@ -38,23 +39,31 @@ shinyUI(fluidPage(# Application title
     ),
     
     mainPanel(
-      helpText(
-        'overlapping rectangles define the topology of the pseudo dual graph.'
-      ),
-      plotOutput("mapPlot"),
-      tableOutput("plot_hoverinfo"),
-      p('please wait some seconds until the cartogram is computed.'),
-      plotOutput(
-        "cartogramPlot",
-        hover = hoverOpts(
-          id = "plot_hover",
-          delayType = "throttle",
-          delay = 500
+      tabsetPanel(
+        tabPanel("recmap",
+                 list(
+                   helpText(
+                     'overlapping rectangles define the topology of the pseudo dual graph.'
+                   ),
+                   plotOutput("mapPlot"),
+                   tableOutput("plot_hoverinfo"),
+                   p('please wait some seconds until the cartogram is computed.'),
+                   plotOutput(
+                     "cartogramPlot",
+                     hover = hoverOpts(
+                       id = "plot_hover",
+                       delayType = "throttle",
+                       delay = 500
+                     )
+                   ))),
+        tabPanel("GA",
+                 list(
+                   plotOutput("gaPlot"),
+                   DT::dataTableOutput("gaSolution")
+                 )
         )
       ),
-      
-      plotOutput("gaPlot"),
-      
+        
       p(
         'compute your own cartogram with',
         a('https://CRAN.R-project.org/package=recmap',
