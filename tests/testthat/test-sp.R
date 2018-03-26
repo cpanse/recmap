@@ -1,6 +1,6 @@
 #R
 
-context("Test recmap")
+context("sp")
 
 test_that("recmap2sp and sp2recmap", {
   
