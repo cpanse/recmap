@@ -1,6 +1,6 @@
 #R
 
-context("Test recmap")
+context("topology fitness")
 
 test_that("input 2x2 checker board for topoloy error test", {
   
