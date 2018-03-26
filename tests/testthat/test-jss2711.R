@@ -16,16 +16,17 @@ test_that("reproducibility check for recmapGA using a 4x4 checkerboard (Figure 7
     res$seed <- seed
     res})
   
-  # sanity check - extract best solution
+  # extract best solution for each run
   solutions <- lapply(res, function(x){x$GA@solution[1,]})
   
   # solution must be identical on the same platform
-  expect_true(identical(solutions[[1]], solutions[[2]]))
-  expect_true(identical(solutions[[3]], solutions[[4]]))
-  expect_true(identical(solutions[[5]], solutions[[6]]))
+  expect_identical(solutions[[1]], solutions[[2]])
+  expect_identical(solutions[[3]], solutions[[4]])
+  expect_identical(solutions[[5]], solutions[[6]])
 })
 
 test_that("cross-platform reproducibility check of Figures 11 (Switzerland))", {
+  skip_on_cran()
   
   data(jss2711)
   solutions.best <- Switzerland$solution
@@ -52,7 +53,8 @@ test_that("cross-platform reproducibility check of Figures 12 (SBB))", {
 })
 
 test_that("cross-platform reproducibility check of Figures 13 (UK))", {
-  
+  skip_on_cran()
+
   data(jss2711)
 
   # note: map idx is in best solution order
