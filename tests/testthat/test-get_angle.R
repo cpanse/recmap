@@ -1,6 +1,6 @@
 #R
 
-context("Test get_angle")
+context("get_angle")
 
 test_that("get angle of two map regions", {
   
