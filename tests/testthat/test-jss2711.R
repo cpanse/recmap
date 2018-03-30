@@ -53,7 +53,7 @@ test_that("cross-platform reproducibility check of Figures 12 (SBB))", {
 })
 
 test_that("cross-platform reproducibility check of Figures 13 (UK))", {
-  skip_on_cran()
+ 
 
   data(jss2711)
 
