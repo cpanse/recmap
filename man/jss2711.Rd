@@ -19,12 +19,15 @@ jss2711 contains the recmap input for the Figures 4, 6, 7, 11, 12, 13.
 \source{
 \itemize{
 \item{Figure 11 -- \code{Switzerland}:
-map data source:
-Swiss Federal Office of Topography using Landscape Models / Boundaries GG25,
-downloaded 2016-05-01; statistical data: Bundesamt fur Statistik (BFS),
-Website Statistik Schweiz, downloaded file \code{je-d-21.03.01.xls} on 2016-05-26.}
+\itemize{
+  \item {input map rectangles derived from:
+Swiss Federal Office of Topography \url{https://www.swisstopo.admin.ch} using Landscape Models / Boundaries GG25,
+downloaded 2016-05-01;}
+\item{statistical data: Bundesamt fur Statistik (BFS) \url{https://www.bfs.admin.ch},
+Website Statistik Schweiz, downloaded file \code{je-d-21.03.01.xls} on 2016-05-26.}}
+}
 \item{Figure 12 -- \code{sbb}:
-\url{sbb.ch} 2016-05-12}
+\url{https://data.sbb.ch/explore/?sort=explore.download_count&refine.modified=2016} 2016-05-12}
 \item{Figure 13 -- \code{UK}:
 Contains National Statistics data Crown copyright and database right 2016
 Contains NRS data Crown copyright and database right 2016
