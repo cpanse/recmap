@@ -229,7 +229,7 @@ shinyServer(function(input, output, session) {
       cm <- unlist(colormap()[input$colormapname])
       
       S <- state.x77[which(rownames(state.x77) %in% res$Cartogram$name), input$color]
-      S <- S[res$GA@solution[1,]]
+      S <- S[res$GA@solution[1, ]]
       S <- round((length(cm) - 1) * (S - min(S)) / (max(S)  - min(S))) + 1
       plot(res, col=cm[S], col.text = 'black')
       legend("topleft", c(paste("Area ~", input$area),

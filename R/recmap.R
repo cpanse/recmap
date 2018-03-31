@@ -468,7 +468,8 @@ recmapGRASP <-
       iteration <- iteration + 1
       
       # Construct Greedy Randomized Solution
-      res <- parallel::mclapply(1:n.samples, function(x){
+      # res <- parallel::mclapply(1:n.samples, function(x){
+      res <- lapply(1:n.samples, function(x){
         smp <- sample.int(nrow(input))
         list(solution = smp,
              fitness = fitness(smp, input))
@@ -497,6 +498,7 @@ recmapGRASP <-
          )
     
     class(r) <- c(class(r), 'recmapGRASP')
+    r
 }
 
 

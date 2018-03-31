@@ -2,7 +2,7 @@
 
 context("sp")
 
-test_that("recmap2sp and sp2recmap", {
+test_that("convert a SpatialPolygonsDataFrame object to a recmap object and back", {
   
   
   X <- checkerboard(8)
@@ -20,4 +20,6 @@ test_that("recmap2sp and sp2recmap", {
   expect_true(sum(X$name == XX$name) == 64)
   expect_true(sum(X$dx == XX$dx) == 64)
   expect_true(sum(X$dy == XX$dy) == 64)
+
+## TODO(cp): idea would be expect_identical
 })
