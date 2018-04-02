@@ -342,7 +342,7 @@ The table provides a glossary of the used algebraic terms.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The package usage}
 \label{section:usage}
-\subsection{The input}
+\subsection{Input}
 
 The U.S. map on state level is often used to compare
 cartogram algorithms. To generate a useful dual graph,
@@ -397,7 +397,7 @@ library("recmap")
 US.cartogram <- recmap(US.map)
 @
 
-\subsection{The output}
+\subsection{Output}
 
 The \code{recmap} method returns an S3 class object \code{c('recmap', 'data.frame')} of the
 transformed map. Additional columns in the result contain
@@ -1295,8 +1295,9 @@ C <- Switzerland$cartogram
 class(C) <- c('recmap', 'data.frame')
 plot(C)
 idx <- rev(order(C$z))[1:50];
-text(C$x[idx], C$y[idx], C$name[idx], col='red', 
-  cex = C$dx[idx]/strwidth(as.character(C$name[idx])))
+text(C$x[idx], C$y[idx], C$name[idx],
+  col='red',
+  cex = C$dx[idx] / strwidth(as.character(C$name[idx])))
 @
 
 \begin{figure}[htbp]
