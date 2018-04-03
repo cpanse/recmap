@@ -82,10 +82,11 @@ stopifnot(packageVersion('recmap') >= '0.5.31')
 stopifnot(packageVersion('noncensus') >= '0.1')
 stopifnot(packageVersion('maps') >= '2.0')
 
-library("recmap")
-library("maps")
-library("noncensus")
-library("colorspace")
+library(recmap)
+library(maps)
+library(noncensus)
+library(colorspace)
+library(xtable)
 
 data(jss2711)
 
@@ -1090,62 +1091,55 @@ The code below is a wrapper function for the
 \code{state.x77} column names is given as input.
 
 <<eval = TRUE>>=
-recmap_state_x77 <- 
+recmap_state_x77 <-
 function(input, Map = US.map, DF = state.x77,
   cm = heat_hcl(10)){
-  # join
+  # Join map and data.frame
   Map <- cbind(Map, DF, match(Map$name, row.names(DF)))
+  attr(Map, 'Map.name') <- 'U.S.'
+  attr(Map, 'Map.stat') <- input$area
 
-  # filter 
+  # Filter 
   Map <- Map[!Map$name %in% c("Hawaii", "Alaska"), ]
 
-  # set attribute for desired area
+  # Set attribute for desired area
   Map$z <- Map[, input$area]
 
-  ptm <- proc.time()
   res <- recmapGA(Map = Map,
-    popSize = 300, maxiter = 30, run = 10,
-    parallel = RECMAP_ENABLE_PARALLEL)
+    popSize = 300,
+    maxiter = 30,
+    run = 10)
 
-  # set attribute for the coloring 
+  # Set attribute for the coloring 
   S <- Map[res$GA@solution[1, ], input$color]
   col.idx <- round((length(cm) - 1)  * (S - min(S)) / (max(S)  - min(S))) + 1
-		    
-  # have fun
+
+  # Have fun
   plot(res$Cartogram, col = cm[col.idx], col.text='black')
-  legend("bottomleft", c(paste("area:", input$area), 
+  legend("bottomleft", c(paste("area:", input$area),
                          paste("color:", input$color)), cex=1.5)
 
-  res$time.elapsed = (proc.time() - ptm)[3]
   res
 }
 @
 
 As input map the \code{US.map} defined in Section~\ref{section:usage} is used.
-An interactive \pkg{shiny}~\citep{shiny} web application,
-using this method, provides more combination of
-attributes and is available through
-<<eval=FALSE>>=
-library(shiny)
-
-recmap_shiny <- system.file("shiny-examples", package = "recmap")
-shiny::runApp(recmap_shiny, display.mode = "normal")
-@
 
 <<label=x77, fig = TRUE, width=8, height=16, echo=TRUE, keep.source = FALSE, include=FALSE>>=
 op <- par(mfrow = c(4, 1), mar = rep(0.25, 4), bg = 'white')
 set.seed(1)
-cartogram.x77 <- lapply(list(list(color="Area", area="Population"),
+recmapGA.x77 <- lapply(list(list(color="Area", area="Population"),
   list(color="HS Grad", area="Murder"),
   list(color="HS Grad", area="Income"),
   list(color="Life Exp", area="Illiteracy")),
   recmap_state_x77)
 par(op)
+
 @
 
 <<label=x77GA, fig = TRUE, width=3, height=12, echo=TRUE, keep.source = FALSE, include=FALSE>>=
 op <- par(mar = c(5, 5, 3, 3), mfrow = c(4, 1))
-res <- lapply(cartogram.x77, function(x){plot(x$GA)})
+res <- lapply(recmapGA.x77, function(x){plot(x$GA)})
 par(op)
 @
     
@@ -1154,8 +1148,7 @@ par(op)
 \includegraphics[height=0.9\textheight,keepaspectratio]{graphics/jss2711-x77}
 \includegraphics[height=0.9\textheight,keepaspectratio]{graphics/jss2711-x77GA}
 \caption{Rectangular Statistical Cartograms using the 'US State Facts
-and Figures' dataset are drawn (see also
-\url{https://recmap.shinyapps.io/state_x77/}).
+and Figures' dataset are drawn.
 The fitness values versus the generations are displayed in the plots on the right.
 The plots on the right column display the fitness values versus the generation of 
 the genetic algorithm during the optimization process.
@@ -1165,7 +1158,6 @@ the genetic algorithm during the optimization process.
 
 
 <<label=us_counties, fig = TRUE, width=8, height=16, echo=FALSE, include=FALSE>>=
-# install.packages(c('maps', 'noncensus'))
 data("counties")
 get_county_mbb <- function(state='colorado'){
   MBB <- lapply(map('county', state, plot = FALSE)$names,
@@ -1181,64 +1173,53 @@ get_county_mbb <- function(state='colorado'){
   MBB <- do.call('rbind', MBB)
   MBB <- merge(MBB, county.fips, by='polyname')
   MBB$fips <- as.integer(MBB$fips)
- 
+
   P <- data.frame(fips = paste(counties$state_fips,
                   counties$county_fips, sep=''),
-                  z = counties$population,      
+                  z = counties$population,
                   name = counties$county_name)
   P$fips <- as.integer(levels(P$fips))[P$fips]
- 
+
   M <- merge(MBB, P, by='fips')
   class(M) <- c('recmap', 'data.frame')
   M
 }
 
-recmap_ga_county <- function(state='colorado'){
+set.seed(1)
+op <- par(mfrow = c(5, 2), mar = c(0, 0, 0, 0), bg = 'white')
+
+recmapGA.county <- lapply(c('california', 'colorado',
+    'florida', 'new jersey', 'new york'),
+  function(state){
   M <- get_county_mbb(state)
+  attr(M, 'Map.name') <- paste('U.S.', state)
+  attr(M, 'Map.stat') <- 'population'
   plot(M, col.text = 'darkred')
   M$dx = 1.25 * M$dx
 
-# Start the clock!
-ptm <- proc.time()
- 
-  recmapGA <- ga(type = "permutation",
+  rv <- recmapGA(
     fitness = function(idxOrder, Map, ...){
       Cartogram <- recmap(Map[idxOrder, ])
       if (sum(Cartogram$topology.error == 100) > 0){return (0)}
       1 / sum(Cartogram$relpos.error)
     },
     Map = M,
-    #monitor = gaMonitor2,
     min = 1, max = nrow(M),
-    popSize = nrow(M)*5,
+    popSize = nrow(M) * 5,
     maxiter = 200,
     run = 20,
     parallel=RECMAP_ENABLE_PARALLEL,
     pmutation = 0.25)
-  
-    plot(Cartogram <- recmap(M[recmapGA@solution[1, ], ]), col.text = 'darkred')
-    summary(Cartogram)
-    
-    list(GA = recmapGA, 
-    	Map = M, 
-	Cartogram = Cartogram, 
-	state = state, 
-	time.elapsed = (proc.time() - ptm)[3])
-}
 
-set.seed(1)
-op <- par(mfrow = c(5, 2), mar = c(0, 0, 0, 0), bg = 'white')
-res.us_county <- lapply(c('california',
-    'colorado',
-    'florida',
-    'new jersey',
-    'new york'),
-    recmap_ga_county)
+    plot(rv$Cartogram, col.text = 'darkred')
+
+    rv
+})
 @
 
 <<label=us_countiesGA, fig = TRUE, width=3.75, height=15, echo=FALSE, keep.source = FALSE, include=FALSE>>=
 op <- par(mar = c(5, 5, 3, 3), mfrow = c(5, 1))
-res <- lapply(res.us_county, function(x){plot(x$GA)})
+res <- lapply(recmapGA.county, function(x){plot(x$GA)})
 par(op)
 @
 
@@ -1266,6 +1247,27 @@ Processing Standard) county codes using the
 \code{counties} data frame.
 The cartograms were generated by using the genetic algorithm as metaheuristic.
 
+An interactive \pkg{shiny}~\citep{shiny} web application,
+using this method, provides more combination of
+attributes and is available through
+<<eval=FALSE>>=
+library(shiny)
+recmap_shiny <- system.file("shiny-examples", package = "recmap")
+shiny::runApp(recmap_shiny, display.mode = "normal")
+@
+
+<<results=tex, echo=FALSE>>=
+X <- do.call('rbind', lapply(recmapGA.x77, function(x){x$Summary}))
+Y <- do.call('rbind', lapply(recmapGA.county, function(x){x$Summary}))
+Z <- recmapGA(checkerboard(8), maxiter = 1)$Summary
+
+xt <- xtable(do.call('rbind', list(Z,X,Y)), caption = "\\label{tab:summary}The table lists a Summary of the X77 and U.S. county level examples.")
+print(xt,
+  floating.environment = "sidewaystable",
+  rotate.colnames = TRUE,
+  include.rownames = FALSE)
+@
+
 \paragraph{A population cartogram of Switzerland} on
 community (Gemeinde) level is drawn in
 Figure~\ref{figure:Switzerland:population}. The
@@ -1282,12 +1284,17 @@ Kennzahlen aller Gemeinden (je-d-21.03.01) Bundesamt
 f{\"u}r Statistik BFS
 \url{http://www.bfs.admin.ch/bfs/portal/de/index/regionen/02/daten.html})
 and joined by the \code{Gemeindecode} attribute with the
-swisstopo map. On the web application, available through
-\url{https://recmap.shinyapps.io/CH-Gemeinden/}, the
-reader can play with the rectangular population cartogram
-of Switzerland and different statisical values provided
-in the previous mentioned data for coloring the cartogram
-regions.
+swisstopo map. 
+%On the web application, available through
+%\url{https://recmap.shinyapps.io/CH-Gemeinden/}, the
+%reader can play with the rectangular population cartogram
+%of Switzerland and different statisical values provided
+%in the previous mentioned data for coloring the cartogram
+%regions.
+
+
+
+
 
 <<label=Switzerland_population, fig = TRUE, width=7, height=8, echo=FALSE, include=FALSE>>=
 par(mar=c(0, 0, 0, 0))

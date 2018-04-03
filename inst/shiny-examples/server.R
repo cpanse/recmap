@@ -44,6 +44,9 @@ data(counties)
     P$fips <- as.integer(levels(P$fips))[P$fips]
     
     M <- merge(MBB, P, by = 'fips')
+    attr(M, 'Map.name') <- paste("U.S.", state)
+    attr(M, 'Map.stat') <- 'population'
+    
     class(M) <- c('recmap', 'data.frame')
     M
   }
@@ -89,7 +92,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$colormapPlot <- renderPlot({
-    par(mar=c(0,0,0,0));
+    par(mar = c(0,0,0,0));
     pal(unlist(colormap()[input$colormapname]))
   })
   
@@ -138,6 +141,9 @@ shinyServer(function(input, output, session) {
         usa$z <- state.x77[, input$area]
         
         res <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]
+        attr(res, 'Map.name') <- "U.S."
+        attr(res, 'Map.stat') <- input$area
+        
         class(res) <- c('recmap', class(res))
         return(res)
         
@@ -249,6 +255,11 @@ shinyServer(function(input, output, session) {
     t(Cartogram()$GA@solution)
   })
  
+  output$summary <- DT::renderDataTable({
+    res <- Cartogram()
+    t(res$Summary)
+  })
+  
   
   output$foo = downloadHandler(
     filename = paste("recmap.pdf", sep = ''),

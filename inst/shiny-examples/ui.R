@@ -61,6 +61,11 @@ shinyUI(fluidPage(# Application title
                    plotOutput("gaPlot"),
                    DT::dataTableOutput("gaSolution")
                  )
+        ),
+        tabPanel("summary",
+                 list(
+                   DT::dataTableOutput("summary")
+                 )
         )
       ),
         
