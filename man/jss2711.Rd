@@ -163,6 +163,23 @@ text(C$x[idx], C$y[idx], C$name[idx], col = 'red',
 
 
 ## Figure 12
+
+\dontrun{
+fitness.SBB <- function(idxOrder, Map, ...){
+  Cartogram <- recmap(Map[idxOrder, ])
+  if (sum(Cartogram$topology.error == 100) > 1){return (0)}
+  1 / sum(Cartogram$z / (sqrt(sum(Cartogram$z^2))) * Cartogram$relpos.error)
+}
+
+SBB <- recmapGA(SBB$Map, 
+  parallel=TRUE, 
+  maxiter=1000, 
+  run=1000, 
+  seed = 1, 
+  keepBest = TRUE,
+  fitness=fitness.SBB)
+}
+
 SBB.Map <- SBB$Map
 
 # make input map overlapping
