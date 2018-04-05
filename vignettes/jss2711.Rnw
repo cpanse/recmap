@@ -987,7 +987,6 @@ fitness.weighted <- function (idxOrder, Map, ...)
 @
 
 <<echo = TRUE, eval = TRUE>>=
-set.seed(1)
 US.map.best <- recmapGA(Map = US.map,
          fitness = fitness.weighted, 
          maxiter = 100,
@@ -995,6 +994,7 @@ US.map.best <- recmapGA(Map = US.map,
          popSize = 50,
          keepBest = TRUE, 
          pmutation = 0.35, 
+	 seed = 1,
          parallel = FALSE)
 @
 
@@ -1185,12 +1185,11 @@ get_county_mbb <- function(state='colorado'){
   M
 }
 
-set.seed(1)
 op <- par(mfrow = c(5, 2), mar = c(0, 0, 0, 0), bg = 'white')
 
 recmapGA.county <- lapply(c('california', 'colorado',
     'florida', 'new jersey', 'new york'),
-  function(state){
+  function(state, seed = 1){
   M <- get_county_mbb(state)
   attr(M, 'Map.name') <- paste('U.S.', state)
   attr(M, 'Map.stat') <- 'population'
@@ -1208,7 +1207,7 @@ recmapGA.county <- lapply(c('california', 'colorado',
     popSize = nrow(M) * 5,
     maxiter = 200,
     run = 20,
-    parallel=RECMAP_ENABLE_PARALLEL,
+    seed = seed,
     pmutation = 0.25)
 
     plot(rv$Cartogram, col.text = 'darkred')
@@ -1259,9 +1258,14 @@ shiny::runApp(recmap_shiny, display.mode = "normal")
 <<results=tex, echo=FALSE>>=
 X <- do.call('rbind', lapply(recmapGA.x77, function(x){x$Summary}))
 Y <- do.call('rbind', lapply(recmapGA.county, function(x){x$Summary}))
-Z <- recmapGA(checkerboard(8), maxiter = 1)$Summary
+set.seed(1)
+Z <- recmapGA(checkerboard(8), maxiter = 10)$Summary
 
-xt <- xtable(do.call('rbind', list(Z,X,Y)), caption = "\\label{tab:summary}The table lists a Summary of the X77 and U.S. county level examples.")
+
+XYZ <- do.call('rbind', list(Z,X,Y))
+
+xt <- xtable(XYZ[order(XYZ['Map.number.regions']),], caption = "\\label{tab:summary}The table lists a Summary of the X77 and U.S. county level examples.")
+
 print(xt,
   floating.environment = "sidewaystable",
   rotate.colnames = TRUE,
