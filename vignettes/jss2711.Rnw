@@ -364,6 +364,11 @@ US.map <- data.frame(x=state.center$x,
 head(US.map)
 @
 
+<<echo = FALSE>>=
+attr(US.map, 'Map.name') <- 'U.S.'
+attr(US.map, 'Map.area') <- 'area'
+@
+
 Please note, in general \code{recmap} is not transforming the
 geodetic datum, e.g., WGS84 or Swissgrid.
 Furthermore, geospatial positions have to be mapped from the
@@ -709,7 +714,6 @@ demonstrated in the next section.
 
 \section{Choose a metaheuristic}
 \label{section:metaheuristic}
-
 The design of the \pkg{recmap} algorithm is as follows: First, compute a set
 of feasible solutions. In a second evaluation step choose the best solution.
 In the current implementation, variations can be introduced
@@ -721,14 +725,11 @@ can be used to evaluate the result and to define a
 fitness function which has to be maximized.
 The following R code defines the
 fitness function which will be used as default.
-
 <<eval = TRUE, echo = TRUE>>=
 recmap:::.recmap.fitness
 @
-
 Other variants of fitness functions will lead to different results as it is shown
 in \cite[Figure 4]{recmap}.
-
 Since it is not possible to compute and evaluate all permutations,
 which is $n!$,
 random experiments are conducted.
@@ -927,6 +928,12 @@ Figure \ref{figure:GAseed} illustrates the variability in solutions,
 dependent on the initial seed value. The experiment was repeated twice to
 demonstrate the effect that the same seed values lead to the same
 permutation order $\Pi$ and finally to the same cartogram construction.
+The results of the recmap implementation are reproducible on the same 
+platform however due to the numerical ill-condition special care has to
+be taken for computing of the fitness value. Small differences in the
+fitness values will cause error propagation over the iterations of the
+metaheuristic and derive a different solution sequence $\Pi$ and cartogram
+drawing.
 <<label=GAseed, fig = TRUE, width=16, height=8, echo=FALSE, include=FALSE, eval = TRUE>>=
 res <- lapply(c(1, 1, 2, 2, 3, 3), function(seed){
   set.seed(seed); 
@@ -986,7 +993,6 @@ fitness.weighted <- function (idxOrder, Map, ...)
     1 / (c(0.2, 0.6, 0.2) %*% c(dT, dR, dE))
 }
 @
-
 <<echo = TRUE, eval = TRUE>>=
 US.map.best <- recmapGA(Map = US.map,
          fitness = fitness.weighted, 
@@ -1015,7 +1021,6 @@ axis(1, c(0.2,0.4,0.6,0.8,1), seq(20, 100, by = 20));
 axis(2, c(0.2,0.4,0.6,0.8,1), seq(10, 50, by = 10))
 abline(v = GA.generation / 100, col='darkred')
 @
-
 <<label=bestSolution, fig = TRUE, width=8, height=8, echo=FALSE, include=FALSE>>=
 par(mfrow=c(3,2), mar=c(0,0,0,0))
 
@@ -1032,8 +1037,6 @@ rv <- lapply(GA.generation, function(idx){
                        paste("dE =", round(S[5,]))))
 })
 @
-
-
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\textwidth,keepaspectratio]{graphics/jss2711-bestSolutionFitness}
@@ -1098,7 +1101,7 @@ function(input, Map = US.map, DF = state.x77,
   # Join map and data.frame
   Map <- cbind(Map, DF, match(Map$name, row.names(DF)))
   attr(Map, 'Map.name') <- 'U.S.'
-  attr(Map, 'Map.stat') <- input$area
+  attr(Map, 'Map.area') <- input$area
 
   # Filter 
   Map <- Map[!Map$name %in% c("Hawaii", "Alaska"), ]
@@ -1193,7 +1196,7 @@ recmapGA.county <- lapply(c('california', 'colorado',
   function(state, seed = 1){
   M <- get_county_mbb(state)
   attr(M, 'Map.name') <- paste('U.S.', state)
-  attr(M, 'Map.stat') <- 'population'
+  attr(M, 'Map.area') <- 'population'
   plot(M, col.text = 'darkred')
   M$dx = 1.25 * M$dx
 
@@ -1262,10 +1265,10 @@ set.seed(1)
 Z <- recmapGA(checkerboard(8), maxiter = 10)$Summary
 
 
-XYZ <- do.call('rbind', list(Z,X,Y))
+XYZ <- do.call('rbind', list(Z,X,Y,US.map.best$Summary))
 
-xt <- xtable(XYZ[order(XYZ['Map.number.regions']),], caption = "\\label{tab:summary}The table lists a Summary of the X77 and U.S. county level examples.")
-
+xt <- xtable(XYZ[order(XYZ['Map.number.regions']),], caption = "\\label{table:reproduced:overview}The spreadsheet provides an overview of the statistical rectangular cartograms drawn in Figures \\ref{figure:cmp_GA_GRASP}, \\ref{figure:bestSolution}, \\ref{figure:x77}, and \\ref{figure:us_census} ordered by the number of map regions.")
+ 
 print(xt,
   floating.environment = "sidewaystable",
   rotate.colnames = TRUE,
@@ -1281,7 +1284,7 @@ from the Federal Office of Topography (swisstopo) using
 \pkg{shapefiles} by~\cite{shapefiles}. The following
 attributes were extracted for each map region:
 \code{box}, \code{Gemeindecode}, and \code{Gemeindename}.
-There are 2300 rectangles to place. The statistical
+There are \Sexpr{nrow(Switzerland$cartogram)} rectangles to place. The statistical
 values (population 2013, published in 2015) were
 downloaded from Swiss Statistics (Regionalportr{\"a}ts:
 Kennzahlen aller Gemeinden (je-d-21.03.01) Bundesamt
@@ -1326,14 +1329,6 @@ on 2016-05-26.
 An interactive shiny app is available through \url{https://recmap.shinyapps.io/CH-Gemeinden/}. }
 \end{figure}
 
-\paragraph{A Swiss railway passenger frequency cartogram}
-is graphed on the bottom of Figure~\ref{figure:sbb}.
-The upper visualization shows the overlapping rectanglues
-of all 400 geo-locations which define the pseudo dual of the map.
-The data were retrieved from
-\url{https://data.sbb.ch/explore/}
-and contain already the longitude and latitude coordinates of of the
-railway main station and stops.
 
 <<label=sbb, fig = TRUE, width=8, height=10, echo=FALSE, include=FALSE>>=
 op <- par(mfrow = c(2, 1), mar = c(0, 0, 0, 0))
@@ -1358,6 +1353,16 @@ text(Cartogram.SBB$x[idx],Cartogram.SBB$y[idx],
 	cex = 1.25 * Cartogram.SBB$dx[idx] / strwidth(Cartogram.SBB$name[idx]))
 
 @
+
+\paragraph{A Swiss railway passenger frequency cartogram}
+is graphed on the bottom of Figure~\ref{figure:sbb}.
+The upper visualization shows the overlapping rectanglues
+of all \Sexpr{nrow(Cartogram.SBB)} geo-locations which define the pseudo dual of the map.
+The data were retrieved from
+\url{https://data.sbb.ch/explore/}
+and contain already the longitude and latitude coordinates of of the
+railway main station and stops.
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=1.0\textwidth, keepaspectratio]{graphics/jss2711-sbb}
@@ -1490,7 +1495,7 @@ US state level	&	murder 1977	&	48	&      0.37	& 	GA	&	300	&	0.25	&	20	&	3 GHz In
 US state level	&	income 1977	&	48	&      0.29 	&	GA	&	300	&	0.25	&	30	&	3 GHz Intel Core i7	&	4	&	16	&	sec	&		&	\ref{figure:x77}\\
 US state level	&	illiteracy 1977     &	48	&      0.40 	&	GA	&	300	&	0.25	&	30	&	3 GHz Intel Core i7	&	4	&	16	&	sec	&		&	\ref{figure:x77}\\
 \hline
-US California	&	population 2010	&	48	&	0.62	&	GA	&	240	&	0.25	&	27	&	3 GHz Intel Core i7	&	4	&	10	&	sec	&		&	\ref{figure:us_census}\\
+US California	&	population 2010	&	58	&	0.62	&	GA	&	240	&	0.25	&	27	&	3 GHz Intel Core i7	&	4	&	10	&	sec	&		&	\ref{figure:us_census}\\
 US Colorado	&	population 2010	&	64	&	0.68	&	GA	&	320	&	0.25	&	102	&	3 GHz Intel Core i7	&	4	&	74	&	sec	&		&	\ref{figure:us_census}\\
 US Florida	&	population 2010	&	68	&	0.44	&	GA	&	240	&	0.25	&	49	&	3 GHz Intel Core i7	&	4	&	39	&	sec	&		&	\ref{figure:us_census}\\
 US New Jersey	&	population 2010	&	21	&	0.38	&	GA	&	105	&	0.25	&	30	&	3 GHz Intel Core i7	&	4	&	4	&	sec	&		&	\ref{figure:us_census}\\
@@ -1543,7 +1548,7 @@ complex polygon mesh as input.
 The potential of the method is shown by using
 real world maps covering a maps size of three orders
 magnitude and synthetical data (8x8 checkerboard). 
-Table~\ref{table:overview} provides an overview of the 
+Table~\ref{table:reproduced:overview} provides an overview of the 
 rectangular cartogram specification.
 The \pkg{recmap} package is a powerful tool in the hand of data
 analysts, cartographers, or statisticians using R who want

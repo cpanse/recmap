@@ -176,7 +176,7 @@ checkerboard <- function(n = 8, ratio = 4){
   res <- res[with(res, order(x, y)), ]
   row.names(res) <- 1:nrow(res); # paste(letters[1:n][xy[,1]], xy[,2], sep='')
   attr(res, 'Map.name') <- paste("checkerboard", n, "x", n)
-  attr(res, 'Map.stat') <- "in-silico"
+  attr(res, 'Map.area') <- "1:4"
   class(res) = c('recmap', class(res))
   res
 }
@@ -524,29 +524,30 @@ recmapGA <- function(Map,
            maxiter = maxiter, 
            run = run, 
            parallel = parallel,
-           pmutation = pmutation, ...)
+           pmutation = pmutation, 
+	   ...)
   end_time <- Sys.time()
-  diff_time <- as.double(end_time - start_time)
+  diff_time <- as.numeric(difftime(end_time, start_time, units = "secs"))
    if (is.null(attr(Map, 'Map.name'))){
    	attr(Map, 'Map.name')  <- ""
 	}
-   if (is.null(attr(Map, 'Map.stat'))){
-   	attr(Map, 'Map.stat')  <- ""
+   if (is.null(attr(Map, 'Map.area'))){
+   	attr(Map, 'Map.area')  <- ""
    }
   res <- list(GA = GA, 
               Map = Map[GA@solution[1, ], ], 
               Cartogram = recmap(Map[GA@solution[1, ], ]),
 	      Summary = data.frame(
       Map.name = attr(Map, 'Map.name'),
-      Map.stat = attr(Map, 'Map.stat'),
+      Map.area = tolower(attr(Map, 'Map.area')),
       Map.number.regions = length(GA@solution[1,]),
       Map.error.area = round(recmap:::.compute_area_error(Map), 2),
       GA.population.size = as.integer(GA@popSize),
       GA.number.generation = nrow(GA@summary),
       GA.pmutation = GA@pmutation,
-      #GA.fitness.begin = fitness(1:length(Map), Map),
       GA.fitness = round(GA@fitnessValue, 2),
       GA.parallel = parallel,
+      GA.number.recmaps_a_second = round((as.integer(GA@popSize) * nrow(GA@summary) / diff_time), 1),
       Sys.compute.time = round(diff_time, 1),
       Sys.machine = Sys.info()['machine'],
       Sys.sysname = Sys.info()['sysname'])
