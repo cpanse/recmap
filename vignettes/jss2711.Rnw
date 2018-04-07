@@ -447,7 +447,16 @@ A feasible solution thereof generated with
 \code{recmap} is on the right side.\label{figure:usage}
 The state area, original size of the map region, is used as statistical value.}
 \end{figure}
-
+The \proglang{S}3 methods, \code{as.recmap} and
+\code{as.SpatialPolygonsDataFrame}, enable the exchange and the
+manipulation of geographic data contained in the classes of the
+\pkg{sp} package \citep{sp1, sp2013}.  The following code displays how
+a `\code{recmap}' object can be translated into a
+`\code{SpatialPolygonsDataFrame}' object and back.
+<<>>=
+X <- checkerboard(8)
+all.equal(X, as.recmap(as.SpatialPolygonsDataFrame(X)))
+@
 
 \section{Implementation}
 \label{section:implementation}
@@ -929,7 +938,8 @@ dependent on the initial seed value. The experiment was repeated twice to
 demonstrate the effect that the same seed values lead to the same
 permutation order $\Pi$ and finally to the same cartogram construction.
 As shown above, the results of the recmap implementation are reproducible
-on the same platform. However, due to the numerical ill-condition special
+on the same platform. However, due to the numerical ill-condition 
+of the problem special
 care has to be taken for the computation of the fitness value. 
 Small differences in the fitness values on different platforms cause
 error propagation through iterations of the metaheuristic and derive

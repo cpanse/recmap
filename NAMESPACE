@@ -14,6 +14,7 @@ importFrom("GA", "ga", "gaMonitor", "plot", 'summary.ga')
 
 export("recmap")
 export("is.recmap")
+export("all.equal.recmap")
 export("recmapGA")
 export("recmapGRASP")
 export("checkerboard")

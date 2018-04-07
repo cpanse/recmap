@@ -181,6 +181,15 @@ checkerboard <- function(n = 8, ratio = 4){
   res
 }
 
+all.equal.recmap <- function(target, current, ...){
+  all.equal(target$x, current$x) &
+    all.equal(target$y, current$y) &
+    all.equal(target$dx, current$dx) & 
+    all.equal(target$dy, current$dy) &
+    all.equal(target$z, current$z) &
+    all.equal(target$name, current$name)
+}
+
 is.recmap <- function(object){
   if(sum(c("x", "y", "dx", "dy", "z") %in% names(object)) != 5) {
     message("column names 'x', 'y', 'dx', 'dy', and 'z' are required.")
@@ -314,6 +323,14 @@ as.recmap.SpatialPolygonsDataFrame <- function(X){
    df <- cbind(df, X@data) 
 
    if (is.recmap(df)){
+   	if (is.null(attr(X, 'Map.name'))){
+   		attr(df, 'Map.name')  <- ""
+	}
+   	if (is.null(attr(X, 'Map.area'))){
+   		attr(df, 'Map.area')  <- ""
+   	}
+	df <- df[, c('x', 'y', 'dx', 'dy', 'z', 'name')]
+	row.names(df) <- 1:nrow(df)
   	class(df) <- c('recmap', class(df))
    	return(df)
    } else if (!'z' %in% names(df)){
@@ -541,7 +558,7 @@ recmapGA <- function(Map,
       Map.name = attr(Map, 'Map.name'),
       Map.area = tolower(attr(Map, 'Map.area')),
       Map.number.regions = length(GA@solution[1,]),
-      Map.error.area = round(recmap:::.compute_area_error(Map), 2),
+      Map.error.area = round(.compute_area_error(Map), 2),
       GA.population.size = as.integer(GA@popSize),
       GA.number.generation = nrow(GA@summary),
       GA.pmutation = GA@pmutation,

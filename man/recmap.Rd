@@ -3,6 +3,7 @@
 \alias{RecMap}
 \alias{cartogram}
 \alias{is.recmap}
+\alias{all.equal.recmap}
 
 \title{
 
