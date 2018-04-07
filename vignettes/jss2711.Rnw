@@ -1,4 +1,4 @@
-%\VignetteIndexEntry{Rectangular Statistical Cartograms R (JSS submission #2711)}
+%\VignetteIndexEntry{Rectangular Statistical Cartograms R (jss2711 replication code)}
 \documentclass[nojss]{jss}
 \usepackage{amssymb}
 \usepackage{amsmath}
