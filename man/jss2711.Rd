@@ -10,7 +10,7 @@
 jss2711 data
 }
 \description{
-jss2711 contains the recmap input for the Figures 4, 6, 7, 11, 12, 13.
+jss2711 contains the input maps for the Figures 4, 6, 7, 11, 12, 13.
 }
 \format{
   A set of nested list of data frames.
@@ -157,20 +157,15 @@ idx <- rev(order(C$z))[1:50];
 text(C$x[idx], C$y[idx], C$name[idx], col = 'red', 
   cex = C$dx[idx] / strwidth(as.character(C$name[idx])))
 
-# text(C$x[idx], C$y[idx], iconv(as.character(C$name[idx]),
-#   "latin1", "UTF-8"), col='red',
-#   cex = C$dx[idx]/strwidth(as.character(C$name[idx])))
-
-
 ## Figure 12
 
-\dontrun{
 fitness.SBB <- function(idxOrder, Map, ...){
   Cartogram <- recmap(Map[idxOrder, ])
   if (sum(Cartogram$topology.error == 100) > 1){return (0)}
   1 / sum(Cartogram$z / (sqrt(sum(Cartogram$z^2))) * Cartogram$relpos.error)
 }
 
+\dontrun{
 SBB <- recmapGA(SBB$Map, 
   parallel=TRUE, 
   maxiter=1000, 
@@ -205,7 +200,7 @@ text(Cartogram.recomp$x[idx],Cartogram.recomp$y[idx],
 	cex = 1.25 * Cartogram.recomp$dx[idx] / strwidth(Cartogram.recomp$name[idx]))
 
 # sanity check - reproducibility cross plattform
-op <- par(mfrow=c(2,2), mar=c(5,5,5,5))
+op <- par(mfrow = c(2, 2), mar = c(5, 5, 5, 5))
 identical.recmap(Cartogram.recomp, SBB$Cartogram, TRUE)
 
 

@@ -4,4 +4,4 @@
 ^.*Dockerfile$
 ^.*_config.yml$
 ^.*.travis.yml$
-^.*vignettes/jss2711.Rnw$
+# ^.*vignettes/jss2711.Rnw$
