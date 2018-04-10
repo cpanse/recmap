@@ -1,5 +1,16 @@
-FROM rocker/rstudio
+FROM rocker/geospatial
 MAINTAINER Christian Panse <Christian.Panse@gmail.com>
-RUN R -e "install.packages(pkgs=c('devtools'), quiet=FALSE, repos='https://stat.ethz.ch/CRAN/', type='source'); \
-    library(devtools); \
-    install_git('https://github.com/cpanse/recmap', build_vignettes = TRUE, quiet = FALSE)" 
+RUN install2.r --error \ 
+  GA \
+  colorspace  \
+  doParallel \
+  knitr \
+  maps \
+  noncensus \
+  shiny \
+  testthat 
+RUN apt-get install curl && cd /tmp \
+ && curl -s https://codeload.github.com/cpanse/recmap/zip/master \
+ > recmap.zip && unzip recmap.zip \
+ && R CMD build recmap-master \
+ && R CMD INSTALL recmap*.gz 
