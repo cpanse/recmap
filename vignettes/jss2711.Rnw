@@ -9,7 +9,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% almost as usual
-\author{Christian Panse\\Swiss Federal Institute of Technology in Zurich }
+\author{Christian Panse\\Swiss Federal Institute of Technology Zurich }
 
 \title{Rectangular Statistical Cartograms in \proglang{R}: The \pkg{recmap} Package\thanks{This vignette is a (slightly) modified version (added Table~\ref{table:overview} and section~\ref{section:session}) of jss2711, to be published in the Journal of Statistical Software.}}
 
