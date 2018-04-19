@@ -1569,6 +1569,9 @@ The \pkg{recmap} package is a powerful tool in the hand of data
 analysts, cartographers, or statisticians using R who want
 to draw their own statistical rectangular cartograms.
 
+\bibliography{jss2711}
+
+\appendix
 \section{Session information}
 \label{section:session}
 An overview of the package versions used to produce this document are
@@ -1578,5 +1581,4 @@ shown below.
 toLatex(sessionInfo())
 @
 
-\bibliography{jss2711}
 \end{document}

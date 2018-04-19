@@ -23,7 +23,7 @@
 
 #include <Rcpp.h>
 #include <string>
-#include "recmap.h"
+#include <recmap.h>
 
 using namespace Rcpp;
 

@@ -187,6 +187,7 @@ class RecMap{
   recmapvector Cartogram;
   mbb_set MBB;
   int intersect_count;
+  bool map_region_intersect_multiset = true;
 
   int num_regions;
 
@@ -229,6 +230,7 @@ class RecMap{
     Cartogram.push_back(R1);
     num_regions++;
 
+
     //if (num_regions != Map.size()) {
       // TODO(cp): call an exception?
     //}
@@ -249,6 +251,7 @@ class RecMap{
   int get_size() {return num_regions;}
 
   int get_intersect_count() { return intersect_count; }
+  void set_map_region_intersect_multiset(bool b) { map_region_intersect_multiset = b; }
 
   map_region& get_map_region(int i) { return(Cartogram[i]); }
 
@@ -312,6 +315,7 @@ class RecMap{
   bool map_region_intersect(const recmapvector &C, const map_region &a) {
     for (map_region b : C) {
       if (a.id != b.id && b.placed > 0) {
+      intersect_count++;
       if (mbb_check(a, b)) {
         return true;
       }}
@@ -337,6 +341,8 @@ class RecMap{
 
 
     for (auto it_x = lower_x; it_x != upper_x; ++it_x) {
+
+      intersect_count++;
       if ((*it_x).id != a.id &&  mbb_check(a, C[(*it_x).id])) {
         return true;
       }
@@ -355,6 +361,7 @@ class RecMap{
                                       { return f1.key < f2.key; });
 
     for (auto it_y = lower_y; it_y != upper_y; ++it_y) {
+      intersect_count++;
       if ((*it_y).id != a.id && mbb_check(a, C[(*it_y).id])) {
         return true;
       }
@@ -369,6 +376,7 @@ class RecMap{
     mbb_node mn;
 
     double beta_sign = 1.0;
+    bool intersect = true;
 
     // strategy one: try to place it in the neighborhood;
     // and only one => allow non feasible solution to be filtered out
@@ -385,9 +393,12 @@ class RecMap{
 
           place_rectangle(C[adj_region_id], alpha, C[region_id]);
 
-          // for linear MBB check use
-          // if (!map_region_intersect(C, C[region_id])) {
-          if (!map_region_intersect_set(C, MBB, C[region_id])) {
+	  if (map_region_intersect_multiset)
+		  intersect = map_region_intersect_set(C, MBB, C[region_id]);
+	  else
+		  intersect = map_region_intersect(C, C[region_id]);
+
+          if (!intersect) {
             C[region_id].placed++;
             C[region_id].topology_error = 0;  // for the moment
 
@@ -451,30 +462,30 @@ class RecMap{
 
     std::for_each(C.begin(), C.end(), [&] (map_region &r) {
       if (r.placed == 0) {
-        PlaceRectangle(M, C, r.id);
-        if (r.placed == 0) {
-          // yes -
-          // accept a non feasible solution to save computational resources
-          // the metaheuristic has to fix that with the fitness function
-          warnings.push_back(r.name + " was not placed!!");
-        }
-        //
-      }});
-  }
+		PlaceRectangle(M, C, r.id);
+		if (r.placed == 0) {
+		  // yes -
+		  // accept a non feasible solution to save computational resources
+		  // the metaheuristic has to fix that with the fitness function
+		  warnings.push_back(r.name + " was not placed!!");
+		}
+		//
+	      }});
+	  }
 
 
-  void ComputeError(recmapvector &M, recmapvector &C) {
-    double gammaM, gammaC, delta;
-    // relative position error
-    // TODO(cp): make the  each_unique_pair construct working to
-    //           save 50% of the hand shakes
-    for (const auto & a : M) {
-      for (const auto & b : M) {
-        gammaM = get_angle(M[a.id], M[b.id]);
-        gammaC = get_angle(C[a.id], C[b.id]);
+	  void ComputeError(recmapvector &M, recmapvector &C) {
+	    double gammaM, gammaC, delta;
+	    // relative position error
+	    // TODO(cp): make the  each_unique_pair construct working to
+	    //           save 50% of the hand shakes
+	    for (const auto & a : M) {
+	      for (const auto & b : M) {
+		gammaM = get_angle(M[a.id], M[b.id]);
+		gammaC = get_angle(C[a.id], C[b.id]);
 
-	if ((gammaM < 0 && gammaC > 0) || ( gammaM > 0 && gammaC < 0))
-          delta = fabs(gammaC + gammaM) / C.size();
+		if ((gammaM < 0 && gammaC > 0) || ( gammaM > 0 && gammaC < 0))
+		  delta = fabs(gammaC + gammaM) / C.size();
 	else
           delta = fabs(gammaC - gammaM) / C.size();
 
