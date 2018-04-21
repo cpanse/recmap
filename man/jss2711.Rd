@@ -48,7 +48,7 @@ Christian Panse, 2018
 options(warn = -1)
 
 ## Figure 4 
-jss2711_figure4 <- function(nrep = 5, size = c(2, 3, 5, 10, 20)){
+jss2711_figure4 <- function(nrep = 1, size = 2:20){
   recmap_debug_code <- '
   // [[Rcpp::plugins(cpp11)]]
   
@@ -127,22 +127,32 @@ jss2711_figure4 <- function(nrep = 5, size = c(2, 3, 5, 10, 20)){
       }))
     }))
 }
+
 mbb_check <- jss2711_figure4()
 
-library(lattice)
-bwplot(number ~ size | algorithm * sysname, horizontal = FALSE, data = mbb_check)
+boxplot(number  ~ sqrt(size),
+  axes=FALSE,
+  data = mbb_check,
+  log='y', 
+  cex = 0.75,
+  subset = algorithm == "list", 
+  col = "red", boxwex = 0.25); 
+abline(v = sqrt(50), col = 'lightgray', lwd = 3)
 
-bwplot(time_in_secs ~ size | algorithm * sysname, horizontal = FALSE, data = mbb_check)
+boxplot(number  ~ sqrt(size), 
+  data = mbb_check,log='y',
+  subset = algorithm == "multiset",
+  cex = 0.75,
+  ylab = 'number of MBB intersection calls',
+  xlab = 'number of map regions',
+  boxwex = 0.25, add = TRUE, axes=FALSE); 
+axis(2)
+axis(1, c(5, sqrt(50), 10, 15, 20), c("5x5", "US", "10x10", "15x15", "20x20"))
+box()
 
-xyplot(number ~ size, group=paste(algorithm, sysname),
-  data = aggregate(number ~ size * algorithm * sysname, data = mbb_check, FUN=mean),
-  auto.key = TRUE,
-  type='b')
+legend("bottomright", c("C++ STL list", "C++ STL multiset"),
+      col=c('red', 'black'), pch = 16, cex = 1.0)
 
-xyplot(time_in_secs ~ size, group=paste(algorithm, sysname),
-  data = aggregate(time_in_secs ~ size * algorithm * sysname, data = mbb_check, FUN=mean),
-  auto.key = TRUE,
-  type='b')
 
 
 
