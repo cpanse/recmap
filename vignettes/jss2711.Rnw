@@ -803,7 +803,7 @@ based on a GRASP metaheuristic.
 
 <<eval=FALSE>>=
 set.seed(1)
-res.GRASP <- recmapGRASP(Checkerboard)
+res.GRASP <- recmapGRASP(Checkerboard, iteration.max = 80)
 plot(res.GRASP$Cartogram,
   col = c('white', 'white', 'white', 'black')[res.GRASP$Cartogram$z])
 @
@@ -837,10 +837,9 @@ within 60 seconds.
 recmap.GA <- ga(type = "permutation",
     fitness = recmap:::.recmap.fitness,
     Map = Checkerboard,
-    min = 1,
-    max = nrow(Checkerboard),
-    popSize = 64,
-    maxiter = 1000,
+    popSize = 50,
+    run = 300,
+    maxiter = 300,
     maxFitness = 1.7,
     parallel = TRUE,
     pmutation = 0.25)
@@ -848,7 +847,7 @@ recmap.GA <- ga(type = "permutation",
 
 The metaheuristic stops when a maximum number of
 iteration has been performed or the fitness value is
-higher than 1.7. Having reached a fitness value of 1.7
+higher than 1.7. Having reached a fitness value of \Sexpr{max(cmp_GA_GRASP$cmp$best)}
 using the \code{recmap.fitness} function the result
 in Figure~\ref{figure:cmp_GA_GRASP} (right)
 looks like an almost \lq optimal\rq solution.
@@ -857,7 +856,7 @@ The \code{recmapGA} function is a higher level wrapper function to glue
 the \code{recmap} construction heuristic with the metaheuristic \code{ga}.
 
 <<eval=FALSE>>=
-res.GA <- recmapGA(Checkerboard)
+res.GA <- recmapGA(Checkerboard, popSize = 50, run = 300, maxiter = 300)
 summary(res.GA)
 plot(res.GA$Cartogram, 
   col=c('white', 'white', 'white', 'black')[res.GA$Cartogram$z])
@@ -875,67 +874,53 @@ placed rectangle and the $\diamond$ the last one.
 <<label=CB8_GRASP_GA, fig = TRUE, width=6, height=2, echo=FALSE, include=FALSE, eval = TRUE>>=
 op <- par(mar=c(0, 0, 0, 0), mfrow=c(1, 3), bg = 'azure')
 
-plot(checkerboard8x8 <- checkerboard(8),
-	    border='black',
-            col=c('white', 'white', 'white', 'black')[checkerboard8x8$z])
+plot(cmp_GA_GRASP$GRASP$Map,
+     border='black',
+     col=c('white', 'white', 'white', 'black')[cmp_GA_GRASP$GRASP$Map$z])
 
-# found by a greedy randomized search
-index.greedy <- c(8, 56, 18, 5, 13, 57, 3, 37, 62, 58, 7, 16, 40, 59, 17, 34,
-                  29, 41, 46, 27, 54, 43, 2, 21, 38, 52, 31, 20, 28, 48, 1, 22,
-                  55, 11, 25, 19, 50, 10, 24, 53, 47, 30, 45, 44, 32, 35, 51,
-                  15, 64, 12, 14, 39, 26, 6, 42, 33, 4, 36, 63, 49, 60, 61, 9,
-                  23)
+plot(cmp_GA_GRASP$GRASP$Cartogram,
+     border='black',
+     col = c('white', 'white', 'white', 'black')[cmp_GA_GRASP$GRASP$Cartogram$z])
 
-plot(Cartogram.checkerboard8x8.greedy <- recmap(checkerboard8x8[index.greedy, ]),
-	    border='black',
-            col = c('white', 'white', 'white', 'black')[Cartogram.checkerboard8x8.greedy$z])
-
-# found by a genetic algorithm
-index.ga <- c(52, 10, 27, 63, 7, 20, 32, 18, 47, 28, 6, 55, 11, 61, 38, 50, 5,
-              21, 36, 34, 2, 22, 3, 1, 29, 57, 43, 4, 51, 58, 31, 49, 44, 25,
-              59, 33, 17, 40, 8, 41, 26, 37, 19, 56, 45, 35, 62, 53, 24, 64,
-              30, 15, 39, 12, 60, 48, 16, 23, 46, 42, 13, 54, 14, 9)
-
-plot(Cartogram.checkerboard8x8.ga <- recmap(checkerboard8x8[index.ga,]),
-  col = c('white', 'white', 'white', 'black')[Cartogram.checkerboard8x8.ga$z])
+plot(cmp_GA_GRASP$GA$Cartogram,
+     border='black',
+     col = c('white', 'white', 'white', 'black')[cmp_GA_GRASP$GA$Cartogram$z])
 @           
            
 <<label=CB8, fig = TRUE, width=4, height=4, echo=FALSE, include=FALSE, eval = TRUE>>=
 op <- par(mar = c(0, 0, 0, 0), mfrow=c(1, 1), bg = 'azure')
-Checkerboard <- checkerboard(8)
-#plot(Checkerboard <- checkerboard(8),
-#            col=c('white','white','white','black')[Checkerboard$z])
+bestsolution <- cmp_GA_GRASP$GA$GA@solution[1,]
 
-# found by the GA
-smp <- c(52, 10, 27, 63, 7, 20, 32, 18, 47, 28, 6, 55, 11, 61, 38,
-50, 5, 21, 36, 34, 2, 22, 3, 1, 29, 57, 43, 4, 51, 58, 31, 49, 44,
-25, 59, 33, 17, 40, 8, 41, 26, 37, 19, 56, 45, 35, 62, 53, 24, 64,
-30, 15, 39, 12, 60, 48, 16, 23, 46, 42, 13, 54, 14, 9)
-
-Cartogram.Checkerboard <- recmap(Checkerboard[smp, ])
+Cartogram.Checkerboard <- recmap(Checkerboard[bestsolution, ])
 idx <- order(Cartogram.Checkerboard$dfs.num)
 
 plot(Cartogram.Checkerboard,
-	    border='black',
-            col=c('white', 'white', 'white', 'black')[Cartogram.Checkerboard$z])
+     border='black',
+     col=c('white', 'white', 'white', 'black')[Cartogram.Checkerboard$z])
 
 # draw placement order
-lines(Cartogram.Checkerboard$x[idx], Cartogram.Checkerboard$y[idx], col = 'red', lwd = 2)
+lines(Cartogram.Checkerboard$x[idx], Cartogram.Checkerboard$y[idx], col = rgb(1,0,0, alpha=0.3), lwd = 4, cex=0.5)
+
+text(Cartogram.Checkerboard$x[idx], Cartogram.Checkerboard$y[idx], 1:length(idx), pos=1, col=rgb(1,0,0, alpha=0.7))
+
 points(Cartogram.Checkerboard$x[idx[1]], Cartogram.Checkerboard$y[idx[1]], lwd = 5, col = 'red')
+text(Cartogram.Checkerboard$x[idx[1]], Cartogram.Checkerboard$y[idx[1]], "start", col = 'red', pos=3)
 points(Cartogram.Checkerboard$x[idx[length(idx)]], Cartogram.Checkerboard$y[idx[length(idx)]],
-  cex = 1.25, lwd = 2, col = 'red', pch = 5)
+       cex = 1.25, lwd = 2, col = 'red', pch = 5)
 @
 
 <<label=cmp_GA_GRASP, fig = TRUE, width=4, height=4, echo=FALSE, include=FALSE>>=
-op <- par(mar = c(4, 4, 0.5, 0.5), mfrow = c(1, 1), bg = 'white')
-
-plot(cmp_GA_GRASP$GA[, 1], cmp_GA_GRASP$GA[, 2], type = 'b',
-     xlab = 'elapsed time [in seconds]',
-     ylab = 'recmap.fitness', pch = 22, lwd = 2)
-
-lines(cmp_GA_GRASP$GRASP[, 1], cmp_GA_GRASP$GRASP[, 2], col = 'red', type = 'b', pch = 23)
-legend("bottomright", c("GA", "GRASP"), col = c('black', 'red'),
-    pch=c(22, 23), cex=1.5)
+op <- par(mar = c(4, 4, 1.5, 0.5), mfrow = c(1, 1), bg = 'white')
+plot(best ~ elapsedtime, data = cmp_GA_GRASP$cmp,
+     type = 'n',
+     ylab = 'best fitness value',
+     xlab = 'elapsed time [in seconds]')
+abline(v=60, col='lightgrey',lwd=2)
+lines(cmp_GA_GRASP$cmp[cmp_GA_GRASP$cmp$algorithm == "GRASP", c('elapsedtime', 'best')], type = 'b', col='red', pch=16)
+lines(cmp_GA_GRASP$cmp[cmp_GA_GRASP$cmp$algorithm == "GA", c('elapsedtime', 'best')], type = 'b', pch=16)
+legend("bottomright", c("Evolutionary based Genetic Algorithm (GA)",
+                        "Greedy Randomized Adaptive Search Procedures (GRASP)"), col = c('black', 'red'),
+       pch=16, cex=0.5)
 @
 
 \begin{figure}[htbp]
