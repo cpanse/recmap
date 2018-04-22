@@ -176,7 +176,7 @@ plot(cmp_GA_GRASP$GRASP$Map,
 
 plot(cmp_GA_GRASP$GRASP$Cartogram,
      border='black',
-     col = c('white', 'white', 'white', 'black')[res.GRASP$Cartogram$z])
+     col = c('white', 'white', 'white', 'black')[cmp_GA_GRASP$GRASP$Cartogram$z])
 
 plot(cmp_GA_GRASP$GA$Cartogram,
      border='black',
@@ -187,9 +187,9 @@ par(op)
 
 op <- par(mar = c(0, 0, 0, 0), mfrow=c(1, 1), bg = 'azure')
 # found by the GA
-smp <- res.GA$GA@solution[1,]
+smp <- cmp_GA_GRASP$GA$GA@solution[1,]
 
-Cartogram.Checkerboard <- recmap(Checkerboard[smp, ])
+Cartogram.Checkerboard <- recmap(cmp_GA_GRASP$GA$Map[smp, ])
 idx <- order(Cartogram.Checkerboard$dfs.num)
 
 plot(Cartogram.Checkerboard,

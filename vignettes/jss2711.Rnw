@@ -855,9 +855,10 @@ looks like an almost \lq optimal\rq solution.
 The \code{recmapGA} function is a higher level wrapper function to glue
 the \code{recmap} construction heuristic with the metaheuristic \code{ga}.
 
+<<eval=TRUE>>=
+res.GA <- recmapGA(Checkerboard, popSize = 50, run = 300, maxiter = 300, seed = 3)
+summary(res.GA$Cartogram)
 <<eval=FALSE>>=
-res.GA <- recmapGA(Checkerboard, popSize = 50, run = 300, maxiter = 300)
-summary(res.GA)
 plot(res.GA$Cartogram, 
   col=c('white', 'white', 'white', 'black')[res.GA$Cartogram$z])
 @
@@ -904,7 +905,7 @@ lines(Cartogram.Checkerboard$x[idx], Cartogram.Checkerboard$y[idx], col = rgb(1,
 text(Cartogram.Checkerboard$x[idx], Cartogram.Checkerboard$y[idx], 1:length(idx), pos=1, col=rgb(1,0,0, alpha=0.7))
 
 points(Cartogram.Checkerboard$x[idx[1]], Cartogram.Checkerboard$y[idx[1]], lwd = 5, col = 'red')
-text(Cartogram.Checkerboard$x[idx[1]], Cartogram.Checkerboard$y[idx[1]], "start", col = 'red', pos=3)
+text(Cartogram.Checkerboard$x[idx[1]], Cartogram.Checkerboard$y[idx[1]], "start", col = 'red', pos=3,cex=0.75)
 points(Cartogram.Checkerboard$x[idx[length(idx)]], Cartogram.Checkerboard$y[idx[length(idx)]],
        cex = 1.25, lwd = 2, col = 'red', pch = 5)
 @
@@ -916,10 +917,10 @@ plot(best ~ elapsedtime, data = cmp_GA_GRASP$cmp,
      ylab = 'best fitness value',
      xlab = 'elapsed time [in seconds]')
 abline(v=60, col='lightgrey',lwd=2)
-lines(cmp_GA_GRASP$cmp[cmp_GA_GRASP$cmp$algorithm == "GRASP", c('elapsedtime', 'best')], type = 'b', col='red', pch=16)
+lines(cmp_GA_GRASP$cmp[cmp_GA_GRASP$cmp$algorithm == "GRASP", c('elapsedtime', 'best')], type = 'b', col='grey', pch=16)
 lines(cmp_GA_GRASP$cmp[cmp_GA_GRASP$cmp$algorithm == "GA", c('elapsedtime', 'best')], type = 'b', pch=16)
 legend("bottomright", c("Evolutionary based Genetic Algorithm (GA)",
-                        "Greedy Randomized Adaptive Search Procedures (GRASP)"), col = c('black', 'red'),
+                        "Greedy Randomized Adaptive Search Procedures (GRASP)"), col = c('black', 'grey'),
        pch=16, cex=0.5)
 @
 
