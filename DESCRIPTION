@@ -25,10 +25,12 @@ Suggests:
 	colorspace,
 	doParallel,
 	knitr,
+	lattice,
 	maps,
 	noncensus,
 	shiny,
-	testthat
+	testthat,
+	xtable
 SystemRequirements: C++11
 LinkingTo: Rcpp (>= 0.12.4)
 VignetteBuilder: knitr
