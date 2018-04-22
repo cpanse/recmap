@@ -1115,6 +1115,8 @@ and \ref{figure:x77} the examples focus more on the
 demonstration of the drawing characteristics of the
 \code{recmap} method itself and less on the information
 visualization scopes.
+Examples of combining cartogram drawings with pixel visualization techniques
+are described in \citep{4015426}.
 Figure~\ref{fig:brexit} demonstrates how \pkg{recmap}
 objects can be transformed to \code{SpatialPolygonsDataFrame}
 objects.
