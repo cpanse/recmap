@@ -18,21 +18,28 @@ jss2711 contains the input maps for the Figures 4, 6, 7, 11, 12, 13.
 
 \source{
 \itemize{
+\item{Figure 4 -- \code{mbb_check} contains a \code{data.frame} with some
+\code{recmap} implemention benchmarks.
+\item{Figure 5} -- \code{cmp_GA_GRASP} contains a \code{list} of results using 
+a GRASP and GA metaheuristic. Perfomed on a MacBook Pro (Retina, 13-inch, Mid 2014).
 \item{Figure 11 -- \code{Switzerland}:
 \itemize{
   \item {input map rectangles derived from:
 Swiss Federal Office of Topography \url{https://www.swisstopo.admin.ch} using Landscape Models / Boundaries GG25,
-downloaded 2016-05-01;}
+downloaded 2016-05-01; Perfomed on a Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz/ Debian8}
 \item{statistical data: Bundesamt fur Statistik (BFS) \url{https://www.bfs.admin.ch},
-Website Statistik Schweiz, downloaded file \code{je-d-21.03.01.xls} on 2016-05-26.}}
+Website Statistik Schweiz, downloaded file \code{je-d-21.03.01.xls} on 2016-05-26.}, 
+\item{Perfomed on a Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz/ Debian8}}
 }
 \item{Figure 12 -- \code{sbb}:
-\url{https://data.sbb.ch/explore/?sort=explore.download_count&refine.modified=2016} 2016-05-12}
+\url{https://data.sbb.ch/explore/?sort=explore.download_count&refine.modified=2016} 2016-05-12},Perfomed on a Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz/ Debian8
 \item{Figure 13 -- \code{UK}:
-Contains National Statistics data Crown copyright and database right 2016
-Contains NRS data Crown copyright and database right 2016
-Source:  NISRA : Website: \url{www.nisra.gov.uk} 
-Contains OS data Crown copyright [and database right] (2016)}
+\itemize{
+\item {input map rectangles derived from: \url{https://census.edina.ac.uk/ukborders}; Contains OS data Crown copyright [and database right] (2016);}
+\item {Source of election data:  NISRA : Website: \url{www.nisra.gov.uk}}
+\item {copyright - Contains National Statistics data Crown copyright and database right 2016
+Contains NRS data Crown copyright and database right 2016}
+\item {Perfomed on a Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz/ Debian8}}
 }
 }
 
@@ -159,17 +166,59 @@ legend("bottomright", c("C++ STL list", "C++ STL multiset"),
 data(package = "recmap")
 data(jss2711)
 
+## Figure 5
+
+op <- par(mar=c(0, 0, 0, 0), mfrow=c(1, 3), bg = 'azure')
+
+plot(cmp_GA_GRASP$GRASP$Map,
+     border='black',
+     col=c('white', 'white', 'white', 'black')[cmp_GA_GRASP$GRASP$Map$z])
+
+plot(cmp_GA_GRASP$GRASP$Cartogram,
+     border='black',
+     col = c('white', 'white', 'white', 'black')[res.GRASP$Cartogram$z])
+
+plot(cmp_GA_GRASP$GA$Cartogram,
+     border='black',
+     col = c('white', 'white', 'white', 'black')[cmp_GA_GRASP$GA$Cartogram$z])
+par(op)
+
 ## Figure 6 - right
-op <- par(mar = c(4, 4, 2, 2), mfrow = c(1, 1), bg = 'white')
 
-plot(cmp_GA_GRASP$GA[, 1], cmp_GA_GRASP$GA[, 2], type = 'b',
-     xlab = 'elapsed time [in seconds]',
-     ylab = 'recmap.fitness', pch = 22, lwd = 2)
+op <- par(mar = c(0, 0, 0, 0), mfrow=c(1, 1), bg = 'azure')
+# found by the GA
+smp <- res.GA$GA@solution[1,]
 
-lines(cmp_GA_GRASP$GRASP[, 1], cmp_GA_GRASP$GRASP[, 2], col = 'red', type = 'b', pch = 23)
-legend("bottomright", c("GA", "GRASP"), col = c('black', 'red'),
-    pch=c(22, 23), cex=1.5)
+Cartogram.Checkerboard <- recmap(Checkerboard[smp, ])
+idx <- order(Cartogram.Checkerboard$dfs.num)
 
+plot(Cartogram.Checkerboard,
+     border='black',
+     col=c('white', 'white', 'white', 'black')[Cartogram.Checkerboard$z])
+
+# draw placement order
+lines(Cartogram.Checkerboard$x[idx], Cartogram.Checkerboard$y[idx], col = rgb(1,0,0, alpha=0.3), lwd = 4, cex=0.5)
+
+text(Cartogram.Checkerboard$x[idx], Cartogram.Checkerboard$y[idx], 1:length(idx), pos=1, col=rgb(1,0,0, alpha=0.7))
+
+points(Cartogram.Checkerboard$x[idx[1]], Cartogram.Checkerboard$y[idx[1]], lwd = 5, col = 'red')
+text(Cartogram.Checkerboard$x[idx[1]], Cartogram.Checkerboard$y[idx[1]], "start", col = 'red', pos=3)
+points(Cartogram.Checkerboard$x[idx[length(idx)]], Cartogram.Checkerboard$y[idx[length(idx)]],
+       cex = 1.25, lwd = 2, col = 'red', pch = 5)
+par(op)
+op <- par(mar = c(4, 4, 1.5, 0.5), mfrow = c(1, 1), bg = 'white')
+plot(best ~ elapsedtime, data = cmp_GA_GRASP$cmp,
+     type = 'n',
+     ylab = 'best fitness value',
+     xlab = 'elapsed time [in seconds]')
+abline(v=60, col='lightgrey',lwd=2)
+lines(cmp_GA_GRASP$cmp[cmp_GA_GRASP$cmp$algorithm == "GRASP", c('elapsedtime', 'best')], type = 'b', col='red', pch=16)
+lines(cmp_GA_GRASP$cmp[cmp_GA_GRASP$cmp$algorithm == "GA", c('elapsedtime', 'best')], type = 'b', pch=16)
+legend("bottomright", c("Evolutionary based Genetic Algorithm (GA)",
+                        "Greedy Randomized Adaptive Search Procedures (GRASP)"), col = c('black', 'red'),
+       pch=16, cex=1.0)
+
+par(op)
 
 ## Figure 7
 \dontrun{
