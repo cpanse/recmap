@@ -10,7 +10,7 @@
 jss2711 data
 }
 \description{
-jss2711 contains the input maps for the Figures 4, 6, 7, 11, 12, 13.
+jss2711 contains the input data and maps for the Figures 4, 5, 6, 7, 11, 12, 13.
 }
 \format{
   A set of nested list of data frames.
@@ -19,9 +19,9 @@ jss2711 contains the input maps for the Figures 4, 6, 7, 11, 12, 13.
 \source{
 \itemize{
 \item{Figure 4 -- \code{mbb_check} contains a \code{data.frame} with some
-\code{recmap} implemention benchmarks.
+\code{recmap} implemention benchmarks.Generated on a MacBook Pro (Retina, 15-inch, Mid 2017)
 \item{Figure 5} -- \code{cmp_GA_GRASP} contains a \code{list} of results using 
-a GRASP and GA metaheuristic. Perfomed on a MacBook Pro (Retina, 13-inch, Mid 2014).
+a GRASP and GA metaheuristic. Generated on a MacBook Pro (Retina, 13-inch, Mid 2014).
 \item{Figure 11 -- \code{Switzerland}:
 \itemize{
   \item {input map rectangles derived from:
@@ -41,7 +41,7 @@ Website Statistik Schweiz, downloaded file \code{je-d-21.03.01.xls} on 2016-05-2
 Contains NRS data Crown copyright and database right 2016}
 \item {Perfomed on a Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz/ Debian8}}
 }
-}
+}}}
 
 \author{
 Christian Panse, 2018
