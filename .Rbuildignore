@@ -7,3 +7,4 @@
 ^.*vignettes/jss2711.Rnw$
 ^.*R/jss2711.R$
 ^.*data/jss2711.RData.bak$
+^.*LICENSE$

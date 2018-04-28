@@ -197,13 +197,20 @@ plot(Cartogram.Checkerboard,
      col=c('white', 'white', 'white', 'black')[Cartogram.Checkerboard$z])
 
 # draw placement order
-lines(Cartogram.Checkerboard$x[idx], Cartogram.Checkerboard$y[idx], col = rgb(1,0,0, alpha=0.3), lwd = 4, cex=0.5)
+lines(Cartogram.Checkerboard$x[idx],
+  Cartogram.Checkerboard$y[idx],
+  col = rgb(1,0,0, alpha=0.3), lwd = 4, cex=0.5)
 
-text(Cartogram.Checkerboard$x[idx], Cartogram.Checkerboard$y[idx], 1:length(idx), pos=1, col=rgb(1,0,0, alpha=0.7))
+text(Cartogram.Checkerboard$x[idx],
+  Cartogram.Checkerboard$y[idx],
+  1:length(idx), pos=1, col=rgb(1,0,0, alpha=0.7))
 
-points(Cartogram.Checkerboard$x[idx[1]], Cartogram.Checkerboard$y[idx[1]], lwd = 5, col = 'red')
-text(Cartogram.Checkerboard$x[idx[1]], Cartogram.Checkerboard$y[idx[1]], "start", col = 'red', pos=3)
-points(Cartogram.Checkerboard$x[idx[length(idx)]], Cartogram.Checkerboard$y[idx[length(idx)]],
+points(Cartogram.Checkerboard$x[idx[1]],
+  Cartogram.Checkerboard$y[idx[1]], lwd = 5, col = 'red')
+text(Cartogram.Checkerboard$x[idx[1]],
+  Cartogram.Checkerboard$y[idx[1]], "start", col = 'red', pos=3)
+points(Cartogram.Checkerboard$x[idx[length(idx)]],
+  Cartogram.Checkerboard$y[idx[length(idx)]],
        cex = 1.25, lwd = 2, col = 'red', pch = 5)
 par(op)
 op <- par(mar = c(4, 4, 1.5, 0.5), mfrow = c(1, 1), bg = 'white')
@@ -212,10 +219,14 @@ plot(best ~ elapsedtime, data = cmp_GA_GRASP$cmp,
      ylab = 'best fitness value',
      xlab = 'elapsed time [in seconds]')
 abline(v=60, col='lightgrey',lwd=2)
-lines(cmp_GA_GRASP$cmp[cmp_GA_GRASP$cmp$algorithm == "GRASP", c('elapsedtime', 'best')], type = 'b', col='red', pch=16)
-lines(cmp_GA_GRASP$cmp[cmp_GA_GRASP$cmp$algorithm == "GA", c('elapsedtime', 'best')], type = 'b', pch=16)
-legend("bottomright", c("Evolutionary based Genetic Algorithm (GA)",
-                        "Greedy Randomized Adaptive Search Procedures (GRASP)"), col = c('black', 'red'),
+lines(cmp_GA_GRASP$cmp[cmp_GA_GRASP$cmp$algorithm == "GRASP",
+  c('elapsedtime', 'best')], type = 'b', col='red', pch=16)
+lines(cmp_GA_GRASP$cmp[cmp_GA_GRASP$cmp$algorithm == "GA",
+  c('elapsedtime', 'best')], type = 'b', pch=16)
+legend("bottomright", 
+  c("Evolutionary based Genetic Algorithm (GA)",
+    "Greedy Randomized Adaptive Search Procedures (GRASP)"),
+    col = c('black', 'red'),
        pch=16, cex=1.0)
 
 par(op)
