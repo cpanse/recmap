@@ -114,8 +114,10 @@ plot.recmap(M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ],
 The index order of the input map
 has an impact to the resulting cartogram. This algorithmic property is caused due to 
 the computation of the dual graph. In [@recmap] a genetic algorithm was applied 
-as metaheuristic. Due to the limited compute resources on the CRAN package 
-build process no metaheuristic will be executed to build this vignette file.
+as metaheuristic. 
+Due to the limited computing resources on the CRAN 
+check systems, we do not use all the potential of the metaheuristic.
+
 
 Study the examples of the reference manual `?recmapGA` on 
 how the [GA](https://cran.r-project.org/package=GA) package can be used.
@@ -151,7 +153,7 @@ smp <- c(29, 22, 30, 3, 17, 8, 9, 41, 18, 15, 38, 35, 21, 23, 19, 6, 31, 32, 20,
         28, 48, 4, 13, 14, 42, 37, 5, 16, 36 , 43, 25, 33, 12, 7, 39, 44, 2, 47,
         45, 46, 24, 10, 1,11 ,40 ,26 ,27 ,34)
 
-op <- par(mfrow = c(1 ,1), mar = c(0, 0, 0, 0))
+op <- par(mfrow = c(1 ,1), mar = c(0, 0, 0, 0), bg = NA)
 plot(Cartogram.Population <- recmap(M[smp, ]), 
             col.text = 'black', lwd=2)
 ```
@@ -203,19 +205,20 @@ plot(Frost$Cartogram,
             col.text = 'black', lwd = 2)
 ```
 
-More examples using `state.x77` data and `shiny` application are 
-available through <https://recmap.shinyapps.io/state_x77/> or by running the following code snipped.
+```{r}
+summary(Frost)
+```
 
-
+More interactive examples using `state.x77` data are available by
+running the code snippet below. 
 ```{r eval=FALSE}
-# Requires to install suggested  packages
+# Requires to install the suggested packages
 # install.packages(c('colorspace', 'maps', 'noncensus', 'shiny'))
 
 library(shiny)
 
 recmap_shiny <- system.file("shiny-examples", package = "recmap")
 shiny::runApp(recmap_shiny, display.mode = "normal")
-
 ```
 
 ## Synthetic input maps - checkerboard

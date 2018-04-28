@@ -35,7 +35,7 @@ Website Statistik Schweiz, downloaded file \code{je-d-21.03.01.xls} on 2016-05-2
 \url{https://data.sbb.ch/explore/?sort=explore.download_count&refine.modified=2016} 2016-05-12},Perfomed on a Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz/ Debian8
 \item{Figure 13 -- \code{UK}:
 \itemize{
-\item {input map rectangles derived from: \url{https://census.edina.ac.uk/ukborders}; Contains OS data Crown copyright [and database right] (2016);}
+\item {input map rectangles derived from: \code{https://census.edina.ac.uk/ukborders}; Contains OS data Crown copyright [and database right] (2016);}
 \item {Source of election data:  NISRA : Website: \url{www.nisra.gov.uk}}
 \item {copyright - Contains National Statistics data Crown copyright and database right 2016
 Contains NRS data Crown copyright and database right 2016}
@@ -55,7 +55,7 @@ Christian Panse, 2018
 options(warn = -1)
 
 ## Figure 4 
-jss2711_figure4 <- function(nrep = 1, size = 2:20){
+jss2711_figure4 <- function(nrep = 1, size = 2:10){
   recmap_debug_code <- '
   // [[Rcpp::plugins(cpp11)]]
   
@@ -112,21 +112,28 @@ jss2711_figure4 <- function(nrep = 1, size = 2:20){
 
       CB.smp <- CB[sample(nrow(CB), nrow(CB)), ]
       start_time <- Sys.time()
-      ncall.multiset <- recmap_debug(CB.smp, map_region_intersect_multiset = TRUE)
+      ncall.multiset <- recmap_debug(CB.smp,
+         map_region_intersect_multiset = TRUE)
+
       end_time <- Sys.time()
-      diff_time.multiset <- as.numeric(difftime(end_time, start_time, units = "secs"))
+
+      diff_time.multiset <- as.numeric(difftime(end_time,
+        start_time, units = "secs"))
 
 
       start_time <- Sys.time()
-      ncall.list <- recmap_debug(CB.smp, map_region_intersect_multiset = FALSE)
+      ncall.list <- recmap_debug(CB.smp,
+        map_region_intersect_multiset = FALSE)
       end_time <- Sys.time()
-      diff_time.list <- as.numeric(difftime(end_time, start_time, units = "secs"))
+      diff_time.list <- as.numeric(difftime(end_time,
+        start_time, units = "secs"))
 
-      #do.call('rbind', list(data.frame(algorithm = "multiset", number = ncall.multiset, size = nrow(CB)),
-      #  data.frame(algorithm = "list", number = ncall.list, size = nrow(CB))))
-      #data.frame(algorithm = "multiset", number = ncall.multiset, size = nrow(CB))
-      rv <- rbind(data.frame(number = ncall.multiset, algorithm="multiset", size = nrow(CB), time_in_secs = diff_time.multiset),
-        data.frame(number = ncall.list, algorithm="list", size = nrow(CB), time_in_secs =  diff_time.list))
+      rv <- rbind(data.frame(number = ncall.multiset,
+        algorithm="multiset", size = nrow(CB),
+	  time_in_secs = diff_time.multiset),
+        data.frame(number = ncall.list,
+	  algorithm="list", size = nrow(CB),
+	    time_in_secs =  diff_time.list))
 
       rv$machine <- Sys.info()['machine']
       rv$sysname <- Sys.info()['sysname']
@@ -135,8 +142,11 @@ jss2711_figure4 <- function(nrep = 1, size = 2:20){
     }))
 }
 
-mbb_check <- jss2711_figure4()
+\dontrun{
+	mbb_check <- jss2711_figure4()
+}
 
+data(jss2711)
 boxplot(number  ~ sqrt(size),
   axes=FALSE,
   data = mbb_check,
@@ -161,10 +171,6 @@ legend("bottomright", c("C++ STL list", "C++ STL multiset"),
       col=c('red', 'black'), pch = 16, cex = 1.0)
 
 
-
-
-data(package = "recmap")
-data(jss2711)
 
 ## Figure 5
 
@@ -356,6 +362,7 @@ identical.recmap(Cartogram.recomp, SBB$Cartogram, TRUE)
 
 ## Figure 13
 
+\dontrun{
 DF <- data.frame(Pct_Leave = UK$Map$Pct_Leave, row.names = UK$Map$name)
 spplot(as.SpatialPolygonsDataFrame(UK$Map, DF), 
   main="Input England/Wales/Scottland")
@@ -366,6 +373,7 @@ spplot(as.SpatialPolygonsDataFrame(UK.recmap , DF))
 # sanity check - reproducibility cross plattform
 op <- par(mfrow=c(2,2), mar=c(5,5,5,5))
 identical.recmap(UK.recmap, UK$Cartogram, TRUE)
+}
 
 }
 \keyword{datasets}
