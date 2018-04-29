@@ -13,55 +13,56 @@ jss2711 data
 
 \description{
 jss2711 contains the data and maps (input and output) for the 
-\href{https://arxiv.org/abs/1606.00464}]{manuscript}
+\href{https://arxiv.org/abs/1606.00464}{manuscript}
 Figures 4, 5, 6, 7, 11, 12, 13.
 }
 
 \format{
-  A set of nested \list{list} of \code{data.frames}.
+  A set of nested \code{list} of \code{data.frames}.
 }
 
 \source{
-\itemize{
-  \item{Figure 4 -- \code{mbb_check} contains a \code{data.frame} with some
-\code{recmap} implemention benchmarks. Generated on
-\itemize{
-\item {MacBook Pro (15-inch, 2017).}
-\item {Processor: 2.9 GHz Intel Core i7}
-\item {Memory: 16 GB 2133 MHz LPDDR3}
-}
+  \itemize{
+    \item{Figure 4 -- \code{mbb_check} contains a \code{data.frame} with some
+    \code{recmap} implemention benchmarks. Generated on
+    \itemize{
+    \item {MacBook Pro (15-inch, 2017).}
+    \item {Processor: 2.9 GHz Intel Core i7}
+    \item {Memory: 16 GB 2133 MHz LPDDR3}
+    }
+  }
 
   \item{Figure 5 -- \code{cmp_GA_GRASP} contains a \code{list} of results using 
 a \code{\link[recmap:recmapGA]{GRASP}} and \code{\link[GA:ga]{GA}} metaheuristic. Generated on a MacBook Pro (Retina, 13-inch, Mid 2014).}
 
-  \item{Figure 11 -- \code{Switzerland:
-\itemize{
-  \item {input map rectangles derived from:
-Swiss Federal Office of Topography \url{https://www.swisstopo.admin.ch} using Landscape Models / Boundaries GG25,
-downloaded 2016-05-01; Perfomed on a Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz/ Debian8}
-  \item{statistical data: Bundesamt fur Statistik (BFS) \url{https://www.bfs.admin.ch},
-Website Statistik Schweiz, downloaded file \code{je-d-21.03.01.xls} on 2016-05-26.}, 
-  \item{Perfomed on a Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz/ Debian8.}
-  }
-}
+  \item{Figure 11 -- \code{Switzerland}:
+    \itemize{
+      \item {input map rectangles derived from:
+    Swiss Federal Office of Topography \url{https://www.swisstopo.admin.ch} using Landscape Models / Boundaries GG25,
+    downloaded 2016-05-01; Perfomed on a Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz/ Debian8}
+      \item{statistical data: Bundesamt fur Statistik (BFS) \url{https://www.bfs.admin.ch},
+    Website Statistik Schweiz, downloaded file \code{je-d-21.03.01.xls} on 2016-05-26.}, 
+      \item{Perfomed on a Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz/ Debian8.}
+      }}
 
-\item{Figure 12 -- \code{SBB}: 
+
+\item{Figure 12 -- \code{SBB}}: 
   \itemize{
-  \item {Source:
-\href{https://data.sbb.ch/explore/?sort=explore.download_count&refine.modified=2016}{https://data.sbb.ch/explore} 2016-05-12}.
-\item{Perfomed on a Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz/ Debian 8.}
+  \item {Source: \href{https://data.sbb.ch/explore/?sort=explore.download_count&refine.modified=2016}{https://data.sbb.ch/explore} 2016-05-12}.
+ \item{Perfomed on a Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz/ Debian 8.}
 }
 
-\item{Figure 13 -- \code{UK}:
+\item{Figure 13 -- \code{UK}}:
   \itemize{
     \item {input map rectangles derived from: \code{https://census.edina.ac.uk/ukborders};
       Contains OS data Crown copyright [and database right] (2016);}
     \item {Source of election data: \href{www.nisra.gov.uk}{NISRA}}
     \item {copyright - Contains National Statistics data Crown copyright and database right 2016
     Contains NRS data Crown copyright and database right 2016}
-    \item {Perfomed on a Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz/ Debian8}}
-  }
-}}}
+    \item {Perfomed on a Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz/ Debian8}
+    }}
+}
+
 
 \author{
  Christian Panse, 2018
