@@ -154,13 +154,13 @@ smp <- c(29, 22, 30, 3, 17, 8, 9, 41, 18, 15, 38, 35, 21, 23, 19, 6, 31, 32, 20,
         45, 46, 24, 10, 1,11 ,40 ,26 ,27 ,34)
 
 op <- par(mfrow = c(1 ,1), mar = c(0, 0, 0, 0), bg = NA)
-plot(Cartogram.Population <- recmap(M[smp, ]), 
-            col.text = 'black', lwd=2)
+plot(Cartogram.Area <- recmap(M[smp, ]),
+            col.text = 'black', lwd = 2)
 ```
 
 ```{r}
 summary.recmap(M)
-summary(Cartogram.Population)
+summary(Cartogram.Area)
 ```
 
 ## `state.x77[, 'Population']`
@@ -170,8 +170,8 @@ summary(Cartogram.Population)
 op <- par(mfrow = c(1 ,1), mar = c(0, 0, 0, 0), bg = NA)
 usa$z <- state.x77[, 'Population']
 M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]
-plot(Cartogram.Population <- recmap(M[order(M$x),]), 
-            col.text = 'black', lwd=2)
+plot(Cartogram.Population <- recmap(M[order(M$x), ]),
+            col.text = 'black', lwd = 2)
 
 ```
 
@@ -191,7 +191,8 @@ plot(Cartogram.Population <- recmap(M[smp,]), col.text = 'black', lwd = 2)
 usa$z <- state.x77[, 'Income']
 M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]
 op <- par(mfrow = c(1 ,1), mar = c(0, 0, 0, 0), bg = NA)
-plot(Cartogram.Income <- recmap(M[order(M$x),]), col.text = 'black', lwd = 2)
+plot(Cartogram.Income <- recmap(M[order(M$x),]),
+  col.text = 'black', lwd = 2)
 ```
 
 ## `state.x77[, 'Frost']`
