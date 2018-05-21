@@ -4,7 +4,7 @@
 ^.*Dockerfile$
 ^.*_config.yml$
 ^.*.travis.yml$
-^.*vignettes/jss2711.Rnw$
+#^.*vignettes/jss2711.Rnw$
 ^.*R/jss2711.R$
-^.*data/jss2711.RData.bak$
+^.*data/jss2711.RData.+$
 ^.*LICENSE$

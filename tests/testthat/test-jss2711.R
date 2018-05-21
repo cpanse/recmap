@@ -29,21 +29,19 @@ test_that("cross-platform reproducibility check of Figures 11 (Switzerland))", {
   skip_on_cran()
   
   data(jss2711)
-  solutions.best <- Switzerland$solution
-  Switzerland.recmap <- recmap(Switzerland$map[solutions.best, ])
+  Switzerland.recmap <- recmap(Switzerland$Map)
 
-  expect_equal(Switzerland.recmap[, 'x'], Switzerland$cartogram[, 'x'], tolerance = 0.001)
-  expect_equal(Switzerland.recmap[, 'y'], Switzerland$cartogram[, 'y'], tolerance = 0.001)
-  expect_equal(Switzerland.recmap[, 'dx'], Switzerland$cartogram[, 'dx'], tolerance = 0.001)
-  expect_equal(Switzerland.recmap[, 'dy'], Switzerland$cartogram[, 'dy'], tolerance = 0.001)
+  expect_equal(Switzerland.recmap[, 'x'], Switzerland$Cartogram[, 'x'], tolerance = 0.001)
+  expect_equal(Switzerland.recmap[, 'y'], Switzerland$Cartogram[, 'y'], tolerance = 0.001)
+  expect_equal(Switzerland.recmap[, 'dx'], Switzerland$Cartogram[, 'dx'], tolerance = 0.001)
+  expect_equal(Switzerland.recmap[, 'dy'], Switzerland$Cartogram[, 'dy'], tolerance = 0.001)
   
 })
 
 test_that("cross-platform reproducibility check of Figures 12 (SBB))", {
   
   data(jss2711)
-  solutions.best <- SBB$GA@solution[1, ]
-  SBB.recmap <- recmap(SBB$Map[solutions.best,])
+  SBB.recmap <- recmap(SBB$Map)
 
   expect_equal(SBB.recmap[, 'x'], SBB$Cartogram[, 'x'], tolerance = 0.001)
   expect_equal(SBB.recmap[, 'y'], SBB$Cartogram[, 'y'], tolerance = 0.001)

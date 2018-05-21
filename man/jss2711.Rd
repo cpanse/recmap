@@ -325,8 +325,7 @@ identical.recmap(res[[1]]$Cartogram, res[[6]]$Cartogram, TRUE)
 
 op <- par(mfrow=c(1, 1), mar=c(0,0,0,0)); 
 
-C <- Switzerland$cartogram
-class(C) <- c('recmap', 'data.frame')
+C <- Switzerland$Cartogram
 
 plot(C)
 
@@ -368,7 +367,7 @@ text(S$x[idx], S$y[idx], S$name[idx], col='red', cex=0.7)
 idx <- rev(order(S$z))[11:30]
 text(S$x[idx], S$y[idx], S$name[idx], col = 'red', cex = 0.5)
 
-Cartogram.recomp <- recmap(S[sol <- SBB$GA@solution[1, ], ])
+Cartogram.recomp <- recmap(S)
 plot(Cartogram.recomp)
 
 idx <- rev(order(Cartogram.recomp$z))[1:40]

@@ -1289,8 +1289,16 @@ Y <- do.call('rbind', lapply(recmapGA.county, function(x){x$Summary}))
 set.seed(1)
 Z <- recmapGA(checkerboard(8), maxiter = 10)$Summary
 
+UK$Summary$Map.name <- "UK"
+UK$Summary$Map.area <- "number of electorates"
 
-XYZ <- do.call('rbind', list(Z,X,Y,US.map.best$Summary))
+SBB$Summary$Map.name <- "SBB"
+SBB$Summary$Map.area <- "passagier frequency"
+
+Switzerland$Summary$Map.name <- "CH"
+Switzerland$Summary$Map.area <- "population"
+
+XYZ <- do.call('rbind', list(Z,X,Y,US.map.best$Summary, Switzerland$Summary, SBB$Summary, UK$Summary))
 
 xt <- xtable(XYZ[order(XYZ['Map.number.regions']),], caption = "\\label{table:reproduced:overview}The spreadsheet provides a summary of the statistical rectangular cartograms drawn in Figures \\ref{figure:cmp_GA_GRASP}, \\ref{figure:bestSolution}, \\ref{figure:x77}, and \\ref{figure:us_census} ordered by the number of map regions.")
  
@@ -1326,12 +1334,12 @@ swisstopo map.
 
 <<label=Switzerland_population, fig = TRUE, width=7, height=8, echo=FALSE, include=FALSE>>=
 op <- par(mar=c(0, 0, 0, 0), mfrow = c(1,1))
-C <- Switzerland$cartogram
-class(C) <- c('recmap', 'data.frame')
+C <- Switzerland$Cartogram
+# class(C) <- c('recmap', 'data.frame')
 plot(C)
 idx <- rev(order(C$z))[1:50];
 text(C$x[idx], C$y[idx], C$name[idx],
-  col='red',
+  col = 'red',
   cex = C$dx[idx] / strwidth(as.character(C$name[idx])))
 par(op)
 @
@@ -1365,7 +1373,8 @@ text(S$x[idx], S$y[idx], S$name[idx], col='red', cex=0.7)
 idx <- rev(order(S$z))[11:30]
 text(S$x[idx], S$y[idx], S$name[idx], col = 'red', cex = 0.5)
 
-Cartogram.SBB <- recmap(S[sol <- SBB$GA@solution[1, ], ])
+Cartogram.SBB <- recmap(SBB$Map)
+#Cartogram.SBB <- recmap(S[sol <- SBB$GA@solution[1, ], ])
 plot(Cartogram.SBB)
 
 idx<-rev(order(Cartogram.SBB$z))[1:40]
