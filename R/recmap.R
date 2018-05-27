@@ -182,12 +182,12 @@ checkerboard <- function(n = 8, ratio = 4){
 }
 
 all.equal.recmap <- function(target, current, ...){
-  all.equal(target$x, current$x) &
-    all.equal(target$y, current$y) &
-    all.equal(target$dx, current$dx) & 
-    all.equal(target$dy, current$dy) &
-    all.equal(target$z, current$z) &
-    all.equal(target$name, current$name)
+  isTRUE(all.equal(target$x, current$x, ...)) &
+  isTRUE(all.equal(target$y, current$y, ...)) &
+  isTRUE(all.equal(target$dx, current$dx, ...)) & 
+  isTRUE(all.equal(target$dy, current$dy, ...)) &
+  isTRUE(all.equal(target$z, current$z, ...)) &
+  isTRUE(all.equal(target$name, current$name, ...))
 }
 
 is.recmap <- function(object){

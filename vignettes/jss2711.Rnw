@@ -1,17 +1,22 @@
+% $HeadURL: svn+ssh://cp@fgcz-148.uzh.ch/home/cp/__SUBVERSION_REPOSITORY__/__projects/2018/jss2711/jss2711.Rnw $
+% $Id: jss2711.Rnw 1274 2018-05-26 12:20:43Z cp $
+% $Date: 2018-05-26 14:20:43 +0200 (Sat, 26 May 2018) $
 %\VignetteIndexEntry{Rectangular Statistical Cartograms R (jss2711 replication code)}
 \documentclass[nojss]{jss}
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{rotating}
+\graphicspath{{Figures/}{graphics/}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
 %% almost as usual
 \author{Christian Panse\\Swiss Federal Institute of Technology Zurich }
 
-\title{Rectangular Statistical Cartograms in \proglang{R}: The \pkg{recmap} Package\thanks{This vignette is a (slightly) modified version (added Table~\ref{table:overview} and section~\ref{section:session}) of jss2711, to be published in the Journal of Statistical Software.}}
+\title{Rectangular Statistical Cartograms in \proglang{R}: The \pkg{recmap} Package\thanks{This vignette is a (slightly) modified version (added system info in section~\ref{section:session}) of jss2711, to be published in the Journal of Statistical Software.}}
 
 %% for pretty printing and a nice hypersummary also set:
 \Plainauthor{Christian Panse} %% comma-separated
@@ -74,11 +79,11 @@ options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE, wa
 RECMAP_ENABLE_PARALLEL <- FALSE
 
 dir.create("graphics")
-message("This manuscript requires the R packages: recmap (>=0.5.32), maps, noncensus.")
+message("This manuscript requires the R packages: recmap (>=0.5.34), maps, noncensus.")
 message(paste("recmap version", packageVersion('recmap'), "is used."))
 
 
-stopifnot(packageVersion('recmap') >= '0.5.32')
+stopifnot(packageVersion('recmap') >= '0.5.34')
 stopifnot(packageVersion('noncensus') >= '0.1')
 stopifnot(packageVersion('maps') >= '2.0')
 
@@ -130,7 +135,7 @@ according to given statistical parameter. A typical usage
 of a cartogram based visualization is demonstrated in
 Figure~\ref{figure:USelection}.
 
-<<label=us_election2004, keep.source = FALSE, fig = TRUE, width=10, height=4, echo = FALSE, include = FALSE>>=
+<<label=US_election2004, keep.source = FALSE, fig = TRUE, width=10, height=4, echo = FALSE, include = FALSE>>=
 op <- par(mar = c(0, 0, 0, 0))
 recmap:::.draw_recmap_us_state_ev()
 par(op)
@@ -138,7 +143,7 @@ par(op)
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth,keepaspectratio]{graphics/jss2711-us_election2004}
+\includegraphics[width=\textwidth,keepaspectratio]{graphics/jss2711-US_election2004}
 \caption{A rectangular statistical cartogram of the U.S. election in 2004 is
 drawn. The area corresponds to the number of electors. Color is indicating
 the outcome of the vote.
@@ -354,7 +359,7 @@ this can be done by
 correcting lines of longitude derived by the square roots
 of the area values (see Figure~\ref{figure:usage} left).
 
-<<eval = TRUE>>=
+<<label=US_map, eval = TRUE>>=
 US.map <- data.frame(x = state.center$x,
     y = state.center$y,
     dx = sqrt(state.area) / 2 / (0.7 * 60 * cos(state.center$y * pi / 180)),
@@ -397,7 +402,7 @@ and the (dx, dy) values. The index order $\Pi$ defines in which
 order the dual graph is explored and the (dx, dy) values
 define which map region are adjacent.
 
-<<eval = TRUE>>=
+<<label=example1, eval = TRUE>>=
 library("recmap")
 # Generate the rectangular statistical cartogram.
 US.cartogram <- recmap(US.map)
@@ -412,7 +417,7 @@ information for topology and relative position error defined in Equations
 The column \code{dfn.num} indicates in which order the dual graph has been 
 explored.
 
-<<eval = TRUE>>=
+<<label = head, eval = TRUE>>=
 head(US.cartogram)
 @
 
@@ -430,7 +435,7 @@ plot(US.cartogram, col.text = 'darkred')
 @
 
 A summary method implements the calculation of some meta data including the objective functions.
-<<eval = TRUE>>=
+<<label = summary, eval = TRUE>>=
 summary(US.cartogram)
 @
 
@@ -453,7 +458,7 @@ manipulation of geographic data contained in the classes of the
 \pkg{sp} package \citep{sp1, sp2013}.  The following code displays how
 a `\code{recmap}' object can be translated into a
 `\code{SpatialPolygonsDataFrame}' object and back.
-<<>>=
+<<label = CB8>>=
 X <- checkerboard(8)
 all.equal(X, as.recmap(as.SpatialPolygonsDataFrame(X)))
 @
@@ -761,7 +766,7 @@ can be used to evaluate the result and to define a
 fitness function which has to be maximized.
 The following R code defines the
 fitness function which will be used as default.
-<<eval = TRUE, echo = TRUE>>=
+<<label = default_fitness, eval = TRUE, echo = TRUE>>=
 recmap:::.recmap.fitness
 @
 Other variants of fitness functions will lead to different results as it is shown
@@ -801,7 +806,7 @@ random sampling. Each cartogram is evaluated. The best
 candidate is saved. The following command will generate cartogram solution
 based on a GRASP metaheuristic.
 
-<<eval=FALSE>>=
+<<label = GRASP, eval=FALSE>>=
 set.seed(1)
 res.GRASP <- recmapGRASP(Checkerboard, iteration.max = 80)
 plot(res.GRASP$Cartogram,
@@ -833,7 +838,7 @@ on the author's laptop\footnote{Mac Book Pro from 2015, please find the hardware
 specification in Table \ref{table:overview}.} 
 within 60 seconds.
 
-<<eval=FALSE>>=
+<<label = ga_wrapper, eval=FALSE>>=
 recmap.GA <- ga(type = "permutation",
     fitness = recmap:::.recmap.fitness,
     Map = Checkerboard,
@@ -856,7 +861,7 @@ looks like an almost \lq optimal\rq solution.
 The \code{recmapGA} function is a higher level wrapper function to glue
 the \code{recmap} construction heuristic with the metaheuristic \code{ga}.
 
-<<eval=TRUE>>=
+<<label = recmapGA, eval=TRUE>>=
 res.GA <- recmapGA(Checkerboard, popSize = 50, run = 300, maxiter = 300, seed = 3)
 summary(res.GA$Cartogram)
 <<eval=FALSE>>=
@@ -1000,7 +1005,7 @@ seed will lead to the same index order and to the identical layout of the cartog
 \end{figure}
 
 
-<<eval = TRUE>>=
+<<label = fitness.weighted, eval = TRUE>>=
 fitness.weighted <- function (idxOrder, Map, ...) 
 {
     Cartogram <- recmap(Map[idxOrder, ])
@@ -1017,7 +1022,7 @@ fitness.weighted <- function (idxOrder, Map, ...)
     1 / (c(0.2, 0.6, 0.2) %*% c(dT, dR, dE))
 }
 @
-<<echo = TRUE, eval = TRUE>>=
+<<label = US.map.best, echo = TRUE, eval = TRUE>>=
 US.map.best <- recmapGA(Map = US.map,
          fitness = fitness.weighted, 
          maxiter = 100,
@@ -1029,7 +1034,7 @@ US.map.best <- recmapGA(Map = US.map,
          parallel = FALSE)
 @
 
-<<label=bestSolutionFitness, fig = TRUE, width=8, height=4, echo=FALSE, include=FALSE>>=
+<<label = bestSolutionFitness, fig = TRUE, width=8, height=4, echo=FALSE, include=FALSE>>=
 fitness <- unlist(lapply(US.map.best$GA@bestSol, 
                          function(x){fitness.weighted(idxOrder = x[1,], Map=US.map)}))
 
@@ -1045,7 +1050,7 @@ axis(1, c(0.2,0.4,0.6,0.8,1), seq(20, 100, by = 20));
 axis(2, c(0.2,0.4,0.6,0.8,1), seq(10, 50, by = 10))
 abline(v = GA.generation / 100, col='darkred')
 @
-<<label=bestSolution, fig = TRUE, width=8, height=8, echo=FALSE, include=FALSE>>=
+<<label = bestSolution, fig = TRUE, width=8, height=8, echo=FALSE, include=FALSE>>=
 par(mfrow=c(3,2), mar=c(0,0,0,0))
 
 rv <- lapply(GA.generation, function(idx){
@@ -1120,7 +1125,7 @@ The code below is a wrapper function for the
 \code{recmap} and the \code{ga} functions. A tuple of
 \code{state.x77} column names is given as input.
 
-<<eval = TRUE>>=
+<<label = recmap_state_x77_wrapper, eval = TRUE>>=
 recmap_state_x77 <-
 function(input, Map = US.map, DF = state.x77,
   cm = heat_hcl(10)){
@@ -1277,36 +1282,23 @@ The cartograms were generated by using the genetic algorithm as metaheuristic.
 An interactive \pkg{shiny}~\citep{shiny} web application is available by
 running the code snippet below. It provides more combinations of parameter
 settings, attributes, and maps.
-<<eval=FALSE>>=
+<<label = shiny, eval=FALSE>>=
 library(shiny)
 recmap_shiny <- system.file("shiny-examples", package = "recmap")
 shiny::runApp(recmap_shiny, display.mode = "normal")
 @
 
-<<results=tex, echo=FALSE>>=
-X <- do.call('rbind', lapply(recmapGA.x77, function(x){x$Summary}))
-Y <- do.call('rbind', lapply(recmapGA.county, function(x){x$Summary}))
-set.seed(1)
-Z <- recmapGA(checkerboard(8), maxiter = 10)$Summary
+The last three application examples use the \code{recmapGA} function
+and the following main parameter setting: one iteration and
+population size of 64.
+Table~\ref{xtable:overview} lists other significant operational parameters.
+The seed values were derived by a greedy heuristic to have a proper
+starting construction sequence and thereby avoid intensive computing of
+the replication code of the manuscript.
+In praxis, it turned out that a population size similar to the number of
+map regions and the maximum number of iteration set to no more than a
+couple of hundred are useful initial values.
 
-UK$Summary$Map.name <- "UK"
-UK$Summary$Map.area <- "number of electorates"
-
-SBB$Summary$Map.name <- "SBB"
-SBB$Summary$Map.area <- "passagier frequency"
-
-Switzerland$Summary$Map.name <- "CH"
-Switzerland$Summary$Map.area <- "population"
-
-XYZ <- do.call('rbind', list(Z,X,Y,US.map.best$Summary, Switzerland$Summary, SBB$Summary, UK$Summary))
-
-xt <- xtable(XYZ[order(XYZ['Map.number.regions']),], caption = "\\label{table:reproduced:overview}The spreadsheet provides a summary of the statistical rectangular cartograms drawn in Figures \\ref{figure:cmp_GA_GRASP}, \\ref{figure:bestSolution}, \\ref{figure:x77}, and \\ref{figure:us_census} ordered by the number of map regions.")
- 
-print(xt,
-  floating.environment = "sidewaystable",
-  rotate.colnames = TRUE,
-  include.rownames = FALSE)
-@
 
 \paragraph{A population cartogram of Switzerland} on
 community (Gemeinde) level is drawn in
@@ -1332,10 +1324,9 @@ swisstopo map.
 %in the previous mentioned data for coloring the cartogram
 %regions.
 
-<<label=Switzerland_population, fig = TRUE, width=7, height=8, echo=FALSE, include=FALSE>>=
+<<label = Switzerland_population, fig = TRUE, width=7, height=8, echo=FALSE, include=FALSE>>=
 op <- par(mar=c(0, 0, 0, 0), mfrow = c(1,1))
 C <- Switzerland$Cartogram
-# class(C) <- c('recmap', 'data.frame')
 plot(C)
 idx <- rev(order(C$z))[1:50];
 text(C$x[idx], C$y[idx], C$name[idx],
@@ -1360,7 +1351,7 @@ An interactive shiny app is available through \url{https://recmap.shinyapps.io/C
 \end{figure}
 
 
-<<label=sbb, fig = TRUE, width=8, height=10, echo=FALSE, include=FALSE>>=
+<<label = SBB, fig = TRUE, width=8, height=10, echo=FALSE, include=FALSE>>=
 op <- par(mfrow = c(2, 1), mar = c(0, 0, 0, 0))
 SBB.Map <- SBB$Map
 S <- SBB$Map
@@ -1374,7 +1365,6 @@ idx <- rev(order(S$z))[11:30]
 text(S$x[idx], S$y[idx], S$name[idx], col = 'red', cex = 0.5)
 
 Cartogram.SBB <- recmap(SBB$Map)
-#Cartogram.SBB <- recmap(S[sol <- SBB$GA@solution[1, ], ])
 plot(Cartogram.SBB)
 
 idx<-rev(order(Cartogram.SBB$z))[1:40]
@@ -1405,7 +1395,7 @@ fitness.SBB <- function(idxOrder, Map, ...){
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=1.0\textwidth, keepaspectratio]{graphics/jss2711-sbb}
+\includegraphics[width=1.0\textwidth, keepaspectratio]{graphics/jss2711-SBB}
 \caption{A Swiss railway passenger frequency cartogram is shown on the
 lower map. The upper graphic displays the overlapping rectangles of the input map. 
 source: \url{sbb.ch}, 2016-05-12.}
@@ -1518,43 +1508,40 @@ Contains OS data~\copyright~Crown copyright [and database right] (2016)
 }
 \end{figure}
 
-\begin{sidewaystable}
-\resizebox{\textwidth}{!}{
-\begin{tabular}{ll|rr|lrrr|lr|rl|rr}
-\hline
-\hline
-map	&	statistical value	&	\#regions	&	area err	&	meta&	pop size	&	mutrate	&	\#gen	& compute hardware     	&	cores	&	proc time	&	unit	&	&	Fig\\
-\hline
-US state level &  \#electors 	&	49	&	0.36	&	GA	&	unknown	&	unknown	&	10	&	Intel Xeon CPU @ 1.5 GHz	&	1	&	$\approx$1	&	min	&		&	\ref{figure:USelection}\\
-US state level &  area 	&	50	&	0.17	&	-	&	-&	-&	-	&	-	&	1	&	$\ll$1	&	sec	&		&	\ref{figure:usage}\\
-8x8 checkerborad	&	1:4	&	64	&	0.27	&	GA	&	256	&	0.25	&     533  	&	3 GHz Intel Core i7	&	4	&	$\approx$1	&	min   &		&	\ref{figure:cmp_GA_GRASP}\\
-8x8 checkerborad	&	1:4	&	64	&	0.27	&	GRASP	&	NA	&	NA	&	NA	&	3 GHz Intel Core i7	&	4	&	$\approx$1	&	min	&		&	\ref{figure:cmp_GA_GRASP}\\
-\hline
-US state level	&	population 1977	&	48	&      0.41	&	GA	&	300	&	0.25	&	11	&	3 GHz Intel Core i7	&	4	&	5	&	sec	&		&	\ref{figure:x77}\\
-US state level	&	murder 1977	&	48	&      0.37	& 	GA	&	300	&	0.25	&	20	&	3 GHz Intel Core i7	&	4	&	10	&	sec	&		&	\ref{figure:x77}\\
-US state level	&	income 1977	&	48	&      0.29 	&	GA	&	300	&	0.25	&	30	&	3 GHz Intel Core i7	&	4	&	16	&	sec	&		&	\ref{figure:x77}\\
-US state level	&	illiteracy 1977     &	48	&      0.40 	&	GA	&	300	&	0.25	&	30	&	3 GHz Intel Core i7	&	4	&	16	&	sec	&		&	\ref{figure:x77}\\
-\hline
-US California	&	population 2010	&	58	&	0.62	&	GA	&	240	&	0.25	&	27	&	3 GHz Intel Core i7	&	4	&	10	&	sec	&		&	\ref{figure:us_census}\\
-US Colorado	&	population 2010	&	64	&	0.68	&	GA	&	320	&	0.25	&	102	&	3 GHz Intel Core i7	&	4	&	74	&	sec	&		&	\ref{figure:us_census}\\
-US Florida	&	population 2010	&	68	&	0.44	&	GA	&	240	&	0.25	&	49	&	3 GHz Intel Core i7	&	4	&	39	&	sec	&		&	\ref{figure:us_census}\\
-US New Jersey	&	population 2010	&	21	&	0.38	&	GA	&	105	&	0.25	&	30	&	3 GHz Intel Core i7	&	4	&	4	&	sec	&		&	\ref{figure:us_census}\\
-US New York	&	population 2010	&	62	&	0.62      &	GA	&	310	&	0.25	&	148	&	3 GHz Intel Core i7	&	4	&	106	&	sec	&		&	\ref{figure:us_census}\\
-\hline
-Switzerland	&	population 2010	&	2300	&	0.59	&	GA	&	1280	&	0.35	&	300	& 	Intel Xeon CPU E5-2698 v3 @ 2.30GHz	&	64	&	3	&	days	&		&	\ref{figure:Switzerland:population}\\
-Swiss SBB railway	&	passenger frequency	&	724	&	NA	&      GA	&	 1000	&	0.25	&  1000     	&	Intel Xeon CPU E5-2698 v3 @ 2.30GHz	&	64	&	2	&	days	&		&	\ref{figure:sbb}\\
-UK	&	electorates	&	370	&	0.57	&	GA	&	1200	&	0.25	&	4000	&	Intel Xeon CPU E5-2698 v3 @ 2.30GHz	&	64	&	3	&	days	&		&	\ref{fig:brexit}\\
-\hline
-\hline
-\end{tabular}
-}
-\caption{
-The spreadsheet provides an overview of all statistical rectangular cartograms displayed in this manuscript ordered by appearance. The spreadsheet includes input properties, e.g., number of map regions, as well as process time on the used hardware platforms. The area error was computed using the \code{summary.recmap} method implementing the area error function introduced by \cite{cartodraw}.
-Since the Swiss railway passenger frequency cartogram is derived from a 2D point set, it is not meaningful to compute an area error of the input.
-The rectangular cartograms having more than 300 map regions required more generation of the genetic algorithm and were computed on a compute server due to the higher computing demands.
-}
-\label{table:overview}
-\end{sidewaystable}
+<<label=SummaryTable, results=tex, echo=FALSE>>=
+SUMMARY.USX77 <- do.call('rbind', lapply(recmapGA.x77, 
+   function(x){x$Summary}))
+SUMMARY.USCOUNTY <- do.call('rbind', lapply(recmapGA.county,
+   function(x){x$Summary}))
+
+SUMMARY.CB8 <- recmapGA(checkerboard(8), seed = 1, maxiter = 10)$Summary
+SUMMARY.US <- US.map.best$Summary
+
+UK$Summary$Map.name <- "UK"
+UK$Summary$Map.area <- "number of electorates"
+
+SBB$Summary$Map.name <- "SBB"
+SBB$Summary$Map.area <- "passagier frequency"
+
+Switzerland$Summary$Map.name <- "CH"
+Switzerland$Summary$Map.area <- "population"
+
+SUMMARY <- do.call('rbind', list(SUMMARY.USX77, SUMMARY.USCOUNTY,
+  SUMMARY.CB8, SUMMARY.US, Switzerland$Summary, SBB$Summary, UK$Summary))
+
+xt <- xtable(SUMMARY[order(SUMMARY['Map.number.regions']),],
+  caption = "\\label{table:reproduced:overview}The spreadsheet provides a summary of the statistical rectangular cartograms drawn in Figures \\ref{figure:cmp_GA_GRASP}, \\ref{figure:bestSolution}, \\ref{figure:x77}, \\ref{figure:us_census}, \\ref{figure:Switzerland:population}, \\ref{figure:sbb}, and \\ref{fig:brexit} ordered by the number of map regions. All listed rectangular cartograms were processed on
+Intel(R) Core(TM) i5-2500 CPU @ 3.30GHz having four cores running Debian 9 GNU/Linux.")
+ 
+print(xt,
+  floating.environment = "sidewaystable",
+  rotate.colnames = TRUE,
+  include.rownames = FALSE)
+@
+% The spreadsheet provides an overview of all statistical rectangular cartograms displayed in this manuscript ordered by appearance. The spreadsheet includes input properties, e.g., number of map regions, as well as process time on the used hardware platforms. The area error was computed using the \code{summary.recmap} method implementing the area error function introduced by \cite{cartodraw}.
+% Since the Swiss railway passenger frequency cartogram is derived from a 2D point set, it is not meaningful to compute an area error of the input.
+% The rectangular cartograms having more than 300 map regions required more generation of the genetic algorithm and were computed on a compute server due to the higher computing demands.
+
 
 \section{Summary}
 \label{section:summary}
