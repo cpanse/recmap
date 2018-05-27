@@ -32,8 +32,8 @@ install the latest development version
 ```{r}
 install.packages('devtools')
 library(devtools)
-install_git('https://github.com/cpanse/recmap', build_vignettes = TRUE, quiet = FALSE)
-library(recmap)
+install_github('cpanse/recmap', build_vignettes = TRUE, quiet = FALSE)
+browseVignettes('recmap')
 ```
 
 ### Use the docker public | automated build [recmap image](https://hub.docker.com/r/cpanse/recmap/) 
