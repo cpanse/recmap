@@ -50,6 +50,13 @@ connect to http://yourdockerhost:8791  using a web browser
 * username: rstudio
 * password: rstudio
 
+or stand alone
+
+```{bash}
+docker run -it -p 8787:8787 cpanse/recmap R -e "library(shiny); recmap_shiny <- system.file('shiny-examples', package = 'recmap'); shiny::runApp(recmap_shiny, display.mode = 'normal', port=8787, host='0.0.0.0')"
+```
+
+conect to the docker host:8787
 
 ## Documentation
 
