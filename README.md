@@ -69,8 +69,8 @@ available through [arXiv:1606.00464](https://arxiv.org/abs/1606.00464).
 
 library(shiny)
 
-recmap_shiny <- system.file("shiny-examples", package = "recmap")
-shiny::runApp(recmap_shiny, display.mode = "normal")
+recmap_shiny <- system.file('shiny-examples', package = 'recmap')
+shiny::runApp(recmap_shiny, display.mode = 'normal')
 ```
 
 ## Related approaches
