@@ -71,8 +71,9 @@ available through [arXiv:1606.00464](https://arxiv.org/abs/1606.00464).
 
 ## Demonstration
 
-
-<img src="https://github.com/cpanse/recmap/tree/master/inst/graphics/recmap_anim.gif" align="center" />
+<p>
+<img src="https://github.com/cpanse/recmap/tree/master/inst/graphics/recmap_anim.gif" width="512" />
+</p>
 
 ```{r}
 # Requires to install suggested  packages
