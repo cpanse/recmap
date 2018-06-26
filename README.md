@@ -71,7 +71,7 @@ available through [arXiv:1606.00464](https://arxiv.org/abs/1606.00464).
 
 ## Demonstration
 
-[[https://github.com/cpanse/recmap/tree/master/inst/graphics/recmap_anim.gif|alt=animation]]
+![recmap animations](https://github.com/cpanse/recmap/tree/master/inst/graphics/recmap_anim.gif)
 
 
 ```{r}
