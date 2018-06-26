@@ -71,6 +71,9 @@ available through [arXiv:1606.00464](https://arxiv.org/abs/1606.00464).
 
 ## Demonstration
 
+[[https://github.com/cpanse/recmap/tree/master/inst/graphics/recmap_anim.gif|alt=animation]]
+
+
 ```{r}
 # Requires to install suggested  packages
 # install.packages(c('colorspace', 'maps', 'noncensus', 'shiny'))
