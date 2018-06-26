@@ -60,7 +60,7 @@ conect to the docker host:8787
 
 ## Documentation
 
-The package ships with a package vignette (`browseVignettes('recmap')` 
+The package ships with a package vignette [(`browseVignettes('recmap')](https://cran.r-project.org/web/packages/recmap/vignettes/recmap.html) 
 and a reference manual (just type `?recmap` on the R shell).
 
 Both documents are also available on the package's [CRAN](https://CRAN.R-project.org/package=recmap) page.
