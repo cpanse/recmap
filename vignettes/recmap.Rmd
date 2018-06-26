@@ -1,5 +1,5 @@
 ---
-title: "Getting Started with **recmap**"
+title: "Draw your own Rectangular Statistical Cartogram with **recmap**"
 author: "Christian Panse"
 date: "`r Sys.Date()`"
 bibliography:
@@ -12,7 +12,7 @@ output:
     citation_package: natbib
     latex_engine: xelatex
 vignette: >
-  %\VignetteIndexEntry{Getting Started with recmap}
+  %\VignetteIndexEntry{raw your own Rectangular Statistical Cartogram  with recmap}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
