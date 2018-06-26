@@ -17,9 +17,9 @@ This package contains an implementation of the [RecMap construction algorithm (M
 
 `recmap` requires R 3.3 or later.
 
-Released and tested versions of `recmap` are available via the 
-[CRAN](https://CRAN.R-project.org/package=recmap) network, 
-and can be installed using the R shell via
+Released and tested versions of `recmap` are available via
+[CRAN](https://CRAN.R-project.org/package=recmap), 
+and can be installed using the following code
 
 ```{r}
 install.packages('recmap')
@@ -27,7 +27,7 @@ install.packages('recmap')
 
 ### from [github](https://github.com/cpanse/recmap)
 
-install the latest development version
+the code below installs the latest development version
 
 ```{r}
 install.packages('devtools')
@@ -86,4 +86,3 @@ shiny::runApp(recmap_shiny, display.mode = 'normal')
 * [Rcartogram](https://github.com/omegahat/Rcartogram)
 * [High-performance software to produce flow-based cartograms.](https://github.com/Flow-Based-Cartograms/go_cart) 
 * see also [CRAN Task View: Analysis of Spatial Data](https://CRAN.R-project.org/view=Spatial)
-
