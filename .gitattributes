@@ -2,4 +2,5 @@
 *.cpp linguist-vendored=false
 *.h linguist-vendored=false
 R/recmap.R linguist-vendored=false
+*.Rd linguist-vendored=false
 
