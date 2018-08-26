@@ -73,6 +73,8 @@ available through [arXiv:1606.00464](https://arxiv.org/abs/1606.00464).
 
 <img src="vignettes/graphics/rectangular_statistical_cartogram_construction_animation.gif" align="left" />
 
+<br>
+
 ```{r}
 # Requires to install suggested  packages
 # install.packages(c('colorspace', 'maps', 'noncensus', 'shiny'))
