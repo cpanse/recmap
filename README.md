@@ -5,9 +5,7 @@
 [![](http://cranlogs.r-pkg.org/badges/grand-total/recmap)](https://cran.r-project.org/package=recmap)
 [![](http://cranlogs.r-pkg.org/badges/recmap)](https://cran.r-project.org/package=recmap) 
 
-# recmap - Compute the Rectangular Statistical Cartogram
-
-<img src="vignettes/graphics/rectangular_statistical_cartogram_construction_animation.gif" align="left" />
+# recmap - Compute the Rectangular Statistical Cartogram <img src="vignettes/graphics/rectangular_statistical_cartogram_construction_animation.gif" align="left" />
 
 
 This package implementats of the [RecMap construction algorithm (MP2)](http://dx.doi.org/10.1109/INFVIS.2004.57).
