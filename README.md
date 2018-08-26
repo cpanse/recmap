@@ -71,7 +71,6 @@ available through [arXiv:1606.00464](https://arxiv.org/abs/1606.00464).
 
 ## Demonstration
 
-<img src="vignettes/graphics/rectangular_statistical_cartogram_construction_animation.gif" align="left" /><br/>
 
 
 ```{r}
@@ -82,6 +81,9 @@ library(shiny)
 recmap_shiny <- system.file('shiny-examples', package = 'recmap')
 shiny::runApp(recmap_shiny, display.mode = 'normal')
 ```
+
+<img src="vignettes/graphics/rectangular_statistical_cartogram_construction_animation.gif" align="left" />
+
 
 ## Related approaches
 * [Rectangular Cartograms: the game](http://www.win.tue.nl/~speckman/demos/game/index.html), [Rectangular Cartograms](http://www.win.tue.nl/~speckman/Cartograms/SoccerCarto.html)
