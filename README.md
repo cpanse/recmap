@@ -7,6 +7,9 @@
 
 # recmap - Compute the Rectangular Statistical Cartogram
 
+<img src="vignettes/graphics/rectangular_statistical_cartogram_construction_animation.gif" align="left" />
+
+
 This package implementats of the [RecMap construction algorithm (MP2)](http://dx.doi.org/10.1109/INFVIS.2004.57).
 
 
@@ -82,7 +85,6 @@ recmap_shiny <- system.file('shiny-examples', package = 'recmap')
 shiny::runApp(recmap_shiny, display.mode = 'normal')
 ```
 
-<img src="vignettes/graphics/rectangular_statistical_cartogram_construction_animation.gif" align="left" />
 
 
 ## Related approaches
