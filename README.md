@@ -71,6 +71,7 @@ available through [arXiv:1606.00464](https://arxiv.org/abs/1606.00464).
 
 ## Demonstration
 
+<img src="vignettes/graphics/rectangular_statistical_cartogram_construction_animation.gif" align="left" />
 
 ```{r}
 # Requires to install suggested  packages
