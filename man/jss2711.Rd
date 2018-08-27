@@ -69,7 +69,9 @@ a \code{\link[recmap:recmapGA]{GRASP}} and \code{\link[GA:ga]{GA}} metaheuristic
 }
 
 \references{
-  \href{https://arxiv.org/abs/1606.00464}{arXiv:1606.00464}
+Panse C (2018). "Rectangular Statistical Cartograms in R: The recmap
+Package." Journal of Statistical Software, Code Snippets, 86(1),
+pp. 1-27. doi: 10.18637/jss.v086.c01
 }
 
 \examples{
