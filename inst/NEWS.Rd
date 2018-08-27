@@ -1,6 +1,12 @@
 \name{NEWS}
 \title{News for Package 'recmap'}
 
+\section{Changes until version 0.5.36 (2018-08-27)}{
+  \itemize{
+	  \item incorporate CITATION file to refer back to the JSS manuscript doi 10.18637/jss.v086.c01.
+  }
+}
+
 \section{Changes until version 0.5.35 (2018-06-01)}{
   \itemize{
 	  \item \href{https://github.com/cpanse/recmap/issues/11}{issues 11}.

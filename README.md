@@ -82,7 +82,6 @@ recmap_shiny <- system.file('shiny-examples', package = 'recmap')
 shiny::runApp(recmap_shiny, display.mode = 'normal')
 ```
 
-![construction animation](https://github.com/cpanse/recmap/blob/master/vignettes/graphics/rectangular_statistical_cartogram_construction_animation.gif)
 
 ## Related approaches
 * [Rectangular Cartograms: the game](http://www.win.tue.nl/~speckman/demos/game/index.html), [Rectangular Cartograms](http://www.win.tue.nl/~speckman/Cartograms/SoccerCarto.html)

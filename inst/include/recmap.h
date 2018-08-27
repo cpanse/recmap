@@ -19,7 +19,7 @@
 
 //  Author:  Christian Panse <Christian.Panse@gmail.com>
 //  2016-04-19/20/21/22 ACCU2016 Bristol, UK
-//  see also: https://arxiv.org/abs/1606.00464
+//  see also doi: 10.18637/jss.v086.c01
 
 #ifndef SRC_RECMAP_H_
 #define SRC_RECMAP_H_

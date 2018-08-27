@@ -12,7 +12,7 @@ output:
     citation_package: natbib
     latex_engine: xelatex
 vignette: >
-  %\VignetteIndexEntry{raw your own Rectangular Statistical Cartogram  with recmap}
+  %\VignetteIndexEntry{Draw your own Rectangular Statistical Cartogram  with recmap}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -20,7 +20,7 @@ vignette: >
 # Introduction
 
 This package contains a C++ implementation of the RecMap algorithm 
-[[@recmap]](http://dx.doi.org/10.1109/INFVIS.2004.57) to draw maps according to 
+[[@recmap]](http://dx.doi.org/10.1109/INFVIS.2004.57), [@2016arXiv160600464P] to draw maps according to 
 given statistical values. These so-called cartograms or value-by-area-maps may 
 be used to visualize any geospatial-related data, e.g., political, economic or 
 public health data.
