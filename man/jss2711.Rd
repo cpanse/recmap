@@ -301,8 +301,8 @@ identical.recmap <- function(x, y, plot.diff = FALSE){
   
   stopifnot(is.recmap(target))
   stopifnot(is.recmap(current))
-  rv <- identical(x$x, y$x) && identical(x$y, y$y) \
-    && identical(x$dx, y$dx) && identical(x$dy, y$dy)
+  rv <- identical(x$x, y$x) && identical(x$y, y$y)  && \
+    identical(x$dx, y$dx) && identical(x$dy, y$dy)
   if (plot.diff){
    rvtemp <- lapply(c('x', 'y', 'dx', 'dy'), function(cn){
         plot(sort(abs(target[, cn] - current[, cn])),
