@@ -1,7 +1,7 @@
 \name{NEWS}
 \title{News for Package 'recmap'}
 
-\section{Changes until version 0.5.36 (2018-08-27)}{
+\section{Changes until version 1.0.0 (2018-08-28)}{
   \itemize{
 	  \item incorporate CITATION file to refer back to the JSS manuscript doi 10.18637/jss.v086.c01.
   }
