@@ -56,7 +56,7 @@ or stand alone
 docker run -it -p 8787:8787 cpanse/recmap R -e "library(shiny); recmap_shiny <- system.file('shiny-examples', package = 'recmap'); shiny::runApp(recmap_shiny, display.mode = 'normal', port=8787, host='0.0.0.0')"
 ```
 
-conect to the docker host:8787
+connect to the docker host:8787
 
 ## Documentation
 
@@ -73,7 +73,7 @@ available through [arXiv:1606.00464](https://arxiv.org/abs/1606.00464).
 
 animation of the construction algorithm
 
-![rectangulars cartogram algotithm construction animation](https://github.com/cpanse/recmap/blob/master/vignettes/graphics/rectangular_statistical_cartogram_construction_animation.gif)
+![animated GIF of the construction algorithm](https://github.com/cpanse/recmap/blob/master/vignettes/graphics/rectangular_statistical_cartogram_construction_animation.gif)
 
 
 interactive shiny application
