@@ -71,7 +71,7 @@ available through [arXiv:1606.00464](https://arxiv.org/abs/1606.00464).
 
 ## Demonstration
 
-
+![rectangulars cartogram algotithm construction animation](https://github.com/cpanse/recmap/blob/master/vignettes/graphics/rectangular_statistical_cartogram_construction_animation.gif)
 
 ```{r}
 # Requires to install suggested  packages
