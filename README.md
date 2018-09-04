@@ -67,7 +67,7 @@ and a reference manual (just type `?recmap` on the R shell).
 Both documents are also available on the package's 
 [CRAN](https://CRAN.R-project.org/package=recmap) page.
 A white paper containing more technical information and examples is
-available through [arXiv:1606.00464](https://arxiv.org/abs/1606.00464).
+available through [jss.v086.c01](http://dx.doi.org/10.18637/jss.v086.c01).
 
 ## Demonstration
 
