@@ -80,7 +80,9 @@ interactive shiny application
 
 ```{r}
 # Requires to install suggested  packages
-# install.packages(c('colorspace', 'maps', 'noncensus', 'shiny'))
+pkgs <- c('colorspace', 'maps', 'noncensus', 'shiny')
+pkgs <- pkgs[(!pkgs %in% unique(installed.packages()[,'Package']))]
+if(length(pkgs) > 0){install.packages(pkgs)}
 
 library(shiny)
 recmap_shiny <- system.file('shiny-examples', package = 'recmap')
