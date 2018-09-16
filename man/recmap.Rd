@@ -141,11 +141,12 @@ metaheuristic.
 \item Roland Heilmann, Daniel Keim, Christian Panse, and Mike Sips (2004). 
 "RecMap: Rectangular Map Approximations."
 InfoVis 2004, IEEE Symposium on Information Visualization, Austin, Texas, 33-40.
-\url{http://dx.doi.org/10.1109/INFVIS.2004.57}.
+doi: \href{http://dx.doi.org/10.1109/INFVIS.2004.57}{10.1109/INFVIS.2004.57}.
 
 \item Panse C (2018). "Rectangular Statistical Cartograms in R: The recmap
 Package." Journal of Statistical Software, Code Snippets, 86(1),
-pp. 1-27. doi: 10.18637/jss.v086.c01.
+pp. 1-27. doi: \href{http://dx.doi.org/10.18637/jss.v086.c01}{10.18637/jss.v086.c01}.
+
 }
 }
 
@@ -167,8 +168,6 @@ pp. 1-27. doi: 10.18637/jss.v086.c01.
   \item The package vignette
   \url{https://CRAN.R-project.org/package=recmap/vignettes/recmap.html} 
   or by calling \code{vignette("recmap")} on the R command prompt.
-  
-  \item A shiny web application \url{https://recmap.shinyapps.io/state_x77/}.
   }
 }
 

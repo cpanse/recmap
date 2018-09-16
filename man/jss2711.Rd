@@ -12,9 +12,9 @@ jss2711 data
 }
 
 \description{
-jss2711 contains the data and maps (input and output) for the 
-\href{https://arxiv.org/abs/1606.00464}{manuscript}
-Figures 4, 5, 6, 7, 11, 12, 13.
+jss2711 contains the replication materials (input and output) for the 
+\href{http://dx.doi.org/10.18637/jss.v086.c01}{jss.v086.c01} manuscript's
+Figures 4, 5, 6, 7, 11, 12, and 13.
 }
 
 \format{
@@ -33,7 +33,8 @@ Figures 4, 5, 6, 7, 11, 12, 13.
   }
 
   \item{Figure 5 -- \code{cmp_GA_GRASP} contains a \code{list} of results using 
-a \code{\link[recmap:recmapGA]{GRASP}} and \code{\link[GA:ga]{GA}} metaheuristic. Generated on a MacBook Pro (Retina, 13-inch, Mid 2014).}
+a \code{\link[recmap:recmapGA]{GRASP}} and \code{\link[GA:ga]{GA}} metaheuristic.
+Generated on a MacBook Pro (Retina, 13-inch, Mid 2014).}
 
   \item{Figure 11 -- \code{Switzerland}:
     \itemize{
@@ -71,7 +72,7 @@ a \code{\link[recmap:recmapGA]{GRASP}} and \code{\link[GA:ga]{GA}} metaheuristic
 \references{
 Panse C (2018). "Rectangular Statistical Cartograms in R: The recmap
 Package." Journal of Statistical Software, Code Snippets, 86(1),
-pp. 1-27. doi: 10.18637/jss.v086.c01
+pp. 1-27. doi: \href{http://dx.doi.org/10.18637/jss.v086.c01}{10.18637/jss.v086.c01}.
 }
 
 \examples{
