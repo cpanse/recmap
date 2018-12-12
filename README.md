@@ -71,8 +71,6 @@ available through [jss.v086.c01](http://dx.doi.org/10.18637/jss.v086.c01).
 
 ## Demonstration
 
-animation of the construction algorithm
-
 ![animated GIF of the construction algorithm](https://github.com/cpanse/recmap/blob/master/vignettes/graphics/rectangular_statistical_cartogram_construction_animation.gif)
 
 
