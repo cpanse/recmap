@@ -85,7 +85,11 @@ library(shiny)
 recmap_shiny <- system.file('shiny-examples', package = 'recmap')
 shiny::runApp(recmap_shiny, display.mode = 'normal')
 ```
+## Frequently Asked Questions
 
+### Is there an easy way to convert a `recmap` object to an `sf` object?
+
+Yes; see issue [https://github.com/cpanse/recmap/issues/13](#13).
 
 ## Related approaches
 * [Rectangular Cartograms: the game](http://www.win.tue.nl/~speckman/demos/game/index.html), [Rectangular Cartograms](http://www.win.tue.nl/~speckman/Cartograms/SoccerCarto.html)
