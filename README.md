@@ -85,11 +85,13 @@ library(shiny)
 recmap_shiny <- system.file('shiny-examples', package = 'recmap')
 shiny::runApp(recmap_shiny, display.mode = 'normal')
 ```
-## Frequently Asked Questions
+## (Frequently) Asked Questions
 
 ### Is there an easy way to convert a `recmap` object to an `sf` object?
 
-Yes; see issue [#13](https://github.com/cpanse/recmap/issues/13).
+Yes; see issue [#13](https://github.com/cpanse/recmap/issues/13). 
+The `as.recmap` function perform the transformation from a
+`SpatialPolygonsDataFrame` into a `recmap` compatible object.
 
 ## Related approaches
 * [Rectangular Cartograms: the game](http://www.win.tue.nl/~speckman/demos/game/index.html), [Rectangular Cartograms](http://www.win.tue.nl/~speckman/Cartograms/SoccerCarto.html)
