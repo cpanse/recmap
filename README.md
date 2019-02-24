@@ -87,9 +87,9 @@ shiny::runApp(recmap_shiny, display.mode = 'normal')
 ```
 ## (Frequently) Asked Questions
 
-### Is there an easy way to convert a `recmap` object to an `sf` object?
+### Is there an easy way to convert a `recmap` object to an [`sf`](https://CRAN.R-project.org/package=sf ) object?
 
-Yes; use [`as.SpatialPolygonsDataFrame`](https://github.com/cpanse/recmap/blob/da2f90d2edb3feda7464bb543147d2908851e92b/R/recmap.R#L265),
+Use [`as.SpatialPolygonsDataFrame`](https://github.com/cpanse/recmap/blob/da2f90d2edb3feda7464bb543147d2908851e92b/R/recmap.R#L265),
 see also issue [#13](https://github.com/cpanse/recmap/issues/13). 
 The `as.recmap` function perform the transformation from a
 `SpatialPolygonsDataFrame` into a `recmap` compatible object.
