@@ -7,7 +7,7 @@
 
 # recmap - Compute the Rectangular Statistical Cartogram 
 
-This package implements the [RecMap construction algorithm (MP2)](http://dx.doi.org/10.1109/INFVIS.2004.57) using the [`GA`]( https://CRAN.R-project.org/package=GA) CRAN package as metaheuristic.
+This package implements the [RecMap construction algorithm (MP2)](http://dx.doi.org/10.1109/INFVIS.2004.57) using the [GA]( https://CRAN.R-project.org/package=GA) CRAN package as metaheuristic.
 
 ## Installation
 
