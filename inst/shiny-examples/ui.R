@@ -25,15 +25,19 @@ shinyUI(fluidPage(# Application title
       br(),
       htmlOutput("II"),
       hr(),
-      helpText('Settings Genetic Algorithm (GA):'),
+      helpText('Genetic Algorithm (GA):'),
       numericInput("seed", "seed", 1),
-      sliderInput("GApopulation", "GApopulation", 1, 10, 1),
-      numericInput("GAmaxiter", "GAmaxiter", 10),
-      numericInput("GArun", "GArun", 10),
-      sliderInput("GApmutation", "GApmutation", 0, 1, 0.2),
+      sliderInput("GApopulation", "population size factor", 1, 10, 1),
+      numericInput("GAmaxiter", "maxiter", 10),
+      helpText('the maximum number of iterations to run before the GA search is halted.'),
+      hr(),
+      numericInput("GArun", "run", 10),
+      helpText('the number of consecutive generations without any improvement in the best fitness value before the GA is stopped.'),
+      hr(),
+      sliderInput("GApmutation", "probability of mutation in a parent chromosome", 0, 1, 0.2),
       #sliderInput("objective_weight", "topology ~ relative position", 0, 1, 0.5),
       
-      checkboxInput("parallel", "GAparallel", FALSE),
+      checkboxInput("parallel", "parallel - An optional argument which allows to specify if the Genetic Algorithm should be run sequentially or in parallel.", FALSE),
       hr(),
       downloadButton('foo')
     ),
@@ -62,11 +66,12 @@ shinyUI(fluidPage(# Application title
                    DT::dataTableOutput("gaSolution")
                  )
         ),
-        tabPanel("summary",
+        tabPanel("Summary",
                  list(
                    DT::dataTableOutput("summary")
                  )
-        )
+        ),
+        tabPanel("Session Info", verbatimTextOutput("sessionInfo"))
       ),
         
       p(
@@ -75,7 +80,5 @@ shinyUI(fluidPage(# Application title
           href = 'https://CRAN.R-project.org/package=recmap'),
         '.'
       )
-      
-      
     )
   )))

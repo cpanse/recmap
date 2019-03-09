@@ -87,6 +87,16 @@ recmap_shiny <- system.file('shiny-examples', package = 'recmap')
 shiny::runApp(recmap_shiny, display.mode = 'normal')
 ```
 
+if you want to run the recmap shiny demonstration as stand-alone application
+using Linux and Apple systems use the `Terminal` application add the following 
+code to your alias file, e.g., `$HOME/.bashrc`
+
+```
+alias recmapShiny="R -e \"library(shiny); \
+  recmap_shiny <- system.file('shiny-examples', package = 'recmap'); \
+  shiny::runApp(recmap_shiny, display.mode = 'normal', launch.browser=TRUE)\""
+```
+
 
 ## Related approaches
 * [Rectangular Cartograms: the game](http://www.win.tue.nl/~speckman/demos/game/index.html), [Rectangular Cartograms](http://www.win.tue.nl/~speckman/Cartograms/SoccerCarto.html)

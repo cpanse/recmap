@@ -70,6 +70,7 @@ shinyServer(function(input, output, session) {
     paste("region name:", rv)
   })
   
+  #---- colormap ----
   # some taken from the vignette of https://CRAN.R-project.org/package=colorspace 
   colormap <- reactive({
     list(colorspace_heat_hcl = heat_hcl(12, c = c(80, 30), l = c(30, 90), power = c(1/5, 2)),
@@ -96,6 +97,7 @@ shinyServer(function(input, output, session) {
     pal(unlist(colormap()[input$colormapname]))
   })
   
+  #---- output UI  ----
   output$II <- renderUI({
     if (input$datatype == 'checkerboard'){
       numericInput("checkerboardSize", "checkerboardSize", 4, min = 2, 
@@ -114,6 +116,7 @@ shinyServer(function(input, output, session) {
         sliderInput("scaleY", "scaleY", 0, 1, 0.63))
     }})
   
+  #---- Map ----
   Map <-  reactive({
     progress <- shiny::Progress$new(session = session)
     progress$set(message = "get input map")
@@ -150,6 +153,7 @@ shinyServer(function(input, output, session) {
       }
   })
   
+  #---- fitness function ----
   wfitness <- function(idxOrder, Map,  ...) {
     Cartogram <- recmap(Map[idxOrder,])
     if (sum(Cartogram$topology.error == 100) > 0) {
@@ -160,11 +164,14 @@ shinyServer(function(input, output, session) {
                                                                        2, S['relative position error',]))
   }
   
+  #---- Cartogram ----
   Cartogram <- reactive({
     progress <- shiny::Progress$new(session = session, min = 0, max = 1)
     progress$set(message = "recmapGA init")
     on.exit(progress$close())
+    
     options(warn = -1)
+    
     M <- Map()
     
     time.elapsed <- rep(proc.time()[3], input$GAmaxiter)
@@ -282,4 +289,8 @@ shinyServer(function(input, output, session) {
     }
   )
   
+  #---- sessionInfo ----
+  output$sessionInfo <- renderPrint({
+    capture.output(sessionInfo())
+  })
 })

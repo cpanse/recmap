@@ -1,7 +1,7 @@
 Package: recmap
 Type: Package
 Title: Compute the Rectangular Statistical Cartogram
-Version: 1.0.0
+Version: 1.0.2
 Authors@R: person("Christian", "Panse", 
 		email = "Christian.Panse@gmail.com", 
 		role = c("aut", "cre"),
@@ -14,26 +14,15 @@ Description: Provides an interface and a C++ implementation of the RecMap MP2
   population or epidemiological data). The basic idea of the RecMap algorithm is
   that each map region (e.g., different countries) is represented by a
   rectangle. The area of each rectangle represents the statistical value given
-  as input (maintain zero cartographic error). Documentation about RecMap is
-  provided by a vignette included in this package.
+  as input (maintain zero cartographic error). Documentation about the usage
+  of the recmap algorithm is provided by a vignette included in this package.
 License: GPL-3
-Depends: R (>= 3.3),
-	GA (>= 3.0.0),
-	Rcpp (>= 0.12.4),
-	sp
-Suggests:
-	colorspace,
-	doParallel,
-	knitr,
-	lattice,
-	maps,
-	noncensus,
-	shiny,
-	testthat,
-	tufte,
-	xtable
+Depends: R (>= 3.3), GA (>= 3.0.0), Rcpp (>= 0.12.4), sp
+Suggests: colorspace, doParallel, knitr, lattice, maps, noncensus,
+        shiny, testthat, tufte, xtable
 SystemRequirements: C++11
 LinkingTo: Rcpp (>= 0.12.4)
 VignetteBuilder: knitr
 NeedsCompilation: yes
 BugReports: https://github.com/cpanse/recmap/issues
+Packaged: 2019-03-06 13:51:54 UTC; cp

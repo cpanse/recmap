@@ -1,6 +1,16 @@
 \name{NEWS}
 \title{News for Package 'recmap'}
 
+\newcommand{\ghit}{\href{https://github.com/cpanse/recmap/issues/#1}{##1}}
+
+
+\section{Changes until version 1.0.2 (2019-03-07)}{
+  \itemize{
+	  \item fix recmapGRASP testcase \ghit{14}.
+	  \item text cosmetics \ghit{14}.
+  }
+}
+
 \section{Changes until version 1.0.0 (2018-09-16)}{
   \itemize{
 	  \item incorporate CITATION file to refer back to 
@@ -11,7 +21,7 @@
 
 \section{Changes until version 0.5.35 (2018-06-01)}{
   \itemize{
-	  \item \href{https://github.com/cpanse/recmap/issues/11}{issues 11}.
+	  \item \ghit{11}.
 	  \item replaced items in data/jss2711.RData.
   }
 }
@@ -74,7 +84,7 @@ improvements concerning \href{https://www.jstatsoft.org}{JSS} reviewer comments:
   
 \section{Changes until version 0.5.5 (2016-12-13)}{
   \itemize{
-  	\item added a screen filling parameter in \code{summary.recmap} function.
+  	\item added a screen-filling parameter in \code{summary.recmap} function.
 	  \item man page cosmetics.
 	  \item bugfix in \code{summary.recmap} function for MBB computation.
   }
@@ -108,13 +118,13 @@ improvements concerning \href{https://www.jstatsoft.org}{JSS} reviewer comments:
 
   \itemize{
     \item \emph{bugfix} - \code{valgrind} 
-    'Conditional jump or move depends on uninitialised value(s)'.
+    'Conditional jump or move depends on uninitialized value(s)'.
     
 	  \item added test case for topology error
 	  
 	  \item added startup message for package version
     
-    \item \emph{bugfix} - topology error; if a region can not be placed
+    \item \emph{bugfix} - topology error; if a region cannot be placed
     return topology error 100. 
     this has a major impact on the return value of the fitness function.
     
