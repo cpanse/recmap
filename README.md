@@ -70,9 +70,6 @@ available through [jss.v086.c01](http://dx.doi.org/10.18637/jss.v086.c01).
 
 ## Demonstration
 
-![animated GIF of the construction algorithm](vignettes/graphics/rectangular_statistical_cartogram_construction_animation.gif)
-
-
 interactive shiny application
 
 ```{r}
@@ -85,9 +82,6 @@ library(shiny)
 recmap_shiny <- system.file('shiny-examples', package = 'recmap')
 shiny::runApp(recmap_shiny, display.mode = 'normal')
 ```
-## (Frequently) Asked Questions
-
-### Is there an easy way to convert a `recmap` object to an [`sf`](https://CRAN.R-project.org/package=sf ) object?
 
 if you want to run the recmap shiny demonstration as stand-alone application
 using Linux and Apple systems use the `Terminal` application add the following 
@@ -98,6 +92,12 @@ alias recmapShiny="R -e \"library(shiny); \
   recmap_shiny <- system.file('shiny-examples', package = 'recmap'); \
   shiny::runApp(recmap_shiny, display.mode = 'normal', launch.browser=TRUE)\""
 ```
+
+
+## (Frequently) Asked Questions
+
+### Is there an easy way to convert a `recmap` object to an [`sf`](https://CRAN.R-project.org/package=sf ) object?
+
 
 Use [`as.SpatialPolygonsDataFrame`](https://github.com/cpanse/recmap/blob/da2f90d2edb3feda7464bb543147d2908851e92b/R/recmap.R#L265),
 see also issue [#13](https://github.com/cpanse/recmap/issues/13). 
