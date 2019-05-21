@@ -12,7 +12,7 @@ This package implements the [RecMap construction algorithm (MP2)](http://dx.doi.
 ## Installation
 
 
-### from [CRAN](https://CRAN.R-project.org/package=recmap)
+### use [CRAN](https://CRAN.R-project.org/package=recmap)
 
 `recmap` requires R 3.3 or later.
 
@@ -23,39 +23,6 @@ and can be installed using the following code
 ```{r}
 install.packages('recmap')
 ```
-
-### from [github](https://github.com/cpanse/recmap)
-
-the code below installs the latest development version
-
-```{r}
-install.packages('devtools')
-library(devtools)
-install_github('cpanse/recmap', build_vignettes = TRUE, quiet = FALSE)
-browseVignettes('recmap')
-```
-
-### Use the docker public | automated build [recmap image](https://hub.docker.com/r/cpanse/recmap/) 
-
-this image contains the latest build.
-
-```{bash}
-docker pull cpanse/recmap \
-&& docker run -d -p 8791:8787 cpanse/recmap
-```
-
-connect to http://yourdockerhost:8791  using a web browser
-
-* username: rstudio
-* password: rstudio
-
-or stand alone
-
-```{bash}
-docker run -it -p 8787:8787 cpanse/recmap R -e "library(shiny); recmap_shiny <- system.file('shiny-examples', package = 'recmap'); shiny::runApp(recmap_shiny, display.mode = 'normal', port=8787, host='0.0.0.0')"
-```
-
-connect to the docker host:8787
 
 ## Documentation
 
@@ -83,7 +50,7 @@ recmap_shiny <- system.file('shiny-examples', package = 'recmap')
 shiny::runApp(recmap_shiny, display.mode = 'normal')
 ```
 
-if you want to run the recmap shiny demonstration as stand-alone application
+Run the recmap shiny demonstration as a stand-alone application
 using Linux and Apple systems use the `Terminal` application add the following 
 code to your alias file, e.g., `$HOME/.bashrc`
 
@@ -93,6 +60,9 @@ alias recmapShiny="R -e \"library(shiny); \
   shiny::runApp(recmap_shiny, display.mode = 'normal', launch.browser=TRUE)\""
 ```
 
+execute 
+
+`. $HOME/.bashrc && recmapShiny` 
 
 ## (Frequently) Asked Questions
 
