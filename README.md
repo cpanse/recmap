@@ -9,7 +9,7 @@
 
 This package implements the [RecMap construction algorithm (MP2)](http://dx.doi.org/10.1109/INFVIS.2004.57) using the [GA]( https://CRAN.R-project.org/package=GA) CRAN package as metaheuristic.
 
-## Installation
+## 1. Installation
 
 
 ### use [CRAN](https://CRAN.R-project.org/package=recmap)
@@ -24,7 +24,7 @@ and can be installed using the following code
 install.packages('recmap')
 ```
 
-## Documentation
+## 2. Documentation
 
 The package ships with a package 
 [vignette](https://CRAN.R-project.org/package=recmap/vignettes/recmap.html)
@@ -35,7 +35,7 @@ Both documents are also available on the package's
 A white paper containing more technical information and examples is
 available through [jss.v086.c01](http://dx.doi.org/10.18637/jss.v086.c01).
 
-## Demonstration
+## 3. Demonstration
 
 interactive shiny application
 
@@ -64,9 +64,9 @@ execute
 
 `. $HOME/.bashrc && recmapShiny` 
 
-## (Frequently) Asked Questions
+## 4. (Frequently) Asked Questions
 
-### Is there an easy way to convert a `recmap` object to an [`sf`](https://CRAN.R-project.org/package=sf ) object?
+### 4.1 Is there an easy way to convert a `recmap` object to an [`sf`](https://CRAN.R-project.org/package=sf ) object?
 
 
 Use [`as.SpatialPolygonsDataFrame`](https://github.com/cpanse/recmap/blob/da2f90d2edb3feda7464bb543147d2908851e92b/R/recmap.R#L265),
@@ -74,7 +74,7 @@ see also issue [#13](https://github.com/cpanse/recmap/issues/13).
 The `as.recmap` function performs the transformation from a
 `SpatialPolygonsDataFrame` into a `recmap` compatible object.
 
-## Related approaches
+## 5. Related approaches
 * [Rectangular Cartograms: the game](http://www.win.tue.nl/~speckman/demos/game/index.html), [Rectangular Cartograms](http://www.win.tue.nl/~speckman/Cartograms/SoccerCarto.html)
 * cartogram: Create Cartograms with R [https://CRAN.R-project.org/package=cartogram](https://CRAN.R-project.org/package=cartogram)
 * [Rcartogram](https://github.com/omegahat/Rcartogram)
