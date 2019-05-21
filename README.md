@@ -11,8 +11,7 @@ This package implements the [RecMap construction algorithm (MP2)](http://dx.doi.
 
 ## 1. Installation
 
-
-### use [CRAN](https://CRAN.R-project.org/package=recmap)
+use [CRAN](https://CRAN.R-project.org/package=recmap)
 
 `recmap` requires R 3.3 or later.
 
@@ -75,6 +74,7 @@ The `as.recmap` function performs the transformation from a
 `SpatialPolygonsDataFrame` into a `recmap` compatible object.
 
 ## 5. Related approaches
+
 * [Rectangular Cartograms: the game](http://www.win.tue.nl/~speckman/demos/game/index.html), [Rectangular Cartograms](http://www.win.tue.nl/~speckman/Cartograms/SoccerCarto.html)
 * cartogram: Create Cartograms with R [https://CRAN.R-project.org/package=cartogram](https://CRAN.R-project.org/package=cartogram)
 * [Rcartogram](https://github.com/omegahat/Rcartogram)
