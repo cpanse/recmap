@@ -5,7 +5,7 @@
 Genetic Algorithm Wrapper Function for recmap
 }
 \description{
-high-level function for \code{\link{recmap}} using a Genetic Algorithm as 
+higher-level function for \code{\link{recmap}} using a Genetic Algorithm as 
 metaheuristic.
 }
 \usage{
@@ -63,7 +63,7 @@ Journal of Statistical Software, 53(4), 1-37.
 \url{http://dx.doi.org/10.18637/jss.v053.i04}. 
 }
 \author{
-Christian Panse
+Christian Panse 2016-2019
 }
 
 
