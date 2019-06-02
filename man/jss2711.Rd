@@ -57,7 +57,7 @@ Generated on a MacBook Pro (Retina, 13-inch, Mid 2014).}
   \itemize{
     \item {input map rectangles derived from: \code{https://census.edina.ac.uk/ukborders};
       Contains OS data Crown copyright [and database right] (2016);}
-    \item {Source of election data: \href{www.nisra.gov.uk}{NISRA}}
+    \item {Source of election data: \href{http://www.nisra.gov.uk}{NISRA}}
     \item {copyright - Contains National Statistics data Crown copyright and database right 2016
     Contains NRS data Crown copyright and database right 2016}
     \item {Perfomed on a Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz/ Debian8}
