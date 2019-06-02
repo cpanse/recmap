@@ -1,6 +1,5 @@
-
-
-# This is the server logic for a Shiny web application using U.S. county data
+#R
+# This is the server logic for a Shiny web application using recmap
 #
 # https://CRAN.R-project.org/package=recmap
 
@@ -16,6 +15,11 @@ data(counties)
   function(state = 'colorado',
            scaleX = 0.5,
            scaleY = 0.5) {
+    # sanity check
+    if (!state %in%  row.names(state.x77)) {
+      warning("not a valid U.S. state")
+      return(NULL)
+    }
     MBB <- lapply(map('county', state, plot = FALSE)$names,
                   function(x) {
                     r <- map('county', x, plot = FALSE)
@@ -34,7 +38,7 @@ data(counties)
     MBB <- do.call('rbind', MBB)
     MBB <- merge(MBB, county.fips, by = 'polyname')
     MBB$fips <- as.integer(MBB$fips)
-    
+
     P <- data.frame(
       fips = paste(counties$state_fips,
                    counties$county_fips, sep = ''),
@@ -42,11 +46,10 @@ data(counties)
       name = counties$county_name
     )
     P$fips <- as.integer(levels(P$fips))[P$fips]
-    
+
     M <- merge(MBB, P, by = 'fips')
     attr(M, 'Map.name') <- paste("U.S.", state)
     attr(M, 'Map.stat') <- 'population'
-    
     class(M) <- c('recmap', 'data.frame')
     M
   }
@@ -54,24 +57,27 @@ data(counties)
 # ----- shiny server -------
 shinyServer(function(input, output, session) {
   output$plot_hoverinfo <- renderText({
-    res <- Cartogram()$Cartogram
-    x <- input$plot_hover$x
-    y <- input$plot_hover$y
-    
-    query <-
-      ((res$x - res$dx) < x) &
-      (x < (res$x + res$dx)) &
-      ((res$y - res$dy) < y) & (y < (res$y + res$dy))
-    rv <- "no object identified."
-    if (sum(query) == 1) {
-      rv <- paste(res$name[query])
+
+    if (TRUE){
+      res <- Cartogram()$Cartogram
+      x <- input$plot_hover$x
+      y <- input$plot_hover$y
+
+      query <-
+        ((res$x - res$dx) < x) &
+        (x < (res$x + res$dx)) &
+        ((res$y - res$dy) < y) & (y < (res$y + res$dy))
+      rv <- "no object identified."
+      if (sum(query) == 1) {
+        rv <- paste(res$name[query])
+      }
+
+      message(paste("region name:", rv))
     }
-    
-    paste("region name:", rv)
   })
-  
-  #---- colormap ----
-  # some taken from the vignette of https://CRAN.R-project.org/package=colorspace 
+
+  #---- define colormaps ----
+  # some taken from the vignette of https://CRAN.R-project.org/package=colorspace
   colormap <- reactive({
     list(colorspace_heat_hcl = heat_hcl(12, c = c(80, 30), l = c(30, 90), power = c(1/5, 2)),
          colorspace_rev_heat_hcl = rev(heat_hcl(12, h = c(0, -100), c = c(40, 80), l = c(75, 40),  power = 1)),
@@ -83,24 +89,27 @@ shinyServer(function(input, output, session) {
          colorspace_rainbow_warm10 = rainbow_hcl(10, start = 90, end = -30),
          colorspace_terrain_hcl = terrain_hcl(12, c = c(65, 0), l = c(45, 90), power = c(1/2, 1.5)),
          heat.colors = heat.colors(12),
+# use DBVIS color maps;
+# KEIM, Daniel, 1995. Visual support for query specification and data mining [Dissertation].
+# München: Universität. Aachen : Shaker. ISBN 3-8265-0594-8goes back to 1999
          DanKeim = rev(c('#C6CF32', '#88E53B', '#50E258', '#29C67D', '#19999E', '#2064AF', '#3835AB', '#561493', '#6E086D', '#790D43', '#741F1E', '#5F3307')
          ),
          DanKeim_HSV = rev(c('#BECC3D', '#70C337', '#31B93C', '#2BB077', '#269FA7', '#21589E', '#221C94', '#56188B', '#82147F', '#791043', '#6F0E0D', '#66380A')))
   })
-  
+
   output$colormap <- renderUI({
     selectInput('colormapname', 'colormap name', names(colormap()))
   })
-  
+
   output$colormapPlot <- renderPlot({
     par(mar = c(0,0,0,0));
     pal(unlist(colormap()[input$colormapname]))
   })
-  
-  #---- output UI  ----
+
+  #---- define output UI  ----
   output$II <- renderUI({
     if (input$datatype == 'checkerboard'){
-      numericInput("checkerboardSize", "checkerboardSize", 4, min = 2, 
+      numericInput("checkerboardSize", "checkerboardSize", 4, min = 2,
                    max = 16, step = 1)
     }else if (input$datatype == 'USstate'){
       list(
@@ -115,14 +124,16 @@ shinyServer(function(input, output, session) {
         sliderInput("scaleX", "scaleX", 0, 1, 0.6),
         sliderInput("scaleY", "scaleY", 0, 1, 0.63))
     }})
-  
-  #---- Map ----
+
+  #---- define input map ----
   Map <-  reactive({
     progress <- shiny::Progress$new(session = session)
     progress$set(message = "get input map")
     on.exit(progress$close())
-    
-    if (input$datatype == "UScounty"){
+
+    res <- NULL
+
+    if (input$datatype == "UScounty" && length(input$state) == 1){
       res <-
         .get_county_mbb(
           state = input$state,
@@ -131,51 +142,52 @@ shinyServer(function(input, output, session) {
         )
       res$name <- gsub(" ", "\n", res$name)
       res}else if (input$datatype == "checkerboard"){
-        checkerboard(input$checkerboardSize)
+        res <- checkerboard(input$checkerboardSize)
       }else if (input$datatype == "USstate"){
-        usa <- data.frame(x = state.center$x, 
-                          y = state.center$y, 
+        usa <- data.frame(x = state.center$x,
+                          y = state.center$y,
                           # make the rectangles overlapping by correcting lines of longitude distance
-                          dx = sqrt(state.area) / 2 / (0.8 * 60 * cos(state.center$y*pi/180)), 
-                          dy = sqrt(state.area) / 2 / (0.8 * 60), 
+                          dx = sqrt(state.area) / 2 / (0.8 * 60 * cos(state.center$y*pi/180)),
+                          dy = sqrt(state.area) / 2 / (0.8 * 60),
                           z = sqrt(state.area),
                           name = state.name)
-        
+
         usa$z <- state.x77[, input$area]
-        
+
         res <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]
         attr(res, 'Map.name') <- "U.S."
         attr(res, 'Map.stat') <- input$area
-        
+
         class(res) <- c('recmap', class(res))
-        return(res)
-        
       }
+    res
   })
-  
-  #---- fitness function ----
+
+  #---- define fitness function ----
   wfitness <- function(idxOrder, Map,  ...) {
     Cartogram <- recmap(Map[idxOrder,])
+
     if (sum(Cartogram$topology.error == 100) > 0) {
       return(0)
     }
-    
-    1 / (c(input$objective_weight, 1 - input$objective_weight) %*% c(S['topology error',] / nrow(Cartogram) ^
-                                                                       2, S['relative position error',]))
+
+    1 / (c(input$objective_weight,
+        1 - input$objective_weight) %*% c(S['topology error',] / nrow(Cartogram)^2,
+                                          S['relative position error',]))
   }
-  
-  #---- Cartogram ----
+
+  #---- compute Cartogram ----
   Cartogram <- reactive({
     progress <- shiny::Progress$new(session = session, min = 0, max = 1)
     progress$set(message = "recmapGA init")
     on.exit(progress$close())
-    
-    options(warn = -1)
-    
+
+    # options(warn = -1)
+
     M <- Map()
-    
+    if (is.null(M)){return(NULL)}
     time.elapsed <- rep(proc.time()[3], input$GAmaxiter)
-    
+
     res <- recmapGA(
       M,
       maxiter = input$GAmaxiter,
@@ -188,7 +200,7 @@ shinyServer(function(input, output, session) {
       {
         fitness <- na.exclude(object@fitness)
         sumryStat <- c(mean(fitness), max(fitness))
-        
+
         time.elapsed[object@iter] <- ( proc.time()[3] - time.elapsed[object@iter] ) / object@iter
         progress$set(
           message = "GA",
@@ -205,69 +217,76 @@ shinyServer(function(input, output, session) {
     )
     res
   })
-  
+
+  #----plot input map ----
   output$mapPlot <- renderPlot({
+    M <- Map()
+    if (is.null(M)){return()}
+
     op <- par(mfrow = c(1, 1), mar = c(0, 0, 0, 0))
-    
-    m <- Map()
-    plot(m, col.text = 'darkred')
-    
+
+    plot(M, col.text = 'darkred')
+
     x <- input$plot_hover$x
     y <- input$plot_hover$y
-    
-    res <- Cartogram()$Cartogram
-    query <-
-      ((res$x - res$dx) < x) &
-      (x < (res$x + res$dx)) &
-      ((res$y - res$dy) < y) & (y < (res$y + res$dy))
-    rv <- "no object identified."
-    if (sum(query) == 1) {
-      rv <- paste(res$name[query])
-      idx <- which(m$name == rv)
-      rect(m$x[idx] - m$dx[idx],
-           m$y[idx] - m$dy[idx] ,
-           m$x[idx] + m$dx[idx],
-           m$y[idx] + m$dy[idx],
-           col = rgb(0.8, 0.1, 0.1, 0.3))
-    }
+
+    if(TRUE){
+      C <- Cartogram()
+      if(is.null(C)) {return()}
+      res <- C$Cartogram
+
+      query <-
+        ((res$x - res$dx) < x) &
+        (x < (res$x + res$dx)) &
+        ((res$y - res$dy) < y) & (y < (res$y + res$dy))
+      rv <- "no object identified."
+      if (sum(query) == 1) {
+        rv <- paste(res$name[query])
+        idx <- which(M$name == rv)
+        rect(M$x[idx] - M$dx[idx],
+             M$y[idx] - M$dy[idx] ,
+             M$x[idx] + M$dx[idx],
+             M$y[idx] + M$dy[idx],
+             col = rgb(0.8, 0.1, 0.1, 0.3))
+      }}
   })
-  
-  
+
+  #----plot output cartogram ----
   output$cartogramPlot <- renderPlot({
     res <- Cartogram()
-    
+    if (is.null(res)){return(NULL)}
     op <- par(mfrow = c(1, 1), mar = c(0, 0, 0, 0))
-    
+
     if(input$datatype == "USstate"){
       cm <- unlist(colormap()[input$colormapname])
-      
+
       S <- state.x77[which(rownames(state.x77) %in% res$Cartogram$name), input$color]
       S <- S[res$GA@solution[1, ]]
       S <- round((length(cm) - 1) * (S - min(S)) / (max(S)  - min(S))) + 1
       plot(res, col=cm[S], col.text = 'black')
       legend("topleft", c(paste("Area ~", input$area),
-                          paste("Color ~", input$color)), 
+                          paste("Color ~", input$color)),
              box.col = 'white')
-      
+
     }else{
       plot(res$Cartogram, col.text = 'darkred')}
-    
+
   })
-  
+
   output$gaPlot <- renderPlot({
       plot(Cartogram()$GA)
   })
-  
+
   output$gaSolution <- DT::renderDataTable({
     t(Cartogram()$GA@solution)
   })
- 
+
   output$summary <- DT::renderDataTable({
     res <- Cartogram()
     t(res$Summary)
   })
-  
-  
+
+
   output$foo = downloadHandler(
     filename = paste("recmap.pdf", sep = ''),
     content = function(file) {
@@ -288,7 +307,7 @@ shinyServer(function(input, output, session) {
       #dev.copy2pdf(file = file, width=12, height=8, out.type="pdf")
     }
   )
-  
+
   #---- sessionInfo ----
   output$sessionInfo <- renderPrint({
     capture.output(sessionInfo())
