@@ -13,7 +13,7 @@ This package implements the [RecMap construction algorithm (MP2)](http://dx.doi.
 
 use [CRAN](https://CRAN.R-project.org/package=recmap)
 
-`recmap` requires R 3.5.1 or later.
+`recmap` requires R 3.5 or later.
 
 Released and tested versions of `recmap` are available via
 [CRAN](https://CRAN.R-project.org/package=recmap), 
