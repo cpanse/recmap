@@ -11,6 +11,7 @@ library(noncensus)
 
 data(counties)
 
+# ----- get U.S. county minimal bounding boxes  ------
 .get_county_mbb <-
   function(state = 'colorado',
            scaleX = 0.5,
@@ -141,7 +142,7 @@ shinyServer(function(input, output, session) {
           scaleY = input$scaleY
         )
       res$name <- gsub(" ", "\n", res$name)
-      res}else if (input$datatype == "checkerboard"){
+      res}else if (input$datatype == "checkerboard" && length(input$checkerboardSize) == 1){
         res <- checkerboard(input$checkerboardSize)
       }else if (input$datatype == "USstate"){
         usa <- data.frame(x = state.center$x,
@@ -182,7 +183,7 @@ shinyServer(function(input, output, session) {
     progress$set(message = "recmapGA init")
     on.exit(progress$close())
 
-    # options(warn = -1)
+    options(warn = -1)
 
     M <- Map()
     if (is.null(M)){return(NULL)}
@@ -286,7 +287,7 @@ shinyServer(function(input, output, session) {
     t(res$Summary)
   })
 
-
+  # ------- pdf -------
   output$foo = downloadHandler(
     filename = paste("recmap.pdf", sep = ''),
     content = function(file) {
