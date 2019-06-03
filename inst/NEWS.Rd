@@ -4,13 +4,14 @@
 \newcommand{\ghit}{\href{https://github.com/cpanse/recmap/issues/#1}{##1}}
 
 
-\section{Changes until version 1.0.4 (2019-06-02)}{
+\section{Changes until version 1.0.5 (2019-06-03)}{
   \itemize{
 	  \item fix recmapGRASP testcase \ghit{14}.
 	  \item text cosmetics \ghit{14}.
 	  \item fixed \ghit{15}.
 	  \item fixed \ghit{16}.
 	  \item fixed \ghit{17}.
+	  \item added DOI in Description.
   }
 }
 
