@@ -40,7 +40,7 @@ Run an interactive shiny application
 
 ```{r}
 # Requires to install suggested  packages
-pkgs <- c('colorspace', 'maps', 'noncensus', 'shiny')
+pkgs <- c('colorspace', 'maps', 'noncensus', 'shiny', 'DT')
 pkgs <- pkgs[(!pkgs %in% unique(installed.packages()[,'Package']))]
 if(length(pkgs) > 0){install.packages(pkgs)}
 
