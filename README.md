@@ -80,3 +80,4 @@ The `as.recmap` function performs the transformation from a
 * [Rcartogram](https://github.com/omegahat/Rcartogram)
 * [High-performance software to produce flow-based cartograms.](https://github.com/Flow-Based-Cartograms/go_cart) 
 * see also [CRAN Task View: Analysis of Spatial Data](https://CRAN.R-project.org/view=Spatial)
+* Computing Stable Demers Cartograms - https://arxiv.org/abs/1908.07291
