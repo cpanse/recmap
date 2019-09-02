@@ -10,7 +10,7 @@
 This package implements the [RecMap construction algorithm (MP2)](http://dx.doi.org/10.1109/INFVIS.2004.57) using the [GA]( https://CRAN.R-project.org/package=GA) CRAN package as metaheuristic.
 
 
-![demo](https://github.com/cpanse/recmap/vignettes/graphics/rectangular_statistical_cartogram_construction_animation.gif)
+![demo](vignettes/graphics/rectangular_statistical_cartogram_construction_animation.gif)
 
 ## 1. Installation
 
