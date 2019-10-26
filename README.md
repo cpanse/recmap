@@ -26,6 +26,14 @@ and can be installed using the following code
 install.packages('recmap')
 ```
 
+before running `R CMD build` and `R CMD check` execute
+```{r}
+pkgs <- c('colorspace', 'doParallel', 'DT', 'knitr', 'maps',
+  'noncensus', 'shiny', 'testthat', 'tufte')
+pkgs <- pkgs[(!pkgs %in% unique(installed.packages()[,'Package']))]
+if(length(pkgs) > 0){install.packages(pkgs)}
+```
+
 ## 2. Documentation
 
 The package ships with a package 
@@ -43,8 +51,7 @@ Run an interactive shiny application
 
 ```{r}
 # Requires to install the suggested  packages and R CMD check
-pkgs <- c('colorspace', 'doParallel', 'DT', 'maps', 'noncensus',
-  'shiny', 'testthat', 'tufte')
+pkgs <- c('colorspace', 'doParallel', 'DT', 'maps', 'noncensus')
 pkgs <- pkgs[(!pkgs %in% unique(installed.packages()[,'Package']))]
 if(length(pkgs) > 0){install.packages(pkgs)}
 
