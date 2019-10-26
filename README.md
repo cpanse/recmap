@@ -42,8 +42,9 @@ available through [jss.v086.c01](http://dx.doi.org/10.18637/jss.v086.c01).
 Run an interactive shiny application
 
 ```{r}
-# Requires to install the suggested  packages
-pkgs <- c('colorspace', 'doParallel', 'DT', 'maps', 'noncensus', 'shiny')
+# Requires to install the suggested  packages and R CMD check
+pkgs <- c('colorspace', 'doParallel', 'DT', 'maps', 'noncensus',
+  'shiny', 'testthat', 'tufte')
 pkgs <- pkgs[(!pkgs %in% unique(installed.packages()[,'Package']))]
 if(length(pkgs) > 0){install.packages(pkgs)}
 
