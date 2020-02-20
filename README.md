@@ -29,7 +29,7 @@ install.packages('recmap')
 before running `R CMD build` and `R CMD check` execute
 ```{r}
 pkgs <- c('colorspace', 'doParallel', 'DT', 'knitr', 'maps',
-  'noncensus', 'shiny', 'testthat', 'tufte')
+  'shiny', 'testthat', 'tufte')
 pkgs <- pkgs[(!pkgs %in% unique(installed.packages()[,'Package']))]
 if(length(pkgs) > 0){install.packages(pkgs)}
 ```
@@ -50,10 +50,6 @@ available through [jss.v086.c01](http://dx.doi.org/10.18637/jss.v086.c01).
 Run an interactive shiny application
 
 ```{r}
-pkgs <- c('doParallel', 'DT', 'maps', 'noncensus')
-pkgs <- pkgs[(!pkgs %in% unique(installed.packages()[,'Package']))]
-if(length(pkgs) > 0){install.packages(pkgs)}
-
 library(shiny)
 recmap_shiny <- system.file('shiny-examples', package = 'recmap')
 shiny::runApp(recmap_shiny, display.mode = 'normal')
