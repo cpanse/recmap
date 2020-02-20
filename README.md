@@ -26,7 +26,7 @@ and can be installed using the following code
 install.packages('recmap')
 ```
 
-before running `R CMD build` and `R CMD check` execute
+before running `R CMD build` and `R CMD check` or running the shiny demo execute
 ```{r}
 pkgs <- c('colorspace', 'doParallel', 'DT', 'knitr', 'maps',
   'shiny', 'testthat', 'tufte')
