@@ -15,10 +15,7 @@ shinyUI(fluidPage(# Application title
   # Sidebar with a slider input
   sidebarLayout(
     sidebarPanel(
-      radioButtons("datatype", "Type of data:",
-                   c("checkerboard" = "checkerboard",
-                     "US county" = "UScounty",
-                     "US state" = "USstate")),
+      htmlOutput("methodRadio"),
       br(),
       htmlOutput("II"),
       hr(),

@@ -4,6 +4,15 @@
 \newcommand{\ghit}{\href{https://github.com/cpanse/recmap/issues/#1}{##1}}
 
 
+\section{Changes until version 1.0.8 (2020-02-20)}{
+  \itemize{
+    \item remove colorspace and xtable package in suggest
+    \item R (>=3.6)  and hard coded colormaps or
+      use `grDevices::hcl.colors()` \ghit{19}
+	  \item added construction animated gif
+	  \url{https://user-images.githubusercontent.com/4901987/64121133-3dfc9100-cd9e-11e9-8c35-078678966100.gif} to README.md.
+  }
+}
 \section{Changes until version 1.0.5 (2019-06-03)}{
   \itemize{
 	  \item fix recmapGRASP testcase \ghit{14}.

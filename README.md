@@ -10,13 +10,13 @@
 This package implements the [RecMap construction algorithm (MP2)](http://dx.doi.org/10.1109/INFVIS.2004.57) using the [GA]( https://CRAN.R-project.org/package=GA) CRAN package as metaheuristic.
 
 
-![demo](https://user-images.githubusercontent.com/4901987/64121133-3dfc9100-cd9e-11e9-8c35-078678966100.gif)
+![rectangular population cartogram construction demo - animated gif](https://user-images.githubusercontent.com/4901987/64121133-3dfc9100-cd9e-11e9-8c35-078678966100.gif)
 
 ## 1. Installation
 
 use [CRAN](https://CRAN.R-project.org/package=recmap)
 
-`recmap` requires R 3.5 or later.
+`recmap` requires R 3.6 or later.
 
 Released and tested versions of `recmap` are available via
 [CRAN](https://CRAN.R-project.org/package=recmap), 
@@ -43,7 +43,7 @@ Run an interactive shiny application
 
 ```{r}
 # Requires to install suggested  packages
-pkgs <- c('colorspace', 'maps', 'noncensus', 'shiny', 'DT')
+pkgs <- c('colorspace', 'maps', 'shiny', 'DT')
 pkgs <- pkgs[(!pkgs %in% unique(installed.packages()[,'Package']))]
 if(length(pkgs) > 0){install.packages(pkgs)}
 

@@ -3,19 +3,24 @@
 #
 # https://CRAN.R-project.org/package=recmap
 
-library(colorspace)
+# use R version >= 3.6 - grDevices::hcl; grDevices::hcl.colors; grDevices::hcl.pals;
+# library(colorspace)
 library(maps)
 library(shiny)
 library(recmap)
-library(noncensus)
 
-data(counties)
 
 # ----- get U.S. county minimal bounding boxes  ------
 .get_county_mbb <-
   function(state = 'colorado',
            scaleX = 0.5,
            scaleY = 0.5) {
+
+    if (require(noncensus))
+        data(counties)
+    else
+        stop("no package 'noncensus'.")
+
     # sanity check
     if (!state %in%  row.names(state.x77)) {
       warning("not a valid U.S. state")
@@ -80,22 +85,36 @@ shinyServer(function(input, output, session) {
   #---- define colormaps ----
   # some taken from the vignette of https://CRAN.R-project.org/package=colorspace
   colormap <- reactive({
-    list(colorspace_heat_hcl = heat_hcl(12, c = c(80, 30), l = c(30, 90), power = c(1/5, 2)),
-         colorspace_rev_heat_hcl = rev(heat_hcl(12, h = c(0, -100), c = c(40, 80), l = c(75, 40),  power = 1)),
-         colorspace_sequential_hcl_0 = sequential_hcl(12, c = 0, power = 2.2),
-         colorspace_sequential_hcl_1 = sequential_hcl(12, power = 2.2),
-         colorspace_diverge_hcl = diverge_hcl(7),
-         colorspace_rainbow_dynamic4 = rainbow_hcl(4, start = 30, end = 300),
-         colorspace_rainbow_dynamic10 = rainbow_hcl(10, start = 30, end = 300),
-         colorspace_rainbow_warm10 = rainbow_hcl(10, start = 90, end = -30),
-         colorspace_terrain_hcl = terrain_hcl(12, c = c(65, 0), l = c(45, 90), power = c(1/2, 1.5)),
+    
+    # heat_hcl <- heat_hcl(12, c = c(80, 30), l = c(30, 90), power =  c(1/5, 2))
+    
+    heat_hcl <- c('#8E063B', '#A63945', '#BC584D', '#CF7355', '#DF8B5B',
+                  '#EAA162', '#F2B468', '#F6C56F', '#F6D277', '#F2DD80',
+                  '#EBE48B', '#E2E6BD')
+    
+    
+    # sequential_hcl(12, c = 0, power = 2.2)
+    # sequential_hcl(12, power = 2.2)
+    # sequential_hcl(12, c = 0, power = 2.2)
+    
+    list(
+        colorspace_heat_hcl = heat_hcl,
+         colorspace_rev_heat_hcl = rev(heat_hcl),
+         colorspace_Set2 = hcl.colors(20, "Set 2"),
+         colorspace_Set3 = hcl.colors(20, "Set 3"),
+         colorspace_rev_Set3 = rev(hcl.colors(20, "Set 3")),
          heat.colors = heat.colors(12),
+        rainbow = rainbow(12),
 # use DBVIS color maps;
 # KEIM, Daniel, 1995. Visual support for query specification and data mining [Dissertation].
 # München: Universität. Aachen : Shaker. ISBN 3-8265-0594-8goes back to 1999
-         DanKeim = rev(c('#C6CF32', '#88E53B', '#50E258', '#29C67D', '#19999E', '#2064AF', '#3835AB', '#561493', '#6E086D', '#790D43', '#741F1E', '#5F3307')
+         DanKeim = rev(c('#C6CF32', '#88E53B', '#50E258', '#29C67D', '#19999E',
+                         '#2064AF', '#3835AB', '#561493', '#6E086D', '#790D43',
+                         '#741F1E', '#5F3307')
          ),
-         DanKeim_HSV = rev(c('#BECC3D', '#70C337', '#31B93C', '#2BB077', '#269FA7', '#21589E', '#221C94', '#56188B', '#82147F', '#791043', '#6F0E0D', '#66380A')))
+         DanKeim_HSV = rev(c('#BECC3D', '#70C337', '#31B93C', '#2BB077',
+                             '#269FA7', '#21589E', '#221C94', '#56188B',
+                             '#82147F', '#791043', '#6F0E0D', '#66380A')))
   })
 
   output$colormap <- renderUI({
@@ -108,6 +127,21 @@ shinyServer(function(input, output, session) {
   })
 
   #---- define output UI  ----
+  output$methodRadio <- renderUI({
+    inputData <- c("checkerboard" = "checkerboard",
+                   "US state" = "USstate")
+    
+    if (require('noncensus')){
+      inputData <- c("checkerboard" = "checkerboard",
+                     "US county" = "UScounty",
+                     "US state" = "USstate")
+    }
+   
+    
+	  radioButtons("datatype", "Type of data:",
+	               inputData)
+  })
+  
   output$II <- renderUI({
     if (input$datatype == 'checkerboard'){
       numericInput("checkerboardSize", "checkerboardSize", 4, min = 2,
