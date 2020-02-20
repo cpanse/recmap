@@ -6,7 +6,7 @@
 
 \section{Changes until version 1.0.8 (2020-02-20)}{
   \itemize{
-    \item remove colorspace and xtable package in suggest
+    \item remove shiny colorspace and xtable package in suggest
     \item R (>=3.6)  and hard coded colormaps or
       use `grDevices::hcl.colors()` \ghit{19}
 	  \item added construction animated gif
