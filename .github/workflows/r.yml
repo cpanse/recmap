@@ -23,6 +23,8 @@ jobs:
         r-version: [4.0]
 
     steps:
+      - name: install Linux packages
+        run: sudo apt-get install -y libicu-dev pandoc texlive
       - uses: actions/checkout@v2
       - name: Set up R ${{ matrix.r-version }}
         uses: r-lib/actions/setup-r@v1
@@ -34,5 +36,5 @@ jobs:
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
       - name: Check
-        run: rcmdcheck::rcmdcheck(build_args = "--no-build-vignettes", args = "--no-build-vignettes --no-manual", error_on = "error")
+	run: rcmdcheck::rcmdcheck(build_args = "--no-build-vignettes", args = "--no-manual --ignore-vignettes", error_on = "error")
         shell: Rscript {0}
