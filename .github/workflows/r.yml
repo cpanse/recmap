@@ -6,8 +6,9 @@
 # See https://github.com/r-lib/actions/tree/master/examples#readme for
 # additional example workflows available for the R community.
 
-name: R
-
+name: Rrecmap
+env:
+    ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
 on:
   push:
     branches: [ master ]
@@ -16,15 +17,15 @@ on:
 
 jobs:
   build:
-    runs-on: macOS-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
-        r-version: [3.6]
+        r-version: [4.0]
 
     steps:
       - uses: actions/checkout@v2
       - name: Set up R ${{ matrix.r-version }}
-        uses: r-lib/actions/setup-r@ffe45a39586f073cc2e9af79c4ba563b657dc6e3
+        uses: r-lib/actions/setup-r@v1
         with:
           r-version: ${{ matrix.r-version }}
       - name: Install dependencies
@@ -33,5 +34,5 @@ jobs:
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
       - name: Check
-        run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
+        run: rcmdcheck::rcmdcheck(build_args = "--no-build-vignettes", args = "--no-build-vignettes --no-manual", error_on = "error")
         shell: Rscript {0}
