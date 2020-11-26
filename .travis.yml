@@ -1,9 +1,0 @@
-language: r
-cache: packages
-
-r_packages:
-  - Rcpp
-  - GA
-  - sp
-  - testthat
-warnings_are_errors: false
