@@ -33,7 +33,7 @@ jobs:
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
       - name: install Linux packages
-        run: sudo apt-get install -y libicu-dev pandoc texlive texlive-latex-extra
+        run: sudo apt-get install -y libicu-dev pandoc texlive texlive-latex-extra texlive-fonts-extra
       - name: Check
         run: rcmdcheck::rcmdcheck(build_args = "", args = "", error_on = "error")
         shell: Rscript {0}
