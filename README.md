@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/cpanse/recmap.svg)](https://travis-ci.org/cpanse/recmap) 
 [![](http://cranlogs.r-pkg.org/badges/grand-total/recmap)](https://cran.r-project.org/package=recmap)
 [![](http://cranlogs.r-pkg.org/badges/recmap)](https://cran.r-project.org/package=recmap) 
-[![](https://github.com/cpanse/recmap/workflows/RCMDcheck/badge.svg)
+![](https://github.com/cpanse/recmap/workflows/RCMDcheck/badge.svg)
 
 # recmap - Compute the Rectangular Statistical Cartogram 
 
