@@ -58,7 +58,7 @@ shiny::runApp(recmap_shiny, display.mode = 'normal')
 ```
 
 Run the recmap shiny demonstration as a stand-alone application
-using Linux and Apple systems use the `Terminal` application add the following 
+using Linux and macOS systems use the `Terminal` application add the following 
 code to your alias file, e.g., `$HOME/.bashrc`
 
 ```
