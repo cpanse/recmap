@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        r-version: [4.0, 4.0.3]
+        r-version: [4.0.4]
     steps:
       - uses: actions/checkout@v2
       - name: Set up R ${{ matrix.r-version }}
@@ -37,3 +37,8 @@ jobs:
       - name: Check
         run: rcmdcheck::rcmdcheck(build_args = "", args = "", error_on = "error")
         shell: Rscript {0}
+      - uses: actions/upload-artifact@v2
+        with:
+            name: recmap.Rcheck
+            path: check/recmap.Rcheck
+            if-no-files-found: warn
