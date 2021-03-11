@@ -1,7 +1,7 @@
 % $HeadURL: svn+ssh://cp@fgcz-148.uzh.ch/home/cp/__SUBVERSION_REPOSITORY__/__projects/2018/jss2711/jss2711.Rnw $
 % $Id: jss2711.Rnw 1274 2018-05-26 12:20:43Z cp $
 % $Date: 2018-05-26 14:20:43 +0200 (Sat, 26 May 2018) $
-%\VignetteIndexEntry{Rectangular Statistical Cartograms R (jss2711 replication code)}
+%\VignetteIndexEntry{Rectangular Statistical Cartograms R (inlcuding JSS2711 replication code)}
 \documentclass[nojss]{jss}
 \usepackage{amssymb}
 \usepackage{amsmath}

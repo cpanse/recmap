@@ -6,7 +6,7 @@
 # See https://github.com/r-lib/actions/tree/master/examples#readme for
 # additional example workflows available for the R community.
 
-name: Rrecmap
+name: R-CMD-check-recmap
 env:
     ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
 on:
@@ -33,7 +33,7 @@ jobs:
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
       - name: install Linux packages
-        run: sudo apt-get install -y libicu-dev pandoc texlive texlive-latex-extra texlive-fonts-extra
+        run: sudo apt-get install -y libicu-dev pandoc pandoc-citeproc texlive texlive-latex-extra texlive-fonts-extra
       - name: Check
         run: rcmdcheck::rcmdcheck(build_args = "", args = "", error_on = "error")
         shell: Rscript {0}
