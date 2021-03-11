@@ -37,6 +37,16 @@ jobs:
       - name: Check
         run: rcmdcheck::rcmdcheck(build_args = "", args = "", error_on = "error")
         shell: Rscript {0}
+
+      - name: List files in home directory
+        run: find ~/ -type f > files.txt
+
+      - uses: actions/upload-artifact@v2
+        with:
+            name: files
+            path: files.txt
+            if-no-files-found: warn
+
       - uses: actions/upload-artifact@v2
         with:
             name: recmap.Rcheck
