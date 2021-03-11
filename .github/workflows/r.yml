@@ -35,7 +35,7 @@ jobs:
       - name: install Linux packages
         run: sudo apt-get install -y libicu-dev pandoc pandoc-citeproc texlive texlive-latex-extra texlive-fonts-extra
       - name: Check
-        run: rcmdcheck::rcmdcheck(build_args = "", args = "", error_on = "error")
+        run: rcmdcheck::rcmdcheck(build_args = "", args = "", error_on = "error", check_dir = "/tmp/recmap.check")
         shell: Rscript {0}
 
       - name: List files in home directory
