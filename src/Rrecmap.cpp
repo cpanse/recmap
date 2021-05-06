@@ -21,6 +21,7 @@
 //  2016-04-19/20/21/22 ACCU2016 Bristol, UK
 //  see also: https://arxiv.org/abs/1606.00464
 
+#define STRICT_R_HEADERS
 #include <Rcpp.h>
 #include <string>
 #include <recmap.h>
