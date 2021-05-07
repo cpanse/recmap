@@ -13,7 +13,7 @@ jss2711 data
 
 \description{
 jss2711 contains the replication materials (input and output) for the 
-\href{http://dx.doi.org/10.18637/jss.v086.c01}{jss.v086.c01} manuscript's
+\doi{10.18637/jss.v086.c01} manuscript's
 Figures 4, 5, 6, 7, 11, 12, and 13.
 }
 
@@ -72,7 +72,7 @@ Generated on a MacBook Pro (Retina, 13-inch, Mid 2014).}
 \references{
 Panse C (2018). "Rectangular Statistical Cartograms in R: The recmap
 Package." Journal of Statistical Software, Code Snippets, 86(1),
-pp. 1-27. doi: \href{http://dx.doi.org/10.18637/jss.v086.c01}{10.18637/jss.v086.c01}.
+pp. 1-27. \doi{10.18637/jss.v086.c01}.
 }
 
 \examples{
