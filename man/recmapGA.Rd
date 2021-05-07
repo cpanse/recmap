@@ -60,7 +60,7 @@ function, and a \code{\link{recmap}} object containing the cartogram.
 \references{
 Luca Scrucca (2013). GA: A Package for Genetic Algorithms in R.
 Journal of Statistical Software, 53(4), 1-37. 
-\url{http://dx.doi.org/10.18637/jss.v053.i04}. 
+\doi{10.18637/jss.v053.i04}. 
 }
 \author{
 Christian Panse 2016-2019
