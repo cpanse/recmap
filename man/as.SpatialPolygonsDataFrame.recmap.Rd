@@ -27,7 +27,7 @@
 \references{
 Roger S. Bivand, Edzer Pebesma, Virgilio Gomez-Rubio, 2013. 
 Applied spatial data analysis with R, Second edition. Springer, NY. 
-\url{http://www.asdar-book.org/}
+\url{https://www.asdar-book.org/}
 }
 
 \author{

@@ -9,3 +9,4 @@
 ^.*data/jss2711.RData.+$
 ^.*LICENSE$
 ^.*vignettes/graphics/.*$
+^.github/.*$

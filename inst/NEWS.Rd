@@ -3,6 +3,12 @@
 
 \newcommand{\ghit}{\href{https://github.com/cpanse/recmap/issues/#1}{##1}}
 
+\section{Changes until version 1.0.9 (2021-05-07)}{
+  \itemize{
+    \item Moving towards defining STRICT_R_HEADERS in Rcpp.h \url{https://github.com/RcppCore/Rcpp/issues/1158} \url{https://github.com/cpanse/recmap/commit/5ae6aade93026b96238804e06593fa9088dda763}
+    \item url fix in man page urls
+  }
+}
 
 \section{Changes until version 1.0.8 (2020-02-20)}{
   \itemize{
@@ -75,7 +81,7 @@
    \item added argument for the definition of the pseudo dual graph in \code{recmap}.
    \item fixed register native routine issue by using \code{tools::package_native_routine_registration_skeleton(".")}
    \item added shiny example including
-   \href{https://shiny.rstudio.com/reference/shiny/latest/hoverOpts.html}{hoverOpts}
+   \href{https://shiny.rstudio.com/reference/shiny/1.4.0/hoverOpts.html}{hoverOpts}
    using \code{state.x77} data executable through
    \code{recmap_state.x77 <- system.file("shiny-examples", "state.x77", package = "recmap")}
    and 
