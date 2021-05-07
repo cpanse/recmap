@@ -111,7 +111,7 @@ struct mbb_node {
     if (std::sin(alpha) >= 0 && std::cos(alpha) >= 0) {
       // Quad I
       tanx = a.x + (dx * std::tan(alpha));
-      tany = a.y + (dy * std::tan(PI/2 - alpha));
+      tany = a.y + (dy * std::tan(M_PI/2 - alpha));
 
       c.x = a.x + dx;
       c.y = a.y + dy;
@@ -123,8 +123,8 @@ struct mbb_node {
 
     } else if (std::sin(alpha) >= 0 && std::cos(alpha) < 0) {
       // Quad II
-      tanx = a.x + (dx * std::tan(PI - alpha));
-      tany = a.y - (dy * std::tan(alpha - PI/2));
+      tanx = a.x + (dx * std::tan(M_PI - alpha));
+      tany = a.y - (dy * std::tan(alpha - M_PI/2));
 
       c.x = a.x + dx;
       c.y = a.y - dy;
@@ -135,8 +135,8 @@ struct mbb_node {
 
     } else if (std::sin(alpha) < 0 && std::cos(alpha) < 0) {
       // Quad III
-      tanx = a.x - (dx * std::tan(alpha - PI));
-      tany = a.y - (dy * std::tan(3 * PI / 2 - alpha));
+      tanx = a.x - (dx * std::tan(alpha - M_PI));
+      tany = a.y - (dy * std::tan(3 * M_PI / 2 - alpha));
 
       c.x = a.x - dx;
       c.y = a.y - dy;
@@ -147,8 +147,8 @@ struct mbb_node {
 
     } else if (std::sin(alpha) < 0 && std::cos(alpha) >  0) {
       // Quad IV
-      tanx = a.x - (dy * std::tan(2 * PI - alpha));
-      tany = a.y + (dx * std::tan(alpha - 3 * PI /2));
+      tanx = a.x - (dy * std::tan(2 * M_PI - alpha));
+      tany = a.y + (dx * std::tan(alpha - 3 * M_PI /2));
 
       c.x = a.x - dx;
       c.y = a.y + dy;
@@ -381,8 +381,8 @@ class RecMap{
     // strategy one: try to place it in the neighborhood;
     // and only one => allow non feasible solution to be filtered out
     // by the metaheuristic
-    for (double beta = 0.0; beta <=  PI && C[region_id].placed == 0;
-      beta += PI/180) {
+    for (double beta = 0.0; beta <=  M_PI && C[region_id].placed == 0;
+      beta += M_PI/180) {
       // iterate over all already placed adjacent rectangles
       for (const int &adj_region_id : M[region_id].connected) {
         if (C[adj_region_id].placed > 0) {
