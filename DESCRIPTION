@@ -18,7 +18,7 @@ Description: Provides an interface and a C++ implementation of the RecMap MP2
   of the recmap algorithm is provided by a vignette included in this package.
 License: GPL-3
 Depends: R (>= 3.6), GA (>= 3.1), Rcpp (>= 1.0), sp(>= 1.3)
-Suggests: doParallel, knitr, shiny, testthat, tufte
+Suggests: doParallel, knitr, rmarkdown, shiny, testthat, tufte
 SystemRequirements: C++11
 LinkingTo: Rcpp (>= 1.0)
 VignetteBuilder: knitr
