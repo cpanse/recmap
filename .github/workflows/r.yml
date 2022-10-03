@@ -39,7 +39,7 @@ jobs:
         run: rcmdcheck::rcmdcheck(build_args = "", args = "", error_on = "error", check_dir = "/tmp/recmap.Rcheck")
         shell: Rscript {0}
       - name: codecov
-        run: covr::codecov(type = "all", token=Sys.getenv('CODECOV_TOKEN'))
+        run: install.packages('covr'); covr::codecov(type = "all", token=Sys.getenv('CODECOV_TOKEN'))
         shell: Rscript {0}
       - uses: actions/upload-artifact@v2
         with:
