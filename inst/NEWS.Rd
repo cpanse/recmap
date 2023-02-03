@@ -3,6 +3,12 @@
 
 \newcommand{\ghit}{\href{https://github.com/cpanse/recmap/issues/#1}{##1}}
 
+\section{Changes until version 1.0.12 (2021-11-20)}{
+  \itemize{
+    \item GA Rcpp issue on apply M1; replace skip_on_os with \code{GA::gaControl("useRcpp" = FALSE)} \href{https://github.com/luca-scr/GA/issues/52}{#52}
+  }
+}
+
 \section{Changes until version 1.0.10 (2021-09-20)}{
   \itemize{
     \item url fix in man page urls

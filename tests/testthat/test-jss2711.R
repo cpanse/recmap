@@ -3,6 +3,7 @@
 context("jss2711")
 
 test_that("reproducibility check for recmapGA using a 4x4 checkerboard (Figure 7)", {
+  #skip_on_os(os='mac')
   
   seeds <- c(1, 1, 2, 2, 3, 3)
   

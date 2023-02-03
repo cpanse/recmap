@@ -83,7 +83,7 @@ The `as.recmap` function performs the transformation from a
 
 ## 5. Related approaches
 
-* [Rectangular Cartograms: the game](http://www.win.tue.nl/~speckman/demos/game/index.html), [Rectangular Cartograms](http://www.win.tue.nl/~speckman/Cartograms/SoccerCarto.html)
+* [Rectangular Cartograms: the game](https://bspeckmann.win.tue.nl/demos/game/index.html), [Rectangular Cartograms](https://bspeckmann.win.tue.nl/Cartograms/SoccerCarto.html)
 * cartogram: Create Cartograms with R [https://CRAN.R-project.org/package=cartogram](https://CRAN.R-project.org/package=cartogram)
 * [Rcartogram](https://github.com/omegahat/Rcartogram)
 * [High-performance software to produce flow-based cartograms.](https://github.com/Flow-Based-Cartograms/go_cart) 
