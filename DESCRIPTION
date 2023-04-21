@@ -23,3 +23,4 @@ LinkingTo: Rcpp (>= 1.0)
 VignetteBuilder: knitr
 NeedsCompilation: yes
 BugReports: https://github.com/cpanse/recmap/issues
+Encoding: UTF-8
