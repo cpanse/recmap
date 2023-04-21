@@ -6,6 +6,7 @@
 [![](http://cranlogs.r-pkg.org/badges/recmap)](https://cran.r-project.org/package=recmap) 
 ![](https://github.com/cpanse/recmap/workflows/R-CMD-check-recmap/badge.svg)
 [![JSS](https://img.shields.io/badge/JSS-10.18637%2Fjss.v086.c01-brightgreen)](http://dx.doi.org/10.18637/jss.v086.c01)
+[![codecov](https://codecov.io/github/cpanse/recmap/branch/master/graph/badge.svg?token=QbuhWl5bx5)](https://codecov.io/github/cpanse/recmap)
 
 # recmap - Compute the Rectangular Statistical Cartogram 
 
@@ -83,7 +84,7 @@ The `as.recmap` function performs the transformation from a
 
 ## 5. Related approaches
 
-* [Rectangular Cartograms: the game](http://www.win.tue.nl/~speckman/demos/game/index.html), [Rectangular Cartograms](http://www.win.tue.nl/~speckman/Cartograms/SoccerCarto.html)
+* [Rectangular Cartograms: the game](https://bspeckmann.win.tue.nl/demos/game/index.html), [Rectangular Cartograms](https://bspeckmann.win.tue.nl/Cartograms/SoccerCarto.html)
 * cartogram: Create Cartograms with R [https://CRAN.R-project.org/package=cartogram](https://CRAN.R-project.org/package=cartogram)
 * [Rcartogram](https://github.com/omegahat/Rcartogram)
 * [High-performance software to produce flow-based cartograms.](https://github.com/Flow-Based-Cartograms/go_cart) 

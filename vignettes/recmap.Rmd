@@ -197,7 +197,7 @@ plot(Cartogram.Income <- recmap(M[order(M$x),]),
 
 ## `state.x77[, 'Frost']`
 
-```{r fig.width=8, fig.height=4, fig.align='left', warnings = FALSE, fig.cap="Area ~ mean number of days with minimum temperature below freezing (1931–1960) in capital or large city;" }
+```{r recmapGA, fig.width=8, fig.height=4, fig.align='left', warnings = FALSE, fig.cap="Area ~ mean number of days with minimum temperature below freezing (1931–1960) in capital or large city;", error = TRUE }
 usa$z <- state.x77[, 'Frost'] 
 M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]
 op <- par(mfrow = c(1 ,1), mar = c(0, 0, 0, 0), bg = NA)
@@ -206,7 +206,7 @@ plot(Frost$Cartogram,
             col.text = 'black', lwd = 2)
 ```
 
-```{r}
+```{r Frost, error=TRUE}
 summary(Frost)
 ```
 
@@ -267,11 +267,11 @@ The `recmap` R package on CRAN provides a rectangular cartogram algorithm to be 
 R user. Now, it is easy to generate input (e.g., no complex polygon mesh),
 the code is maintainable (less than 500 lines of `C++-11` code), and the algorithm is made robust
 to the price of not having all features implemented (simplified local placement; 
-no empty space error; no MP1 variant yet).
-Recent research publication on rectangular cartograms drawing include
+no *empty space error*; no MP1 variant yet).
+Recent research publications on rectangular cartogram drawing include
 [@Speckmann2004], [@Speckmann2007], [@Speckmann2012], [@Buchin:2016].
-However, according to recent publication [@TheStateoftheArtInCartograms],
-`recmap` remains the only rectangular cartogram algorithm that 'maintain zero 
+However, according to a recent publication [@TheStateoftheArtInCartograms],
+`recmap` remains the only rectangular cartogram algorithm that 'maintains zero 
 cartographic error'. 
 
 # Session Info
