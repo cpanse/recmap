@@ -257,7 +257,7 @@ class RecMap{
 
 
   void ComputePseudoDual(recmapvector &M) {
-    each_unique_pair(M, [this](map_region &a, map_region &b,
+    each_unique_pair(M, [](map_region &a, map_region &b,
                                recmapvector &M) {
                        // add edges tp pseudo dual graph
                        // iff boxes are connected
