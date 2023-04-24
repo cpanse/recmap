@@ -298,7 +298,7 @@ as.recmap <- function(X){
 
 as.recmap.SpatialPolygonsDataFrame <- function(X){
   
-  if (class(X) == "SpatialPolygonsDataFrame"){
+  if (inherits(X, "SpatialPolygonsDataFrame")){
     n <- length(X@polygons)
     
     df <- do.call('rbind', lapply(1:n, function(id){
