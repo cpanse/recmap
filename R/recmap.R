@@ -531,7 +531,6 @@ recmapGA <- function(Map,
                       { gaMonitor } 
                      else FALSE,
                       parallel = FALSE, ...){
-GA::gaControl("useRcpp" = FALSE)
   start_time <- Sys.time()
   GA <- ga(type = "permutation", 
            fitness = fitness, 

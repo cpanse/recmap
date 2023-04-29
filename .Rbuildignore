@@ -10,3 +10,4 @@
 ^.*LICENSE$
 ^.*vignettes/graphics/.*$
 ^.github/.*$
+README.md

@@ -90,6 +90,9 @@ function(idxOrder, Map, ...){
 
 ## use Genetic Algorithms (GA >=3.0.0) as metaheuristic
 set.seed(1)
+
+## https://github.com/luca-scr/GA/issues/52
+if (Sys.info()['machine'] == "arm64") GA::gaControl(useRcpp = FALSE)
 res <- recmapGA(Map = checkerboard(4), pmutation = 0.25)
 
 op <- par(mfrow = c(1, 3))
