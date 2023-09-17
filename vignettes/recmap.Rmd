@@ -267,12 +267,14 @@ The `recmap` R package on CRAN provides a rectangular cartogram algorithm to be 
 R user. Now, it is easy to generate input (e.g., no complex polygon mesh),
 the code is maintainable (less than 500 lines of `C++-11` code), and the algorithm is made robust
 to the price of not having all features implemented (simplified local placement; 
-no *empty space error*; no MP1 variant yet).
+no *empty space error*; no MP1 variant).
 Recent research publications on rectangular cartogram drawing include
 [@Speckmann2004], [@Speckmann2007], [@Speckmann2012], [@Buchin:2016].
 However, according to a recent publication [@TheStateoftheArtInCartograms],
 `recmap` remains the only rectangular cartogram algorithm that 'maintains zero 
 cartographic error'. 
+The interested reader can find more details on the package usage and its implementation
+in [@2016arXiv160600464P].
 
 # Session Info
 
