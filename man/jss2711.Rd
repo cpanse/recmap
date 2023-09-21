@@ -267,7 +267,7 @@ par(op)
 
 res <- lapply(c(1, 1, 2, 2, 3, 3), function(seed){
   set.seed(seed); 
-  res <- recmapGA(Map = checkerboard(4), pmutation = 0.25)
+  res <- recmapGA(V = checkerboard(4), pmutation = 0.25)
   res$seed <- seed
   res})
  
@@ -347,7 +347,7 @@ fitness.SBB <- function(idxOrder, Map, ...){
 }
 
 \dontrun{
-SBB <- recmapGA(SBB$Map, 
+SBB <- recmapGA(V=SBB$Map, 
   parallel=TRUE, 
   maxiter=1000, 
   run=1000, 

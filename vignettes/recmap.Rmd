@@ -201,6 +201,7 @@ plot(Cartogram.Income <- recmap(M[order(M$x),]),
 usa$z <- state.x77[, 'Frost'] 
 M <- usa[!usa$name %in% c("Hawaii", "Alaska"), ]
 op <- par(mfrow = c(1 ,1), mar = c(0, 0, 0, 0), bg = NA)
+gaControl("useRcpp" = FALSE)
 Frost <- recmapGA(M, seed = 1)
 plot(Frost$Cartogram, 
             col.text = 'black', lwd = 2)

@@ -11,7 +11,7 @@ test_that("reproducibility check for recmapGA using a 4x4 checkerboard (Figure 7
     
     set.seed(seed);
     
-    res <- recmapGA(Map = checkerboard(4), 
+    res <- recmapGA(V = checkerboard(4), 
                     pmutation = 0.25, 
                     parallel = FALSE)
     res$seed <- seed

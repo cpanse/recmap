@@ -25,9 +25,11 @@ cols <- c(rep('white', 4), rep('grey',3))
 op <- par(mfrow=c(1,2), mar=c(0, 0, 0, 0))
 plot(triangle.map, col=cols)
 
+\dontrun{
  # requires libfft.so installed in linux 
 if (require(getcartr) & require(Rcartogram)){
   cartogram <- quick.carto(triangle.map, z, res=64)
   plot(cartogram, col=cols)
+}
 }
 }

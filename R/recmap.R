@@ -1,5 +1,11 @@
 #R
 
+#' @useDynLib recmap, .registration=TRUE
+#' @importFrom utils packageVersion
+#' @importFrom graphics plot polygon rect text strwidth abline axis
+#' @importFrom utils combn read.table
+NULL
+
 
 #' this function reproduces the original election cartogram from 2004 using 
 #' the cartogram output from the 2003 implementation.
@@ -108,10 +114,12 @@
 #' op <- par(mfrow=c(1,2), mar=c(0, 0, 0, 0))
 #' plot(triangle.map, col=cols)
 #' 
+#' \dontrun{
 #'  # requires libfft.so installed in linux 
 #' if (require(getcartr) & require(Rcartogram)){
 #'   cartogram <- quick.carto(triangle.map, z, res=64)
 #'   plot(cartogram, col=cols)
+#' }
 #' }
 .get_7triangles <- function(A=1){
   t<-list()
@@ -153,6 +161,7 @@
 }
 
 
+#' @export
 checkerboard <- function(n = 8, ratio = 4){
   xy <- (t(combn(1:n, 2)))
   xy <- rbind(cbind(xy[,1], xy[,2]), cbind(xy[,2], xy[,1]), cbind(1:n, 1:n))
@@ -181,6 +190,8 @@ checkerboard <- function(n = 8, ratio = 4){
   res
 }
 
+#' @exportS3Method all.equal recmap
+#' @export all.equal.recmap
 all.equal.recmap <- function(target, current, ...){
   isTRUE(all.equal(target$x, current$x, ...)) &
   isTRUE(all.equal(target$y, current$y, ...)) &
@@ -190,6 +201,9 @@ all.equal.recmap <- function(target, current, ...){
   isTRUE(all.equal(target$name, current$name, ...))
 }
 
+#' Is an Object from a Class recmap?
+#' @inheritParams methods::is
+#' @export 
 is.recmap <- function(object){
   if(sum(c("x", "y", "dx", "dy", "z") %in% names(object)) != 5) {
     message("column names 'x', 'y', 'dx', 'dy', and 'z' are required.")
@@ -241,19 +255,7 @@ is.recmap <- function(object){
     return(FALSE)
   }
   
-  
   return (TRUE)
-}
-
-
-recmap <- function(V, E = data.frame(u=integer(), v=integer())) {
-
-  if (is.recmap(V)){
-    res <- recmap_(V, E)
-  
-    class(res) = c('recmap', class(res))
-    res
-  }
 }
 
 
@@ -261,7 +263,28 @@ as.SpatialPolygonsDataFrame <- function (x, ...) {
 	    UseMethod("as.SpatialPolygonsDataFrame", x)
 }
 
-# requires https://CRAN.R-project.org/package=sp 
+#' Convert a recmap Object to SpatialPolygonsDataFrame Object.
+#'
+#' @description
+#' The method generates a SpatialPolygons object of a as input given
+#' \code{\link{recmap}} object. Both \code{data.frame}s are merged by the index order.
+#'
+#' @import sp
+#'
+#' @param x a \code{\link{recmap}} object.
+#' @param df a \code{data.frame} object. default is NULL.
+#' @param \dots \dots
+#' 
+#' @importFrom sp Polygon Polygons SpatialPolygons SpatialPolygonsDataFrame spplot bbox
+#'
+#' @examples 
+#' SpDf <- as.SpatialPolygonsDataFrame(recmap(checkerboard(8)))
+#' summary(SpDf)
+#' spplot(SpDf)
+#'
+#' @export as.SpatialPolygonsDataFrame
+#' @exportS3Method as.SpatialPolygonsDataFrame recmap
+#' @aliases as.SpatialPolygonsDataFrame
 as.SpatialPolygonsDataFrame.recmap <- function(x, df = NULL, ...){
   if (is.recmap(x)){
   SpP <- SpatialPolygons(lapply(1:nrow(x), function(i){
@@ -296,6 +319,29 @@ as.recmap <- function(X){
 	UseMethod("as.recmap", X)
 }
 
+#' Convert a SpatialPolygonsDataFrame Object to recmap Object
+#'
+#' @description 
+#' The method generates a recmap class out of a \code{\link{SpatialPolygonsDataFrame}} object.
+#' 
+#' @param X \code{\link{SpatialPolygonsDataFrame}} object.
+#'
+#' @return
+#' returns a \code{\link{recmap}} object.
+#'
+#' @references
+#' Roger S. Bivand, Edzer Pebesma, Virgilio Gomez-Rubio, 2013.
+#' Applied spatial data analysis with R, Second edition. Springer, NY.
+#'
+#' @examples
+#' SpDf <- as.SpatialPolygonsDataFrame(recmap(checkerboard(8)))
+#' summary(SpDf)
+#' spplot(SpDf)
+#' summary(as.recmap(SpDf))
+#' 
+#' @export as.recmap
+#' @exportS3Method as.recmap SpatialPolygonsDataFrame
+#' @aliases as.recmap
 as.recmap.SpatialPolygonsDataFrame <- function(X){
   
   if (inherits(X, "SpatialPolygonsDataFrame")){
@@ -370,6 +416,28 @@ as.recmap.SpatialPolygonsDataFrame <- function(X){
   sum(x$relpos.error) / nrow(x)
 }
 
+#' Summary for recmap object
+#'
+#' @description
+#' Summary method for S3 class \code{\link{recmap}}.
+#' The area error is computed as described in the CartoDraw paper.
+#'
+#' @inheritParams base::summary
+#' 
+#' @references \doi{10.1109/TVCG.2004.1260761}
+#'
+#' @return
+#' returns a \code{data.frame} containing summary information, e.g.,
+#' objective functions or number of map regions.
+#'
+#' @method summary recmap
+#' @exportS3Method summary recmap
+#' @export summary.recmap
+#' @aliases summary.recmapGA
+#'
+#' @examples
+#' summary(checkerboard(4));
+#' summary(recmap(checkerboard(4)))
 summary.recmap <- function(object, ...) {
 
   x <- object
@@ -410,7 +478,30 @@ summary.recmap <- function(object, ...) {
   }
   
 }
-
+#' Plot a recmap object.
+#'
+#' @description
+#' plots input and output of the \code{\link{recmap}} function.
+#' The function requires column names (x, y, dx, dy).
+#' 
+#' @param x \code{recmap} object - can be input or output of \code{recmap}.
+#' @param col a vector of colors.
+#' @param border
+#' This parameter is passed to the \code{\link{rect}} function.
+#' color for rectangle border(s). The default means par("fg"). 
+#' Use border = NA to omit borders. If there are shading lines, border = TRUE 
+#' means use the same colour for the border as for the shading lines.
+#' The default value is set to \code{'darkgreen'}.
+#' @param col.text a vector of colors.
+#' @param \ldots whatsoever
+#'
+#' @return graphical output
+#'
+#' @exportS3Method plot recmap  
+#' @export plot.recmap
+#' @aliases plot.recmapGA plot.recmapGRASP
+#' @examples 
+#' checkerboard(2) |> recmap() |> plot()
 plot.recmap <- function(x, col='#00000011', col.text = 'grey', border = 'darkgreen', ...){
 
   if (!is.recmap(x)){ return (NULL) }
@@ -472,6 +563,7 @@ plot.recmap <- function(x, col='#00000011', col.text = 'grey', border = 'darkgre
   1 / sum(Cartogram$relpos.error)
 }
 
+#' @export 
 recmapGRASP <-
   function(Map, 
            fitness = .recmap.fitness, 
@@ -521,7 +613,82 @@ recmapGRASP <-
 }
 
 
-recmapGA <- function(Map, 
+#' Genetic Algorithm Wrapper Function for recmap
+#'
+#' @description
+#' higher-level function for \code{\link{recmap}} using a Genetic Algorithm as
+#' metaheuristic.
+#'
+#' @inheritParams recmap
+#' @inheritParams GA::ga
+#'
+#' @importFrom GA ga gaMonitor summary.ga
+#' @return
+#' returns a list of the input \code{Map}, the solution of the \code{\link[GA]{ga}} 
+#' function, and a \code{\link{recmap}} object containing the cartogram. 
+#'
+#' @references 
+#' Luca Scrucca (2013). GA: A Package for Genetic Algorithms in R.
+#' Journal of Statistical Software, 53(4), 1-37.
+#' \doi{10.18637/jss.v053.i04}.
+#'
+#' @examples
+#' ## The default fitnes function is currently defined as
+#' function(idxOrder, Map, ...){
+#' 
+#'   Cartogram <- recmap(Map[idxOrder, ])
+#'   # a map region could not be placed; 
+#'   # accept only feasible solutions!
+#'   
+#'   if (sum(Cartogram$topology.error == 100) > 0){return (0)}
+#'   
+#'   1 / sum(Cartogram$relpos.error)
+#' }
+#' 
+#' 
+#' ## use Genetic Algorithms (GA >=3.0.0) as metaheuristic
+#' set.seed(1)
+#' 
+#' ## https://github.com/luca-scr/GA/issues/52
+#' if (Sys.info()['machine'] == "arm64") GA::gaControl(useRcpp = FALSE)
+#' res <- recmapGA(V = checkerboard(4), pmutation = 0.25)
+#' 
+#' op <- par(mfrow = c(1, 3))
+#' plot(res$Map, main = "Input Map") 
+#' plot(res$GA, main="Genetic Algorithm")
+#' plot(res$Cartogram, main = "Output Cartogram")
+#' 
+#' 
+#' ## US example
+#' getUS_map <- function(){
+#'   usa <- data.frame(x = state.center$x, 
+#'   y = state.center$y, 
+#'   # make the rectangles overlapping by correcting 
+#'   # lines of longitude distance.
+#'   dx = sqrt(state.area) / 2 
+#'     / (0.8 * 60 * cos(state.center$y * pi / 180)), 
+#'   dy = sqrt(state.area) / 2 / (0.8 * 60), 
+#'   z = sqrt(state.area),
+#'   name = state.name)
+#'       
+#'   usa$z <- state.x77[, 'Population']
+#'   US.Map <- usa[match(usa$name, 
+#'     c('Hawaii', 'Alaska'), nomatch = 0)  == 0, ]
+#' 
+#'   class(US.Map) <- c('recmap', 'data.frame')
+#'   US.Map
+#' }
+#' 
+#' \dontrun{
+#' # takes 34.268 seconds on CRAN
+#' res <- recmapGA(V = getUS_map(), maxiter = 5)
+#' op <- par(ask = TRUE)
+#' plot(res)
+#' par(op)
+#' summary(res)
+#' }
+#' @export
+recmapGA <- function(V, 
                       fitness = .recmap.fitness,
                       pmutation = 0.25, 
                       popSize = 10 * nrow(Map), 
@@ -531,6 +698,7 @@ recmapGA <- function(Map,
                       { gaMonitor } 
                      else FALSE,
                       parallel = FALSE, ...){
+	Map <- V
   start_time <- Sys.time()
   GA <- ga(type = "permutation", 
            fitness = fitness, 
@@ -576,17 +744,22 @@ recmapGA <- function(Map,
 }
 
 
+#' @exportS3Method plot recmapGA  
+#' @export plot.recmapGA
 plot.recmapGA <- function(x, ...){
-	plot(x$GA, main="GA")
+	GA::plot(x$GA, main="GA")
 	plot.recmap(x$Map, main="input map", ...)
 	plot.recmap(x$Cartogram, main = "output cartogram", ...)
 }
 
+#' @exportS3Method plot recmapGRASP  
+#' @export plot.recmapGRASP
 plot.recmapGRASP <- function(x, ...){
   plot.recmap(x$Map, main="input map", ...)
   plot.recmap(x$Cartogram, main = "output cartogram", ...)
 }
 
+#' @export summary.recmapGA
 summary.recmapGA <- function(object, ...){
   cat("summary of class recmapGA:\n")
   cat("summary of the GA:\n")

@@ -5,9 +5,14 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // get_angle
 double get_angle(double x0, double y0, double x1, double y1);
-RcppExport SEXP recmap_get_angle(SEXP x0SEXP, SEXP y0SEXP, SEXP x1SEXP, SEXP y1SEXP) {
+RcppExport SEXP _recmap_get_angle(SEXP x0SEXP, SEXP y0SEXP, SEXP x1SEXP, SEXP y1SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -21,7 +26,7 @@ END_RCPP
 }
 // place_rectangle
 DataFrame place_rectangle(double x0, double y0, double dx0, double dy0, double dx1, double dy1, double alpha);
-RcppExport SEXP recmap_place_rectangle(SEXP x0SEXP, SEXP y0SEXP, SEXP dx0SEXP, SEXP dy0SEXP, SEXP dx1SEXP, SEXP dy1SEXP, SEXP alphaSEXP) {
+RcppExport SEXP _recmap_place_rectangle(SEXP x0SEXP, SEXP y0SEXP, SEXP dx0SEXP, SEXP dy0SEXP, SEXP dx1SEXP, SEXP dy1SEXP, SEXP alphaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -36,15 +41,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// recmap_
-DataFrame recmap_(DataFrame df, DataFrame pd);
-RcppExport SEXP recmap_recmap_(SEXP dfSEXP, SEXP pdSEXP) {
+// recmap
+DataFrame recmap(DataFrame V, Rcpp::Nullable<DataFrame> E);
+RcppExport SEXP _recmap_recmap(SEXP VSEXP, SEXP ESEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< DataFrame >::type df(dfSEXP);
-    Rcpp::traits::input_parameter< DataFrame >::type pd(pdSEXP);
-    rcpp_result_gen = Rcpp::wrap(recmap_(df, pd));
+    Rcpp::traits::input_parameter< DataFrame >::type V(VSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<DataFrame> >::type E(ESEXP);
+    rcpp_result_gen = Rcpp::wrap(recmap(V, E));
     return rcpp_result_gen;
 END_RCPP
+}
+
+static const R_CallMethodDef CallEntries[] = {
+    {"_recmap_get_angle", (DL_FUNC) &_recmap_get_angle, 4},
+    {"_recmap_place_rectangle", (DL_FUNC) &_recmap_place_rectangle, 7},
+    {"_recmap_recmap", (DL_FUNC) &_recmap_recmap, 2},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_recmap(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
 }
