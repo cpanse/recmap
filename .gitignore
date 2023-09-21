@@ -1,0 +1,17 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+src/*.o
+src/*.so
+src/*.dll
+NAMESPACE
+man/as.SpatialPolygonsDataFrame.recmap.Rd
+man/as.recmap.SpatialPolygonsDataFrame.Rd
+man/dot-get_7triangles.Rd
+man/is.recmap.Rd
+man/plot.recmap.Rd
+man/recmap.Rd
+man/recmapGA.Rd
+man/summary.recmap.Rd
+recmap.Rproj
