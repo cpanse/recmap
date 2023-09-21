@@ -3,6 +3,12 @@
 
 \newcommand{\ghit}{\href{https://github.com/cpanse/recmap/issues/#1}{##1}}
 
+\section{Changes until version 1.0.17 (2023-09-16)}{
+  \itemize{
+    \item Use RoxygenNote for man page and Rcpp wrapper \ghit{21}.
+  }
+}
+
 \section{Changes until version 1.0.12 (2021-11-20)}{
   \itemize{
     \item GA Rcpp issue on apply M1; replace skip_on_os with \code{GA::gaControl("useRcpp" = FALSE)} \href{https://github.com/luca-scr/GA/issues/52}{#52}
