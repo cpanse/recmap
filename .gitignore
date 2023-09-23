@@ -15,3 +15,4 @@ man/recmap.Rd
 man/recmapGA.Rd
 man/summary.recmap.Rd
 recmap.Rproj
+R/RcppExports.R

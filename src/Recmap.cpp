@@ -169,7 +169,7 @@ DataFrame place_rectangle(double x0, double y0, double dx0, double dy0,
 //'   c('Hawaii', 'Alaska'), nomatch = 0)  == 0, ]
 //' 
 //' plot.recmap(US.Map)
-//' plot(recmap(US.Map))
+//' US.Map |> recmap() |> plot()
 //' par(op)
 //' 
 //' # define a fitness function
