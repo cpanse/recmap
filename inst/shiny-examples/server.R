@@ -3,12 +3,17 @@
 #
 # https://CRAN.R-project.org/package=recmap
 
-# use R version >= 3.6 - grDevices::hcl; grDevices::hcl.colors; grDevices::hcl.pals;
+# use R version >= 4.3 - grDevices::hcl; grDevices::hcl.colors; grDevices::hcl.pals;
 # library(colorspace)
-library(maps)
-library(shiny)
-library(recmap)
 
+stopifnot(require(GA),
+          require(maps),
+          require(recmap))
+
+
+if (Sys.info()['machine'] == "arm64" && Sys.info()['sysname'] == "Darwin"){
+  stopifnot(isFALSE(GA::gaControl()$useRcpp))
+}
 
 # ----- get U.S. county minimal bounding boxes  ------
 .get_county_mbb <-
@@ -255,16 +260,16 @@ shinyServer(function(input, output, session) {
 
   #----plot input map ----
   output$mapPlot <- renderPlot({
+    message("Plotting map ...")
     M <- Map()
     if (is.null(M)){return()}
 
     op <- par(mfrow = c(1, 1), mar = c(0, 0, 0, 0))
 
-    plot(M, col.text = 'darkred')
+    recmap::plot.recmap(M, col.text = 'darkred')
 
     x <- input$plot_hover$x
     y <- input$plot_hover$y
-
     if(TRUE){
       C <- Cartogram()
       if(is.null(C)) {return()}
