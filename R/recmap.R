@@ -99,11 +99,11 @@ NULL
 
 
 #' construct polygon mesh displayed in Figure 4a in 
-#' \url{https://doi.org/10.1109/TVCG.2004.1260761}
 #'
 #' @param A defines the area of a region in the center
 #'
 #' @return a \link{SpatialPolygons} object 
+#' @references \doi{10.1109/TVCG.2004.1260761}
 #' @export
 #'
 #' @examples
@@ -268,8 +268,6 @@ as.SpatialPolygonsDataFrame <- function (x, ...) {
 #' @description
 #' The method generates a SpatialPolygons object of a as input given
 #' \code{\link{recmap}} object. Both \code{data.frame}s are merged by the index order.
-#'
-#' @import sp
 #'
 #' @param x a \code{\link{recmap}} object.
 #' @param df a \code{data.frame} object. default is NULL.

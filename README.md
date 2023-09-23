@@ -51,7 +51,8 @@ available through [jss.v086.c01](http://dx.doi.org/10.18637/jss.v086.c01).
 Run an interactive shiny application
 
 ```{r}
-library(shiny)
+library(recmap)
+GA::gaControl("useRcpp" = FALSE) # apple M1
 recmap_shiny <- system.file('shiny-examples', package = 'recmap')
 shiny::runApp(recmap_shiny, display.mode = 'normal')
 ```
