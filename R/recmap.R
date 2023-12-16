@@ -422,7 +422,7 @@ as.recmap.SpatialPolygonsDataFrame <- function(X){
 #'
 #' @inheritParams base::summary
 #' 
-#' @references \doi{10.1109/TVCG.2004.1260761}
+#' @inherit recmap references author
 #'
 #' @return
 #' returns a \code{data.frame} containing summary information, e.g.,
@@ -493,6 +493,7 @@ summary.recmap <- function(object, ...) {
 #' @param col.text a vector of colors.
 #' @param \ldots whatsoever
 #'
+#' @inherit recmap references author
 #' @return graphical output
 #'
 #' @exportS3Method plot recmap  
