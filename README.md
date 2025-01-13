@@ -89,3 +89,4 @@ The `as.recmap` function performs the transformation from a
 * [High-performance software to produce flow-based cartograms.](https://github.com/Flow-Based-Cartograms/go_cart) 
 * see also [CRAN Task View: Analysis of Spatial Data](https://CRAN.R-project.org/view=Spatial)
 * Computing Stable Demers Cartograms - https://arxiv.org/abs/1908.07291
+* Wang, L., Yuan, H., Li, X., Lu, P., & Li, Y. (2025). A New Construction Method for Rectangular Cartograms. ISPRS International Journal of Geo-Information, 14(1), 25. [doi 10.3390/ijgi14010025](https://doi.org/10.3390/ijgi14010025)
