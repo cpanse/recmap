@@ -33,3 +33,12 @@ The function requires column names (x, y, dx, dy).
 \examples{
 checkerboard(2) |> recmap() |> plot()
 }
+\references{
+\itemize{
+\item \doi{10.18637/jss.v086.c01}
+\item \doi{10.1109/INFVIS.2004.57}
+}
+}
+\author{
+Christian Panse, 2016
+}

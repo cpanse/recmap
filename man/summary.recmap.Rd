@@ -25,5 +25,11 @@ summary(checkerboard(4));
 summary(recmap(checkerboard(4)))
 }
 \references{
-\doi{10.1109/TVCG.2004.1260761}
+\itemize{
+\item \doi{10.18637/jss.v086.c01}
+\item \doi{10.1109/INFVIS.2004.57}
+}
+}
+\author{
+Christian Panse, 2016
 }

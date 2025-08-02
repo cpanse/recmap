@@ -20,7 +20,7 @@ recmapGA(
 }
 \arguments{
 \item{V}{defines the input map regions formatted as \code{\link{data.frame}}
-having the column names \code{c('x', 'y', 'dx', 'dy', 'z', 'name')} 
+having the column names \code{c('x', 'y', 'dx', 'dy', 'z', 'name')}
 as described above. V could also be considered as the nodes of the pseudo dual.}
 
 \item{fitness}{the fitness function, any allowable R function which takes as input an individual \code{string} representing a potential solution, and returns a numerical value describing its ``fitness''.}

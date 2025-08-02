@@ -17,7 +17,7 @@ if (Sys.info()['machine'] == "arm64" && Sys.info()['sysname'] == "Darwin"){
 
 # ----- get U.S. county minimal bounding boxes  ------
 .get_county_mbb <-
-  function(state = 'colorado',
+  function(state = 'CO',
            scaleX = 0.5,
            scaleY = 0.5) {
 
@@ -27,7 +27,7 @@ if (Sys.info()['machine'] == "arm64" && Sys.info()['sysname'] == "Darwin"){
         stop("no package 'noncensus'.")
 
     # sanity check
-    if (!state %in%  row.names(state.x77)) {
+    if (!state %in%  state %in% counties$state) {
       warning("not a valid U.S. state")
       return(NULL)
     }

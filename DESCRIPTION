@@ -26,4 +26,4 @@ VignetteBuilder: knitr
 NeedsCompilation: yes
 BugReports: https://github.com/cpanse/recmap/issues
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
