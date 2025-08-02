@@ -99,7 +99,7 @@
    \item added argument for the definition of the pseudo dual graph in \code{recmap}.
    \item fixed register native routine issue by using \code{tools::package_native_routine_registration_skeleton(".")}
    \item added shiny example including
-   \href{https://shiny.rstudio.com/reference/shiny/1.4.0/hoverOpts.html}{hoverOpts}
+   \href{ https://shiny.posit.co/r/reference/shiny/1.4.0/hoveropts.html}{hoverOpts}
    using \code{state.x77} data executable through
    \code{recmap_state.x77 <- system.file("shiny-examples", "state.x77", package = "recmap")}
    and 
@@ -144,8 +144,7 @@ improvements concerning \href{https://www.jstatsoft.org}{JSS} reviewer comments:
 
 \section{Changes version 0.5.0 (2016-07-01)}{
   \itemize{
-    \item add docker Public | Automated Build
-    \url{https://hub.docker.com/r/cpanse/recmap/}.
+    \item add docker Public | Automated Build.
     \item manual and vignette cosmetics.
     \item added \code{zzz.R}.
   }
@@ -170,7 +169,7 @@ improvements concerning \href{https://www.jstatsoft.org}{JSS} reviewer comments:
     \code{if (sum(cartogram$topology.error == 100) > 0){return (0)}}
     
     \item make \code{recmap.h} pass google/styleguides using
-    \href{https://github.com/google/styleguide/tree/gh-pages/cpplint}{cpplint}.
+    \href{https://github.com/cpplint/cpplint}{cpplint}.
     
     \item manual and vignette cosmetics.
 
