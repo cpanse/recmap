@@ -61,7 +61,7 @@ higher-level function for \code{\link{recmap}} using a Genetic Algorithm as
 metaheuristic.
 }
 \examples{
-## The default fitnes function is currently defined as
+## The default fitness function is currently defined as
 function(idxOrder, Map, ...){
 
   Cartogram <- recmap(Map[idxOrder, ])

@@ -632,7 +632,7 @@ recmapGRASP <-
 #' \doi{10.18637/jss.v053.i04}.
 #'
 #' @examples
-#' ## The default fitnes function is currently defined as
+#' ## The default fitness function is currently defined as
 #' function(idxOrder, Map, ...){
 #' 
 #'   Cartogram <- recmap(Map[idxOrder, ])

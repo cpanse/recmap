@@ -8,7 +8,7 @@
 
 # recmap - Compute the Rectangular Statistical Cartogram 
 
-This package implements the [RecMap construction algorithm (MP2)](http://dx.doi.org/10.1109/INFVIS.2004.57) using the [GA]( https://CRAN.R-project.org/package=GA) CRAN package as metaheuristic.
+This package implements the [RecMap construction algorithm (MP2)](http://dx.doi.org/10.1109/INFVIS.2004.57) using the [GA]( https://CRAN.R-project.org/package=GA) CRAN package as a metaheuristic.
 
 
 ![rectangular population cartogram construction demo - animated gif](https://user-images.githubusercontent.com/4901987/64121133-3dfc9100-cd9e-11e9-8c35-078678966100.gif)
@@ -27,7 +27,7 @@ and can be installed using the following code
 install.packages('recmap')
 ```
 
-before running `R CMD build` and `R CMD check` or running the shiny demo execute
+before running, `R CMD build` and `R CMD check` or running the shiny demo execute
 ```{r}
 pkgs <- c('colorspace', 'doParallel', 'DT', 'knitr', 'maps',
   'shiny', 'testthat', 'tufte')
@@ -57,8 +57,8 @@ recmap_shiny <- system.file('shiny-examples', package = 'recmap')
 shiny::runApp(recmap_shiny, display.mode = 'normal')
 ```
 
-Run the recmap shiny demonstration as a stand-alone application
-using Linux and macOS systems use the `Terminal` application add the following 
+To run the recmap shiny demonstration as a stand-alone application
+on Linux and macOS systems, use the Terminal application and add the following
 code to your alias file, e.g., `$HOME/.bashrc`
 
 ```
