@@ -30,7 +30,11 @@ returns a list of the input \code{Map}, the best solution of GRASP, and a \code{
 Implements a metaheuristic for \code{\link[recmap]{recmap}} based on GRASP.
 }
 \examples{
-\dontrun{ recmap::.getUS_map() |> recmapGRASP() -> res; plot(res$Map, main = "Input Map"); plot(res$Cartogram, main = "Output Cartogram")}
+\dontrun{
+  recmap::.getUS_map() |> recmapGRASP() -> res;
+  plot(res$Map, main = "Input Map");
+  plot(res$Cartogram, main = "Output Cartogram")
+}
 }
 \references{
 \doi{10.1007/BF01096763}

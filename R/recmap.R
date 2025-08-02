@@ -576,7 +576,11 @@ plot.recmap <- function(x, col='#00000011', col.text = 'grey', border = 'darkgre
 #' @return returns a list of the input \code{Map}, the best solution of GRASP, and a \code{\link[recmap]{recmap}} object containing the cartogram.
 #' @export 
 #' @examples
-#' \dontrun{ recmap::.getUS_map() |> recmapGRASP() -> res; plot(res$Map, main = "Input Map"); plot(res$Cartogram, main = "Output Cartogram")}
+#' \dontrun{
+#'   recmap::.getUS_map() |> recmapGRASP() -> res;
+#'   plot(res$Map, main = "Input Map");
+#'   plot(res$Cartogram, main = "Output Cartogram")
+#' }
 recmapGRASP <-
   function(Map, 
            fitness = .recmap.fitness, 
