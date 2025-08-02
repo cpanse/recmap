@@ -15,7 +15,7 @@
 
 \item{col.text}{a vector of colors.}
 
-\item{border}{This parameter is passed to the \code{\link{rect}} function.
+\item{border}{This parameter is passed to the \code{\link[graphics]{rect}} function.
 color for rectangle border(s). The default means par("fg"). 
 Use border = NA to omit borders. If there are shading lines, border = TRUE 
 means use the same colour for the border as for the shading lines.
@@ -27,7 +27,7 @@ The default value is set to \code{'darkgreen'}.}
 graphical output
 }
 \description{
-plots input and output of the \code{\link{recmap}} function.
+plots input and output of the \code{\link[recmap]{recmap}} function.
 The function requires column names (x, y, dx, dy).
 }
 \examples{

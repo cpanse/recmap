@@ -10,7 +10,7 @@
 \item{A}{defines the area of a region in the center}
 }
 \value{
-a \link{SpatialPolygons} object
+a \link[sp]{SpatialPolygons} object
 }
 \description{
 construct polygon mesh displayed in Figure 4a in

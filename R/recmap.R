@@ -102,7 +102,7 @@ NULL
 #'
 #' @param A defines the area of a region in the center
 #'
-#' @return a \link{SpatialPolygons} object 
+#' @return a \link[sp]{SpatialPolygons} object 
 #' @references \doi{10.1109/TVCG.2004.1260761}
 #' @export
 #'
@@ -267,9 +267,9 @@ as.SpatialPolygonsDataFrame <- function (x, ...) {
 #'
 #' @description
 #' The method generates a SpatialPolygons object of a as input given
-#' \code{\link{recmap}} object. Both \code{data.frame}s are merged by the index order.
+#' \code{\link[recmap]{recmap}} object. Both \code{data.frame}s are merged by the index order.
 #'
-#' @param x a \code{\link{recmap}} object.
+#' @param x a \code{\link[recmap]{recmap}} object.
 #' @param df a \code{data.frame} object. default is NULL.
 #' @param \dots \dots
 #' 
@@ -320,19 +320,19 @@ as.recmap <- function(X){
 #' Convert a SpatialPolygonsDataFrame Object to recmap Object
 #'
 #' @description 
-#' The method generates a recmap class out of a \code{\link{SpatialPolygonsDataFrame}} object.
+#' The method generates a recmap class out of a \code{\link[sp]{SpatialPolygonsDataFrame}} object.
 #' 
-#' @param X \code{\link{SpatialPolygonsDataFrame}} object.
+#' @param X \code{\link[sp]{SpatialPolygonsDataFrame}} object.
 #'
 #' @return
-#' returns a \code{\link{recmap}} object.
+#' returns a \code{\link[recmap]{recmap}} object.
 #'
 #' @references
 #' Roger S. Bivand, Edzer Pebesma, Virgilio Gomez-Rubio, 2013.
 #' Applied spatial data analysis with R, Second edition. Springer, NY.
 #'
 #' @examples
-#' SpDf <- as.SpatialPolygonsDataFrame(recmap(checkerboard(8)))
+#' checkerboard(8) |> recmap() |> as.SpatialPolygonsDataFrame() -> SpDf 
 #' summary(SpDf)
 #' spplot(SpDf)
 #' summary(as.recmap(SpDf))
@@ -417,7 +417,7 @@ as.recmap.SpatialPolygonsDataFrame <- function(X){
 #' Summary for recmap object
 #'
 #' @description
-#' Summary method for S3 class \code{\link{recmap}}.
+#' Summary method for S3 class \code{\link[recmap]{recmap}}.
 #' The area error is computed as described in the CartoDraw paper.
 #'
 #' @inheritParams base::summary
@@ -479,13 +479,13 @@ summary.recmap <- function(object, ...) {
 #' Plot a recmap object.
 #'
 #' @description
-#' plots input and output of the \code{\link{recmap}} function.
+#' plots input and output of the \code{\link[recmap]{recmap}} function.
 #' The function requires column names (x, y, dx, dy).
 #' 
 #' @param x \code{recmap} object - can be input or output of \code{recmap}.
 #' @param col a vector of colors.
 #' @param border
-#' This parameter is passed to the \code{\link{rect}} function.
+#' This parameter is passed to the \code{\link[graphics]{rect}} function.
 #' color for rectangle border(s). The default means par("fg"). 
 #' Use border = NA to omit borders. If there are shading lines, border = TRUE 
 #' means use the same colour for the border as for the shading lines.
@@ -562,7 +562,21 @@ plot.recmap <- function(x, col='#00000011', col.text = 'grey', border = 'darkgre
   1 / sum(Cartogram$relpos.error)
 }
 
+#' Greedy Randomized Adaptive Search Procedure Wrapper Function for recmap
+#'
+#' @description Implements a metaheuristic for \code{\link[recmap]{recmap}} based on GRASP.
+#' @inherit recmap references author
+#' @param Map input map, see \link[recmap]{recmap}.
+#' @param fitness.cutoff cut-off value
+#' @param n.samples number of samples.
+#' @param iteration.max defines the maximal number of iterations.
+#' @param fitness a fitness function \code{function(idxOrder, Map, ...)} returning a number which as to be maximized.
+#' @references \doi{10.1007/BF01096763}
+#' @seealso \code{\link[recmap]{recmapGA}} and \code{\link[recmap]{recmap}}
+#' @return returns a list of the input \code{Map}, the best solution of GRASP, and a \code{\link[recmap]{recmap}} object containing the cartogram.
 #' @export 
+#' @examples
+#' \dontrun{ recmap::.getUS_map() |> recmapGRASP() -> res; plot(res$Map, main = "Input Map"); plot(res$Cartogram, main = "Output Cartogram")}
 recmapGRASP <-
   function(Map, 
            fitness = .recmap.fitness, 
@@ -615,7 +629,7 @@ recmapGRASP <-
 #' Genetic Algorithm Wrapper Function for recmap
 #'
 #' @description
-#' higher-level function for \code{\link{recmap}} using a Genetic Algorithm as
+#' higher-level function for \code{\link[recmap]{recmap}} using a Genetic Algorithm as
 #' metaheuristic.
 #'
 #' @inheritParams recmap
@@ -624,11 +638,9 @@ recmapGRASP <-
 #' @importFrom GA ga gaMonitor summary.ga
 #' @return
 #' returns a list of the input \code{Map}, the solution of the \code{\link[GA]{ga}} 
-#' function, and a \code{\link{recmap}} object containing the cartogram. 
+#' function, and a \code{\link[recmap]{recmap}} object containing the cartogram. 
 #'
 #' @references 
-#' Luca Scrucca (2013). GA: A Package for Genetic Algorithms in R.
-#' Journal of Statistical Software, 53(4), 1-37.
 #' \doi{10.18637/jss.v053.i04}.
 #'
 #' @examples
@@ -639,7 +651,7 @@ recmapGRASP <-
 #'   # a map region could not be placed; 
 #'   # accept only feasible solutions!
 #'   
-#'   if (sum(Cartogram$topology.error == 100) > 0){return (0)}
+#'   if (sum(Cartogram$topology.error == 100) > 0){ return (0) }
 #'   
 #'   1 / sum(Cartogram$relpos.error)
 #' }
@@ -658,29 +670,9 @@ recmapGRASP <-
 #' plot(res$Cartogram, main = "Output Cartogram")
 #' 
 #' 
-#' ## US example
-#' getUS_map <- function(){
-#'   usa <- data.frame(x = state.center$x, 
-#'   y = state.center$y, 
-#'   # make the rectangles overlapping by correcting 
-#'   # lines of longitude distance.
-#'   dx = sqrt(state.area) / 2 
-#'     / (0.8 * 60 * cos(state.center$y * pi / 180)), 
-#'   dy = sqrt(state.area) / 2 / (0.8 * 60), 
-#'   z = sqrt(state.area),
-#'   name = state.name)
-#'       
-#'   usa$z <- state.x77[, 'Population']
-#'   US.Map <- usa[match(usa$name, 
-#'     c('Hawaii', 'Alaska'), nomatch = 0)  == 0, ]
-#' 
-#'   class(US.Map) <- c('recmap', 'data.frame')
-#'   US.Map
-#' }
-#' 
 #' \dontrun{
 #' # takes 34.268 seconds on CRAN
-#' res <- recmapGA(V = getUS_map(), maxiter = 5)
+#' res <- recmapGA(V = recmap:::.getUS_map(), maxiter = 5)
 #' op <- par(ask = TRUE)
 #' plot(res)
 #' par(op)
@@ -769,3 +761,32 @@ summary.recmapGA <- function(object, ...){
 	S$Cartogram <- summary.recmap(object$Cartogram)$values
 	print(S)
 }
+
+
+
+#' return a overlapping minimal bounding boxes (MBB) of the U.S.
+#' using \link[datasets]{datasets}.
+#' @inherit recmap references author
+#' @importFrom utils globalVariables
+#' @import datasets
+#' @export
+.getUS_map <- function(){
+  usa <- data.frame(x = state.center$x,
+  y = state.center$y,
+  # make the rectangles overlapping by correcting
+  # lines of longitude distance.
+  dx = sqrt(state.area) / 2
+    / (0.8 * 60 * cos(state.center$y * pi / 180)),
+  dy = sqrt(state.area) / 2 / (0.8 * 60),
+  z = sqrt(state.area),
+  name = state.name)
+
+  usa$z <- state.x77[, 'Population']
+  US.Map <- usa[match(usa$name,
+    c('Hawaii', 'Alaska'), nomatch = 0)  == 0, ]
+
+  class(US.Map) <- c('recmap', 'data.frame')
+  US.Map
+}
+
+utils::globalVariables(c("state.area", "state.center", "state.name", "state.x77"))

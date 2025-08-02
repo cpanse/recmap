@@ -8,16 +8,16 @@
 \method{as.recmap}{SpatialPolygonsDataFrame}(X)
 }
 \arguments{
-\item{X}{\code{\link{SpatialPolygonsDataFrame}} object.}
+\item{X}{\code{\link[sp]{SpatialPolygonsDataFrame}} object.}
 }
 \value{
-returns a \code{\link{recmap}} object.
+returns a \code{\link[recmap]{recmap}} object.
 }
 \description{
-The method generates a recmap class out of a \code{\link{SpatialPolygonsDataFrame}} object.
+The method generates a recmap class out of a \code{\link[sp]{SpatialPolygonsDataFrame}} object.
 }
 \examples{
-SpDf <- as.SpatialPolygonsDataFrame(recmap(checkerboard(8)))
+checkerboard(8) |> recmap() |> as.SpatialPolygonsDataFrame() -> SpDf 
 summary(SpDf)
 spplot(SpDf)
 summary(as.recmap(SpDf))

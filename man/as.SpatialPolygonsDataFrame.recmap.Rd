@@ -8,7 +8,7 @@
 \method{as.SpatialPolygonsDataFrame}{recmap}(x, df = NULL, ...)
 }
 \arguments{
-\item{x}{a \code{\link{recmap}} object.}
+\item{x}{a \code{\link[recmap]{recmap}} object.}
 
 \item{df}{a \code{data.frame} object. default is NULL.}
 
@@ -16,7 +16,7 @@
 }
 \description{
 The method generates a SpatialPolygons object of a as input given
-\code{\link{recmap}} object. Both \code{data.frame}s are merged by the index order.
+\code{\link[recmap]{recmap}} object. Both \code{data.frame}s are merged by the index order.
 }
 \examples{
 SpDf <- as.SpatialPolygonsDataFrame(recmap(checkerboard(8)))

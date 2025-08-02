@@ -19,7 +19,7 @@ recmapGA(
 )
 }
 \arguments{
-\item{V}{defines the input map regions formatted as \code{\link{data.frame}}
+\item{V}{defines the input map regions formatted as \code{\link[base]{data.frame}}
 having the column names \code{c('x', 'y', 'dx', 'dy', 'z', 'name')}
 as described above. V could also be considered as the nodes of the pseudo dual.}
 
@@ -54,10 +54,10 @@ In this case the cluster must be explicitly stopped with \code{\link[parallel]{s
 }
 \value{
 returns a list of the input \code{Map}, the solution of the \code{\link[GA]{ga}} 
-function, and a \code{\link{recmap}} object containing the cartogram.
+function, and a \code{\link[recmap]{recmap}} object containing the cartogram.
 }
 \description{
-higher-level function for \code{\link{recmap}} using a Genetic Algorithm as
+higher-level function for \code{\link[recmap]{recmap}} using a Genetic Algorithm as
 metaheuristic.
 }
 \examples{
@@ -68,7 +68,7 @@ function(idxOrder, Map, ...){
   # a map region could not be placed; 
   # accept only feasible solutions!
   
-  if (sum(Cartogram$topology.error == 100) > 0){return (0)}
+  if (sum(Cartogram$topology.error == 100) > 0){ return (0) }
   
   1 / sum(Cartogram$relpos.error)
 }
@@ -87,29 +87,9 @@ plot(res$GA, main="Genetic Algorithm")
 plot(res$Cartogram, main = "Output Cartogram")
 
 
-## US example
-getUS_map <- function(){
-  usa <- data.frame(x = state.center$x, 
-  y = state.center$y, 
-  # make the rectangles overlapping by correcting 
-  # lines of longitude distance.
-  dx = sqrt(state.area) / 2 
-    / (0.8 * 60 * cos(state.center$y * pi / 180)), 
-  dy = sqrt(state.area) / 2 / (0.8 * 60), 
-  z = sqrt(state.area),
-  name = state.name)
-      
-  usa$z <- state.x77[, 'Population']
-  US.Map <- usa[match(usa$name, 
-    c('Hawaii', 'Alaska'), nomatch = 0)  == 0, ]
-
-  class(US.Map) <- c('recmap', 'data.frame')
-  US.Map
-}
-
 \dontrun{
 # takes 34.268 seconds on CRAN
-res <- recmapGA(V = getUS_map(), maxiter = 5)
+res <- recmapGA(V = recmap:::.getUS_map(), maxiter = 5)
 op <- par(ask = TRUE)
 plot(res)
 par(op)
@@ -117,7 +97,5 @@ summary(res)
 }
 }
 \references{
-Luca Scrucca (2013). GA: A Package for Genetic Algorithms in R.
-Journal of Statistical Software, 53(4), 1-37.
 \doi{10.18637/jss.v053.i04}.
 }

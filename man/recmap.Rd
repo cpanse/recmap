@@ -10,14 +10,14 @@
 recmap(V, E = NULL)
 }
 \arguments{
-\item{V}{defines the input map regions formatted as \code{\link{data.frame}}
+\item{V}{defines the input map regions formatted as \code{\link[base]{data.frame}}
 having the column names \code{c('x', 'y', 'dx', 'dy', 'z', 'name')}
 as described above. V could also be considered as the nodes of the pseudo dual.}
 
 \item{E}{defines the edges of the map region's pseudo dual graph.
 If \code{E} is not provided, this is the default; the pseudo dual graph is
 composed of overlapping rectangles. If used, E must be a
-\code{\link{data.frame}} containing two columns named \code{c('u', 'v')}
+\code{\link[base]{data.frame}} containing two columns named \code{c('u', 'v')}
 of type integer referencing the row number of \code{V}.}
 }
 \value{
@@ -93,7 +93,7 @@ In praxis, computing on a 2.4 GHz Intel Core i7 machine (using only one core), u
 50 state U.S. map example, recmap can compute approximately 100 cartograms in one second.
 The number of MBB calls were
 (Min., Median, Mean, Max)  = (1448, 2534, 3174, 17740), using in each run
-a different index order using the (\code{\link{sample}}) method.
+a different index order using the (\code{\link[base]{sample}}) method.
 
 \emph{Geodetic datum:} the \code{recmap} algorithm is not transforming the
 geodetic datum, e.g., WGS84 or Swissgrid.
