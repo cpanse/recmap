@@ -17,7 +17,7 @@ returns a \code{data.frame} containing summary information, e.g.,
 objective functions or number of map regions.
 }
 \description{
-Summary method for S3 class \code{\link{recmap}}.
+Summary method for S3 class \code{\link[recmap]{recmap}}.
 The area error is computed as described in the CartoDraw paper.
 }
 \examples{

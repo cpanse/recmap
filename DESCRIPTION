@@ -1,7 +1,7 @@
 Package: recmap
 Type: Package
 Title: Compute the Rectangular Statistical Cartogram
-Version: 1.0.18
+Version: 1.0.21
 Authors@R: person("Christian", "Panse",
     email = "Christian.Panse@gmail.com",
     role = c("aut", "cre"),
@@ -23,6 +23,6 @@ Suggests: doParallel, knitr, rmarkdown, shiny, testthat, tufte
 LinkingTo: Rcpp (>= 1.0)
 VignetteBuilder: knitr
 NeedsCompilation: yes
-BugReports: https://github.com/cpanse/recmap/issues
-Encoding: UTF-8
+    BugReports: https://github.com/cpanse/recmap/issues
+    Encoding: UTF-8
 RoxygenNote: 7.3.2
